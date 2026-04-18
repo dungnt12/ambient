@@ -1,1 +1,0 @@
-export { YouScreen } from './YouScreen';

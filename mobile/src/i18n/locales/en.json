@@ -3,6 +3,85 @@
     "name": "Ambient",
     "tagline": "A quiet place to return to."
   },
+  "settings": {
+    "eyebrow": "PROFILE",
+    "title": "Settings",
+    "sections": {
+      "reminders": "REMINDERS & NOTIFICATIONS",
+      "privacy": "PRIVACY"
+    },
+    "reminders": {
+      "dailyWrite": "Daily write reminder",
+      "timezone": "Time zone",
+      "aiSuggestions": "Suggestions from AI"
+    },
+    "actions": {
+      "signOut": "Sign out",
+      "deleteAccount": "Delete account"
+    },
+    "footer": "Ambient v0.1 · made slowly",
+    "notificationsPermission": {
+      "eyebrow": "A SMALL QUESTION",
+      "title": "Get notified when it matters?",
+      "body": "By default, Ambient stays silent. We only knock when AI genuinely senses something to say — at most once a day.",
+      "caption": "You can turn this off anytime in Settings.",
+      "allow": "Allow notifications",
+      "skip": "Not now",
+      "reasons": {
+        "reason1": "When a group's day opens",
+        "reason2": "When someone may need a message",
+        "reason3": "When the weekly digest is ready"
+      }
+    },
+    "privacy": {
+      "eyebrow": "AMBIENT'S PROMISE",
+      "title": "What you write stays with you.",
+      "body": "AI reads your journal to produce a summary signal. The group only sees that signal — never the original text.",
+      "whoCanRead": "Who can read what?",
+      "view": "View →",
+      "cta": "I understand",
+      "readPolicy": "Read the full policy",
+      "steps": {
+        "write": {
+          "eyebrow": "YOU WRITE",
+          "description": "Original journal — kept only for you."
+        },
+        "reads": {
+          "eyebrow": "AI READS",
+          "description": "Creates a 1–2 sentence emotional summary, anonymizing all details."
+        },
+        "senses": {
+          "eyebrow": "GROUP SENSES",
+          "description": "Only sees a warm signal — steady, curious, low."
+        },
+        "choose": {
+          "eyebrow": "YOU CHOOSE",
+          "description": "Can share a specific entry, or never."
+        },
+        "neverSeen": {
+          "eyebrow": "THE GROUP NEVER SEES",
+          "description": "Raw journal text, exact words, private mood logs, and free-text responses — never shared, never exposed."
+        }
+      }
+    },
+    "deleteAccount": {
+      "eyebrow": "LEAVING AMBIENT",
+      "title": "Delete your account?",
+      "body": "Your journal, rhythm, and group connections will be removed. This action cannot be undone.",
+      "reason1": "All journal entries, permanently",
+      "reason2": "Your signal in every group you're in",
+      "reason3": "Invite links you created",
+      "caption": "You'll be signed out on every device.",
+      "cta": "Delete forever",
+      "keep": "Keep my account",
+      "confirmAlert": {
+        "title": "Are you sure?",
+        "body": "This action cannot be undone.",
+        "cancel": "Keep account",
+        "confirm": "Delete"
+      }
+    }
+  },
   "splash": {
     "loading": "Loading"
   },
@@ -23,12 +102,6 @@
       "group": "Group",
       "you": "You",
       "newEntry": "New entry"
-    }
-  },
-  "you": {
-    "placeholder": {
-      "title": "You",
-      "body": "Profile and settings coming soon."
     }
   },
   "journal": {
@@ -59,11 +132,136 @@
     }
   },
   "group": {
-    "pulseTitle": "The group this week",
-    "inviteCta": "Invite someone you love",
-    "placeholder": {
-      "title": "Group pulse",
-      "body": "Your shared signal will live here."
+    "aiSignalNote": "AI signal · group only sees summaries, never what you write",
+    "tabs": {
+      "pulse": "Pulse",
+      "suggestions": "Suggestions"
+    },
+    "memberSubtitle": "{{count}} members · together since {{since}}",
+    "memberSubtitleToday": "{{count}} members · together since today",
+    "memberSubtitlePlain": "{{count}} members",
+    "memberCountLabel_one": "member",
+    "memberCountLabel_other": "members",
+    "updatedAt": {
+      "hoursAgo_one": "{{count}} HOUR AGO",
+      "hoursAgo_other": "{{count}} HOURS AGO",
+      "yesterday": "YESTERDAY"
+    },
+    "create": {
+      "title": "Create a small, close group.",
+      "body": "Ambient is for 3–8 trusted people. Invite by link — no public profiles, no search.",
+      "segmentNew": "New",
+      "segmentJoin": "Join",
+      "nameLabel": "GROUP NAME",
+      "namePlaceholder": "Sunday Group",
+      "defaultName": "Sunday Group",
+      "inviteLabel": "YOUR INVITE LINK · EXPIRES IN 7 DAYS",
+      "inviteHint": "Tap to copy. Share like any link — no public page.",
+      "cta": "Create group"
+    },
+    "join": {
+      "title": "Join a close group.",
+      "body": "Invite links open here. Tap a link to see who's inviting you.",
+      "simulateTitle": "Open an invite link",
+      "simulateHint": "Simulates tapping a link a friend shared",
+      "savedLabel": "SAVED FOR LATER",
+      "emptySaved": "No saved invites yet. They'll appear here when you tap \"Later\".",
+      "savedRowMeta": "From {{name}} · {{count}} {{memberLabel}}",
+      "cta": "Continue"
+    },
+    "inviteOffer": {
+      "eyebrow": "{{name}} INVITED YOU",
+      "title": "Join {{group}}?",
+      "join": "Join group",
+      "later": "Later"
+    },
+    "accept": {
+      "eyebrow": "{{name}} SENT YOU AN INVITE",
+      "title": "Join the {{group}} pulse.",
+      "body": "No public profiles. Just you and {{count}} close friends.",
+      "groupEyebrow": "GROUP",
+      "privacyTitle": "PRIVATE FROM THE START",
+      "privacyBody": "The group never reads what you write. AI only summarizes it into a warm signal — steady, curious, or low.",
+      "cta": "Join {{group}}",
+      "later": "Later"
+    },
+    "joined": {
+      "eyebrow": "YOU'VE JOINED",
+      "title": "Welcome to {{group}}.",
+      "body": "Start with a few lines for yourself — the group will gradually feel your rhythm.",
+      "nextWriteEyebrow": "NEXT · TODAY",
+      "nextWriteLabel": "Write your first journal lines",
+      "nextPulseEyebrow": "GROUP PULSE",
+      "nextPulseLabel": "See how everyone's doing",
+      "andYou": "and you",
+      "memberListBody": "Four people, four distinct rhythms — connected through small signals.",
+      "cta": "Enter group pulse"
+    },
+    "pulse": {
+      "empty": {
+        "eyebrow": "PULSE NOT YET FORMED",
+        "headline": "A new circle, waiting for the first lines.",
+        "body": "When at least one person writes, AI starts weaving a signal for the group.",
+        "cta": "Write the first line for the group",
+        "invite": "Invite more people"
+      }
+    },
+    "insights": {
+      "meetupEyebrow": "A GENTLE MEETUP · THIS WEEKEND",
+      "meetupBody": "Everyone's a bit freer this week. Saturday afternoon could be the right time.",
+      "meetupPropose": "Propose",
+      "meetupLater": "Later",
+      "supportEyebrow": "SOMEONE IS LOW · 3 DAYS",
+      "supportBody": "{{name}} seems quieter this week. You don't need to say much — a small message is enough warmth.",
+      "digestEyebrow": "LAST WEEK · SUNDAY",
+      "digestLabel": "Review the group's past week",
+      "empty": {
+        "eyebrow": "NOTHING TO SAY — AND THAT'S OKAY",
+        "headline": "AI is listening. Silence is also an answer.",
+        "body": "We only speak when something matters. Better silence than meaningless noise.",
+        "cta": "Back to group pulse",
+        "reminderSettings": "Reminder settings"
+      }
+    },
+    "leave": {
+      "eyebrow": "{{group}}",
+      "title": "Leave group?",
+      "body": "Your rhythm will no longer appear in the group. Your personal entries stay here. You can return with a new invite link.",
+      "cta": "Leave group",
+      "stay": "Stay"
+    }
+  },
+  "ambient": {
+    "quietNotes": {
+      "title": "Small note",
+      "subtitle": "AI only knocks when something truly matters."
+    },
+    "quietNotesEmpty": {
+      "title": "Quiet notes",
+      "subtitle": "At most once a day. Only when something matters.",
+      "eyebrow": "NOTHING NEW YET",
+      "headline": "A quiet space.",
+      "body": "When AI senses something worth saying, you'll see it here — not before.",
+      "cta": "Back to home",
+      "mute": "Mute notifications for a while"
+    },
+    "weeklyDigest": {
+      "proposeCta": "Propose to group",
+      "openFullSummary": "Open full summary"
+    },
+    "meetupProposal": {
+      "eyebrow": "AI SUGGESTION · FROM GROUP PULSE",
+      "mayJoin": "MAY JOIN",
+      "proposeCta": "Propose to group",
+      "footer": "If you propose, a tentative event joins everyone's calendar."
+    },
+    "supportDetail": {
+      "eyebrow": "SUPPORT SIGNAL · {{count}} DAYS",
+      "aiEyebrow": "AI SUGGESTION",
+      "aiNoOneSees": "NO ONE SEES THAT YOU MESSAGED",
+      "privacyNote": "Ambient doesn't push you to message. And it won't tell {{name}} that AI suggested this.",
+      "sendCta": "Send {{name}} a line",
+      "later": "Later"
     }
   },
   "garden": {

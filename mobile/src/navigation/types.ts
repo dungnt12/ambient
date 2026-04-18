@@ -25,6 +25,29 @@ export type RootStackParamList = {
   JournalCompose: undefined;
   EntryDetail: { entryId: string };
   EntryEdit: { entryId: string };
+  GroupCreate: undefined;
+  InviteOffer: {
+    inviterName: string;
+    groupName: string;
+    memberCount: number;
+    since?: string;
+    memberInitials: string[];
+  };
+  GroupAcceptInvite: { inviterName: string; groupName: string };
+  GroupJoined: { groupName: string };
+  GroupPulse: { groupName: string };
+  GroupPulseEmpty: undefined;
+  LeaveGroup: { groupName: string };
+  QuietNotes: undefined;
+  QuietNotesEmpty: undefined;
+  WeeklyDigest: undefined;
+  MeetupProposal: undefined;
+  SupportSignalDetail: undefined;
+  WeeklyNeedsWarmth: undefined;
+  Settings: undefined;
+  NotificationsPermission: undefined;
+  PrivacyByDesign: undefined;
+  DeleteAccount: undefined;
 };
 
 export type RootNav<T extends keyof RootStackParamList = keyof RootStackParamList> =

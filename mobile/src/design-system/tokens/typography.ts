@@ -33,6 +33,36 @@ export const typography = {
     lineHeight: 34,
     letterSpacing: -0.4,
   },
+  headingScreen: {
+    fontFamily: fontFamily.serifRegular,
+    fontSize: 36,
+    lineHeight: 42,
+    letterSpacing: -0.5,
+  },
+  headingPulse: {
+    fontFamily: fontFamily.serifRegular,
+    fontSize: 30,
+    lineHeight: 34,
+    letterSpacing: -0.5,
+  },
+  tabSerif: {
+    fontFamily: fontFamily.serifRegular,
+    fontSize: 22,
+    lineHeight: 28,
+    letterSpacing: -0.3,
+  },
+  bodySerifTight: {
+    fontFamily: fontFamily.serifRegular,
+    fontSize: 17,
+    lineHeight: 24,
+  },
+  metaLabel: {
+    fontFamily: fontFamily.sansMedium,
+    fontSize: 11,
+    lineHeight: 14,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
   headingSub: {
     fontFamily: fontFamily.sansSemibold,
     fontSize: 22,
