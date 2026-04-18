@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react-native';
 import {
   CTAButton,
-  Screen,
+  CTAStack,
+  ScreenLayout,
   Text,
   useTheme,
   type ColorToken,
@@ -72,53 +73,43 @@ export function GroupPulseScreen({
   }
 
   return (
-    <Screen edges={['top', 'bottom']} background="bg" scroll>
-      <View
-        style={{
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing.base,
-          gap: t.spacing.sm,
-        }}
-      >
-        <Text variant="headingPulse" color="fg">
-          {groupName}
-        </Text>
-        <Text variant="bodySmall" color="fgFaint">
-          {subtitle}
-        </Text>
-      </View>
-
-      <View style={{ paddingHorizontal: t.layout.screenPaddingX, paddingTop: t.spacing.xl }}>
-        <TabRow active={tab} onChange={setTab} />
-      </View>
-
-      <View
-        style={{
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing.xl,
-          gap: t.spacing.md,
-        }}
-      >
-        {tab === 'pulse' ? (
-          <PulseList members={members} />
-        ) : insightsEmpty ? (
-          <GroupInsightsEmptyBody onBack={onBackToPulse} onReminderSettings={onReminderSettings} />
-        ) : (
-          <GroupInsightsBody
-            supportTargetName={supportTargetName}
-            onProposeMeetup={onProposeMeetup}
-            onLaterMeetup={onLaterMeetup}
-            onOpenDigest={onOpenDigest}
-          />
-        )}
-      </View>
-
-      {tab === 'pulse' ? (
-        <View style={{ paddingHorizontal: t.layout.screenPaddingX, paddingTop: t.spacing.xl }}>
-          <PulseFooter />
+    <ScreenLayout
+      padHorizontal
+      header={
+        <View style={{ paddingTop: t.spacing.base, gap: t.spacing.sm }}>
+          <Text variant="headingPulse" color="fg">
+            {groupName}
+          </Text>
+          <Text variant="bodySmall" color="fgFaint">
+            {subtitle}
+          </Text>
+          <View style={{ paddingTop: t.spacing.xl }}>
+            <TabRow active={tab} onChange={setTab} />
+          </View>
         </View>
-      ) : null}
-    </Screen>
+      }
+      footer={
+        tab === 'pulse' ? (
+          <View style={{ paddingTop: t.spacing.xl }}>
+            <PulseFooter />
+          </View>
+        ) : undefined
+      }
+      bodyContentContainerStyle={{ paddingTop: t.spacing.xl, gap: t.spacing.md }}
+    >
+      {tab === 'pulse' ? (
+        <PulseList members={members} />
+      ) : insightsEmpty ? (
+        <GroupInsightsEmptyBody onBack={onBackToPulse} onReminderSettings={onReminderSettings} />
+      ) : (
+        <GroupInsightsBody
+          supportTargetName={supportTargetName}
+          onProposeMeetup={onProposeMeetup}
+          onLaterMeetup={onLaterMeetup}
+          onOpenDigest={onOpenDigest}
+        />
+      )}
+    </ScreenLayout>
   );
 }
 
@@ -244,57 +235,55 @@ function PulseEmpty({
   const initials = members.slice(0, 4).map((m) => m.initial);
 
   return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing.base,
-        }}
-      >
-        <Text variant="headingPulse" color="fg">
-          {groupName}
-        </Text>
-        <Text variant="bodySmall" color="fgFaint" style={{ marginTop: t.spacing.md }}>
-          {subtitle}
-        </Text>
-
-        <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: t.spacing.xl }}
-        >
-          <EmptyPulseBlob />
-
-          <View style={{ gap: t.spacing.md, alignItems: 'center' }}>
-            <Text variant="overline" color="fgFaint" align="center">
-              {tr('group.pulse.empty.eyebrow')}
-            </Text>
-            <Text variant="headingSub" color="fg" align="center">
-              {tr('group.pulse.empty.headline')}
-            </Text>
-            <Text variant="bodyLarge" color="fgSubtle" align="center">
-              {tr('group.pulse.empty.body')}
-            </Text>
-          </View>
-
-          <View style={{ flexDirection: 'row', gap: t.spacing.md }}>
-            {initials.map((letter, idx) => (
-              <SmallInitial key={`${letter}-${idx}`} letter={letter} />
-            ))}
-          </View>
-        </View>
-
-        <CTAButton variant="dark" label={tr('group.pulse.empty.cta')} onPress={onWriteFirst} />
-        <Pressable
-          accessibilityRole="button"
-          onPress={onInviteMore}
-          style={{ paddingVertical: t.spacing.sm, marginTop: t.spacing.sm }}
-        >
-          <Text variant="buttonLabelSocial" color="fgSubtle" align="center">
-            {tr('group.pulse.empty.invite')}
+    <ScreenLayout
+      padHorizontal
+      header={
+        <View style={{ paddingTop: t.spacing.base }}>
+          <Text variant="headingPulse" color="fg">
+            {groupName}
           </Text>
-        </Pressable>
+          <Text variant="bodySmall" color="fgFaint" style={{ marginTop: t.spacing.md }}>
+            {subtitle}
+          </Text>
+        </View>
+      }
+      footer={
+        <CTAStack
+          primary={
+            <CTAButton variant="dark" label={tr('group.pulse.empty.cta')} onPress={onWriteFirst} />
+          }
+          secondary={{
+            label: tr('group.pulse.empty.invite'),
+            onPress: () => onInviteMore?.(),
+          }}
+        />
+      }
+      bodyContentContainerStyle={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: t.spacing.xl,
+      }}
+    >
+      <EmptyPulseBlob />
+
+      <View style={{ gap: t.spacing.md, alignItems: 'center' }}>
+        <Text variant="overline" color="fgFaint" align="center">
+          {tr('group.pulse.empty.eyebrow')}
+        </Text>
+        <Text variant="headingSub" color="fg" align="center">
+          {tr('group.pulse.empty.headline')}
+        </Text>
+        <Text variant="bodyLarge" color="fgSubtle" align="center">
+          {tr('group.pulse.empty.body')}
+        </Text>
       </View>
-    </Screen>
+
+      <View style={{ flexDirection: 'row', gap: t.spacing.md }}>
+        {initials.map((letter, idx) => (
+          <SmallInitial key={`${letter}-${idx}`} letter={letter} />
+        ))}
+      </View>
+    </ScreenLayout>
   );
 }
 

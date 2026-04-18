@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Ambient",
-    "tagline": "Một nơi tĩnh lặng để quay về."
+    "tagline": "Một chốn để trở về."
   },
   "settings": {
     "eyebrow": "HỒ SƠ",
@@ -11,7 +11,7 @@
       "privacy": "QUYỀN RIÊNG TƯ"
     },
     "reminders": {
-      "dailyWrite": "Nhắc viết mỗi ngày",
+      "dailyWrite": "Nhắc viết nhật ký mỗi ngày",
       "timezone": "Múi giờ",
       "aiSuggestions": "Gợi ý từ AI"
     },
@@ -19,28 +19,28 @@
       "signOut": "Đăng xuất",
       "deleteAccount": "Xóa tài khoản"
     },
-    "footer": "Ambient v0.1 · chậm lại một chút",
+    "footer": "Ambient v0.1 · chậm rãi",
     "notificationsPermission": {
       "eyebrow": "MỘT CÂU HỎI NHỎ",
-      "title": "Bạn có muốn nhận thông báo khi thật sự cần thiết?",
-      "body": "Mặc định, Ambient giữ im lặng. Chúng tôi chỉ khẽ gõ cửa khi AI cảm nhận có điều đáng để bạn biết — tối đa một lần mỗi ngày.",
-      "caption": "Bạn luôn có thể tắt trong phần Cài đặt.",
-      "allow": "Cho phép",
+      "title": "Nhận thông báo khi AI thấy điều đáng nói?",
+      "body": "Ambient vốn dĩ im lặng. Chúng tôi chỉ thông báo khi AI phát hiện điều thực sự quan trọng — tối đa một lần mỗi ngày.",
+      "caption": "Bạn có thể thay đổi bất kỳ lúc nào trong Cài đặt.",
+      "allow": "Cho phép thông báo",
       "skip": "Để sau",
       "reasons": {
-        "reason1": "Khi một ngày mới của nhóm bắt đầu",
-        "reason2": "Khi có người có thể đang cần một lời hỏi thăm",
-        "reason3": "Khi bản tóm tắt tuần đã sẵn sàng"
+        "reason1": "Khi nhịp nhóm có thay đổi",
+        "reason2": "Khi ai đó có thể cần một lời quan tâm",
+        "reason3": "Khi tóm tắt tuần đã sẵn sàng"
       }
     },
     "privacy": {
-      "eyebrow": "LỜI HỨA TỪ AMBIENT",
+      "eyebrow": "LỜI HỨA CỦA AMBIENT",
       "title": "Điều bạn viết chỉ thuộc về bạn.",
-      "body": "AI đọc nhật ký của bạn để tạo ra một tín hiệu tóm tắt. Nhóm chỉ thấy tín hiệu đó — không bao giờ thấy nội dung gốc.",
+      "body": "AI chỉ đọc để tạo tín hiệu cảm xúc ngắn gọn. Nhóm không bao giờ thấy nội dung gốc của bạn.",
       "whoCanRead": "Ai thấy được gì?",
       "view": "Xem →",
-      "cta": "Tôi đã hiểu",
-      "readPolicy": "Đọc chính sách đầy đủ",
+      "cta": "Đã hiểu",
+      "readPolicy": "Đọc chính sách bảo mật đầy đủ",
       "steps": {
         "write": {
           "eyebrow": "BẠN VIẾT",
@@ -48,34 +48,34 @@
         },
         "reads": {
           "eyebrow": "AI ĐỌC",
-          "description": "Tạo bản tóm tắt cảm xúc dài 1–2 câu, loại bỏ mọi chi tiết riêng tư."
+          "description": "Tạo tóm tắt cảm xúc 1–2 câu, loại bỏ mọi chi tiết cá nhân."
         },
         "senses": {
           "eyebrow": "NHÓM CẢM NHẬN",
-          "description": "Chỉ thấy một tín hiệu nhẹ — ổn định, tò mò, hay trầm lắng."
+          "description": "Chỉ thấy tín hiệu chung — bình yên, tò mò hay trầm lắng."
         },
         "choose": {
           "eyebrow": "BẠN QUYẾT ĐỊNH",
-          "description": "Bạn có thể chọn chia sẻ một bài cụ thể — hoặc không chia sẻ bao giờ."
+          "description": "Bạn có thể chọn chia sẻ một bài cụ thể nếu muốn."
         },
         "neverSeen": {
           "eyebrow": "NHÓM KHÔNG BAO GIỜ THẤY",
-          "description": "Nội dung nhật ký gốc, câu chữ cụ thể, cảm xúc riêng tư, và mọi câu trả lời tự do — tất cả đều không được chia sẻ."
+          "description": "Nội dung gốc, chi tiết riêng tư, cảm xúc cá nhân và mọi suy nghĩ tự do."
         }
       }
     },
     "deleteAccount": {
-      "eyebrow": "RỜI AMBIENT",
-      "title": "Xóa tài khoản?",
-      "body": "Nhật ký, nhịp mỗi ngày và các kết nối nhóm của bạn sẽ bị xóa. Hành động này không thể hoàn tác.",
-      "reason1": "Toàn bộ nhật ký của bạn, vĩnh viễn",
+      "eyebrow": "RỜI KHỎI AMBIENT",
+      "title": "Xóa tài khoản vĩnh viễn?",
+      "body": "Toàn bộ nhật ký, nhịp nhóm và kết nối của bạn sẽ biến mất. Không thể khôi phục.",
+      "reason1": "Tất cả nhật ký cá nhân",
       "reason2": "Tín hiệu của bạn trong mọi nhóm",
-      "reason3": "Những liên kết mời bạn đã tạo",
+      "reason3": "Các lời mời bạn đã tạo",
       "caption": "Bạn sẽ bị đăng xuất trên mọi thiết bị.",
       "cta": "Xóa vĩnh viễn",
       "keep": "Giữ tài khoản",
       "confirmAlert": {
-        "title": "Bạn chắc chứ?",
+        "title": "Bạn chắc chắn chứ?",
         "body": "Hành động này không thể hoàn tác.",
         "cancel": "Giữ tài khoản",
         "confirm": "Xóa"
@@ -106,33 +106,33 @@
   },
   "journal": {
     "promptTitle": "Lời nhắc hôm nay",
-    "emptyPlaceholder": "Hôm nay điều gì còn đọng lại trong bạn?",
-    "privacyNote": "Chỉ mình bạn nhìn thấy.",
+    "emptyPlaceholder": "Hôm nay điều gì còn đọng lại với bạn?",
+    "privacyNote": "Chỉ bạn nhìn thấy.",
     "compose": {
       "onlyYou": "CHỈ MÌNH BẠN",
       "promptEyebrow": "LỜI NHẮC HÔM NAY · CLAUDE",
-      "aiWillSummarize": "AI sẽ tóm tắt sau khi bạn lưu.",
-      "placeholder": "Viết vài dòng cho chính bạn. Không ai khác đọc được.",
+      "aiWillSummarize": "AI sẽ tóm tắt cảm xúc sau khi bạn lưu.",
+      "placeholder": "Viết vài dòng cho chính mình. Không ai khác đọc được.",
       "save": "Lưu nhật ký"
     },
     "detail": {
       "aiSignalHeading": "TÍN HIỆU AI · NHÓM THẤY GÌ",
       "privacyNote": "Chỉ bạn thấy bản gốc.",
-      "editCta": "Chỉnh sửa mục này",
+      "editCta": "Chỉnh sửa",
       "deleteCta": "Xóa nhật ký"
     },
     "edit": {
-      "title": "Chỉnh lại vài dòng cho chính bạn.",
-      "aiHint": "AI sẽ tóm tắt lại sau khi bạn lưu."
+      "title": "Chỉnh sửa vài dòng cho chính bạn.",
+      "aiHint": "AI sẽ tạo tóm tắt cảm xúc mới sau khi lưu."
     },
     "list": {
-      "title": "Nhật ký hôm nay",
-      "entryCount_one": "{{count}} mục",
-      "entryCount_other": "{{count}} mục"
+      "title": "Nhật ký của bạn",
+      "entryCount_one": "{{count}} bài",
+      "entryCount_other": "{{count}} bài"
     }
   },
   "group": {
-    "aiSignalNote": "Tín hiệu AI · nhóm chỉ thấy phần tóm tắt, không thấy điều bạn viết",
+    "aiSignalNote": "Tín hiệu AI · nhóm chỉ thấy tóm tắt cảm xúc, không bao giờ thấy nội dung bạn viết",
     "tabs": {
       "pulse": "Nhịp",
       "suggestions": "Gợi ý"
@@ -148,24 +148,24 @@
       "yesterday": "HÔM QUA"
     },
     "create": {
-      "title": "Tạo một nhóm nhỏ, đủ thân.",
-      "body": "Ambient dành cho 3–8 người bạn thật sự tin tưởng. Mời nhau bằng liên kết — không có hồ sơ công khai, không thể tìm kiếm.",
+      "title": "Tạo nhóm nhỏ, thân thiết.",
+      "body": "Ambient dành cho 3–8 người bạn tin tưởng. Mời bằng liên kết — không hồ sơ công khai, không thể tìm kiếm.",
       "segmentNew": "Tạo mới",
       "segmentJoin": "Tham gia",
       "nameLabel": "TÊN NHÓM",
       "namePlaceholder": "Nhóm Chủ Nhật",
       "defaultName": "Nhóm Chủ Nhật",
       "inviteLabel": "LIÊN KẾT MỜI · HẾT HẠN SAU 7 NGÀY",
-      "inviteHint": "Chạm để sao chép. Chia sẻ như một liên kết bình thường — không có trang công khai.",
+      "inviteHint": "Chạm để sao chép. Chia sẻ như liên kết bình thường.",
       "cta": "Tạo nhóm"
     },
     "join": {
-      "title": "Tham gia một nhóm thân thiết.",
-      "body": "Liên kết mời sẽ mở tại đây. Chạm vào một liên kết để xem ai đang mời bạn.",
-      "simulateTitle": "Mở một liên kết mời",
-      "simulateHint": "Mô phỏng thao tác chạm vào liên kết bạn bè gửi",
+      "title": "Tham gia nhóm thân thiết.",
+      "body": "Liên kết mời sẽ mở tại đây. Chạm vào liên kết bạn bè gửi để xem lời mời.",
+      "simulateTitle": "Mở liên kết mời",
+      "simulateHint": "Mô phỏng thao tác mở liên kết",
       "savedLabel": "XEM SAU",
-      "emptySaved": "Chưa có lời mời nào được lưu. Khi bạn chọn “Để sau”, chúng sẽ hiện ở đây.",
+      "emptySaved": "Chưa có lời mời nào được lưu.",
       "savedRowMeta": "Từ {{name}} · {{count}} {{memberLabel}}",
       "cta": "Tiếp tục"
     },
@@ -176,49 +176,49 @@
       "later": "Để sau"
     },
     "accept": {
-      "eyebrow": "{{name}} ĐÃ GỬI BẠN LỜI MỜI",
+      "eyebrow": "{{name}} ĐÃ MỜI BẠN",
       "title": "Tham gia nhịp của {{group}}.",
-      "body": "Không có hồ sơ công khai. Chỉ có bạn và {{count}} người thân quen.",
+      "body": "Không hồ sơ công khai. Chỉ bạn và {{count}} người thân quen.",
       "groupEyebrow": "NHÓM",
       "privacyTitle": "RIÊNG TƯ NGAY TỪ ĐẦU",
-      "privacyBody": "Nhóm sẽ không bao giờ đọc điều bạn viết. AI chỉ tóm tắt thành một tín hiệu nhẹ — bình yên, tò mò, hay trầm lắng.",
+      "privacyBody": "Nhóm không bao giờ đọc điều bạn viết. AI chỉ tạo tín hiệu ngắn gọn.",
       "cta": "Tham gia {{group}}",
       "later": "Để sau"
     },
     "joined": {
       "eyebrow": "BẠN ĐÃ THAM GIA",
       "title": "Chào mừng đến với {{group}}.",
-      "body": "Bắt đầu bằng vài dòng cho riêng mình — rồi cả nhóm sẽ dần cảm nhận được nhịp của bạn.",
+      "body": "Bắt đầu bằng vài dòng cho riêng mình. Nhịp của bạn sẽ dần được cả nhóm cảm nhận.",
       "nextWriteEyebrow": "TIẾP THEO · HÔM NAY",
-      "nextWriteLabel": "Viết những dòng nhật ký đầu tiên",
+      "nextWriteLabel": "Viết bài đầu tiên",
       "nextPulseEyebrow": "NHỊP NHÓM",
-      "nextPulseLabel": "Xem mọi người đang thế nào",
+      "nextPulseLabel": "Xem nhịp nhóm",
       "andYou": "và bạn",
-      "memberListBody": "Bốn người, bốn nhịp riêng — kết nối với nhau qua những tín hiệu nhỏ.",
-      "cta": "Vào xem nhịp nhóm"
+      "memberListBody": "Mỗi người một nhịp riêng — kết nối qua những tín hiệu nhỏ.",
+      "cta": "Vào nhịp nhóm"
     },
     "pulse": {
       "empty": {
         "eyebrow": "NHỊP CHƯA HÌNH THÀNH",
-        "headline": "Một vòng tròn mới, đang đợi những dòng đầu tiên.",
-        "body": "Khi có ít nhất một người viết, AI sẽ bắt đầu dệt nên tín hiệu cho cả nhóm.",
+        "headline": "Vòng tròn mới đang chờ những dòng đầu tiên.",
+        "body": "Khi ai đó bắt đầu viết, AI sẽ tạo tín hiệu cho cả nhóm.",
         "cta": "Viết dòng đầu tiên cho nhóm",
         "invite": "Mời thêm người"
       }
     },
     "insights": {
       "meetupEyebrow": "MỘT BUỔI GẶP NHẸ NHÀNG · CUỐI TUẦN NÀY",
-      "meetupBody": "Tuần này ai cũng có vẻ nhẹ hơn một chút. Chiều thứ Bảy có thể là một thời điểm phù hợp.",
+      "meetupBody": "Tuần này mọi người dường như đều có năng lượng nhẹ nhàng hơn. Chiều thứ Bảy có thể là thời điểm đẹp.",
       "meetupPropose": "Đề xuất",
       "meetupLater": "Để sau",
-      "supportEyebrow": "CÓ MỘT NGƯỜI ĐANG TRẦM XUỐNG · 3 NGÀY",
-      "supportBody": "{{name}} có vẻ lặng hơn trong tuần này. Bạn không cần nói nhiều — chỉ một lời nhắn nhỏ thôi cũng đã đủ ấm.",
+      "supportEyebrow": "MỘT NGƯỜI ĐANG TRẦM XUỐNG · 3 NGÀY",
+      "supportBody": "{{name}} có vẻ trầm lắng hơn tuần này. Một lời nhắn nhỏ từ bạn có thể rất ý nghĩa.",
       "digestEyebrow": "TUẦN TRƯỚC · CHỦ NHẬT",
       "digestLabel": "Xem lại tuần qua của nhóm",
       "empty": {
-        "eyebrow": "KHÔNG CÓ GÌ ĐỂ NÓI — VÀ THẾ CŨNG ỔN",
-        "headline": "AI đang lắng nghe. Sự im lặng cũng là một câu trả lời.",
-        "body": "Chúng tôi chỉ lên tiếng khi có điều thật sự quan trọng. Thà im lặng còn hơn tiếng ồn vô nghĩa.",
+        "eyebrow": "KHÔNG CÓ GÌ ĐÁNG NÓI — VÀ THẾ LÀ ỔN",
+        "headline": "AI đang lắng nghe. Im lặng cũng là một câu trả lời.",
+        "body": "Chúng tôi chỉ lên tiếng khi thực sự cần. Thà im lặng còn hơn tiếng ồn vô ích.",
         "cta": "Về lại nhịp nhóm",
         "reminderSettings": "Cài đặt nhắc nhở"
       }
@@ -226,46 +226,46 @@
     "leave": {
       "eyebrow": "{{group}}",
       "title": "Rời nhóm?",
-      "body": "Nhịp của bạn sẽ không còn xuất hiện trong nhóm nữa. Những dòng nhật ký cá nhân vẫn ở đây. Bạn có thể quay lại bằng một liên kết mời mới.",
+      "body": "Nhịp của bạn sẽ không còn xuất hiện trong nhóm. Nhật ký cá nhân vẫn giữ nguyên. Bạn có thể quay lại bất kỳ lúc nào qua liên kết mời mới.",
       "cta": "Rời nhóm",
       "stay": "Ở lại"
     }
   },
   "ambient": {
     "quietNotes": {
-      "title": "Những ghi chú nhỏ",
-      "subtitle": "AI chỉ khẽ gõ cửa khi thật sự có điều đáng nói."
+      "title": "Ghi chú nhỏ",
+      "subtitle": "AI chỉ khẽ gõ cửa khi thực sự có điều đáng nói."
     },
     "quietNotesEmpty": {
-      "title": "Ghi chú tĩnh",
-      "subtitle": "Nhiều nhất một lần mỗi ngày. Chỉ khi có điều quan trọng.",
+      "title": "Ghi chú yên lặng",
+      "subtitle": "Tối đa một lần mỗi ngày. Chỉ khi có điều quan trọng.",
       "eyebrow": "CHƯA CÓ GÌ MỚI",
       "headline": "Một khoảng lặng.",
-      "body": "Khi AI cảm nhận có điều đáng để nói, bạn sẽ thấy ở đây — không sớm hơn.",
+      "body": "Khi AI thấy điều đáng nói, ghi chú sẽ hiện ở đây.",
       "cta": "Về trang chính",
-      "mute": "Tắt thông báo một thời gian"
+      "mute": "Tắt thông báo tạm thời"
     },
     "weeklyDigest": {
       "proposeCta": "Đề xuất cho nhóm",
       "openFullSummary": "Mở tóm tắt đầy đủ"
     },
     "meetupProposal": {
-      "eyebrow": "GỢI Ý AI · TỪ NHỊP NHÓM",
+      "eyebrow": "GỢI Ý TỪ AI · DỰA TRÊN NHỊP NHÓM",
       "mayJoin": "CÓ THỂ THAM GIA",
       "proposeCta": "Đề xuất cho nhóm",
-      "footer": "Nếu bạn gửi đề xuất, một sự kiện dự kiến sẽ xuất hiện trong lịch của mọi người."
+      "footer": "Nếu bạn gửi đề xuất, mọi người sẽ thấy sự kiện trong lịch chung."
     },
     "supportDetail": {
       "eyebrow": "TÍN HIỆU HỖ TRỢ · {{count}} NGÀY",
-      "aiEyebrow": "GỢI Ý AI",
+      "aiEyebrow": "GỢI Ý TỪ AI",
       "aiNoOneSees": "KHÔNG AI BIẾT BẠN ĐÃ NHẮN",
-      "privacyNote": "Ambient không ép bạn phải nhắn tin. Và cũng sẽ không nói với {{name}} rằng AI đã gợi ý điều này.",
+      "privacyNote": "Ambient không ép bạn nhắn tin. Và cũng không nói với {{name}} rằng AI đã gợi ý.",
       "sendCta": "Gửi {{name}} một lời nhắn",
       "later": "Để sau"
     }
   },
   "garden": {
-    "subtitle": "{{done}} / {{total}} ngày · cuộn để xem trọn năm",
+    "subtitle": "{{done}} / {{total}} ngày · cuộn để xem cả năm",
     "cellLabel": "{{month}} {{day}}",
     "legend": {
       "empty": "Trống",
@@ -290,47 +290,47 @@
       "live": "{{done}} ngày đã qua · cuộn để xem tháng khác",
       "completed": "{{done}} / {{total}} ngày",
       "completedNote": "{{done}} / {{total}} ngày · {{note}}",
-      "ahead": "{{total}} ngày · Ở phía trước"
+      "ahead": "{{total}} ngày · Phía trước"
     },
     "notes": {
-      "jan": "Khởi đầu chậm rãi, vẫn đang tìm giọng điệu của riêng mình",
-      "feb": "Lạnh hơn, ngắn hơn, với nhiều khoảng lặng",
-      "mar": "Ấm dần lên, bắt đầu bước ra ngoài nhiều hơn"
+      "jan": "Khởi đầu nhẹ nhàng, đang tìm nhịp riêng",
+      "feb": "Ngắn hơn, nhiều khoảng lặng hơn",
+      "mar": "Ấm dần, bắt đầu mở lòng"
     }
   },
   "onboarding": {
     "signIn": "Tôi đã có tài khoản",
     "welcome": {
       "title": "Viết cho chính bạn.",
-      "body": "Vài dòng mỗi ngày, nhẹ như hơi thở. Không ai đọc — kể cả nhóm của bạn.",
-      "cta": "Viết dòng đầu tiên"
+      "body": "Vài dòng mỗi ngày, nhẹ như hơi thở. Không ai đọc — kể cả nhóm.",
+      "cta": "Viết bài đầu tiên"
     },
     "signal": {
       "title": "Gần nhau, dù xa.",
-      "body": "Cảm nhận nhau mà không cần phải đọc một dòng nào.",
+      "body": "Cảm nhận nhau qua những tín hiệu nhỏ, không cần đọc từng dòng.",
       "cta": "Tiếp tục"
     },
     "hints": {
       "title": "Chỉ khi thật sự cần.",
-      "body": "AI luôn giữ im lặng. Chỉ khẽ gõ cửa khi thật sự cần.",
+      "body": "AI luôn im lặng. Chỉ khẽ gõ cửa khi cần.",
       "cta": "Bắt đầu"
     }
   },
   "auth": {
     "signIn": {
       "overline": "CHÀO MỪNG TRỞ LẠI",
-      "title": "Vẫn còn vài dòng đang đợi bạn.",
+      "title": "Vài dòng đang đợi bạn.",
       "body": "Đăng nhập để tiếp tục nhịp viết mỗi ngày.",
       "apple": "Tiếp tục với Apple",
-      "email": "Tiếp tục bằng email",
-      "terms": "Tiếp tục tức là bạn đồng ý với Điều khoản và Chính sách bảo mật.",
+      "email": "Tiếp tục với email",
+      "terms": "Tiếp tục nghĩa là bạn đồng ý với Điều khoản và Chính sách bảo mật.",
       "newHere": "Tôi là người mới",
       "help": "Cần hỗ trợ?"
     },
     "email": {
       "overline": "ĐĂNG NHẬP BẰNG EMAIL",
       "title": "Nhập email của bạn.",
-      "body": "Chúng tôi sẽ gửi cho bạn một mã đăng nhập — không cần mật khẩu.",
+      "body": "Chúng tôi sẽ gửi mã đăng nhập — không cần mật khẩu.",
       "label": "EMAIL CỦA BẠN",
       "placeholder": "ban@vidu.com",
       "captcha": "Tôi không phải robot",
@@ -341,7 +341,7 @@
     },
     "otp": {
       "overline": "NHẬP MÃ",
-      "title": "Kiểm tra email.",
+      "title": "Kiểm tra email",
       "bodyPrefix": "Mã gồm 6 chữ số đã được gửi tới",
       "label": "MÃ XÁC THỰC",
       "cta": "Tiếp tục",

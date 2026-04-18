@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
-  BackButton,
   CaptchaRow,
   CTAButton,
-  Heading,
-  Screen,
+  ScreenHeader,
+  ScreenLayout,
   Text,
+  TextButton,
   TextInput,
   useTheme,
 } from '../../design-system';
@@ -28,86 +28,68 @@ export function EmailScreen({ onBack, onSendCode, onUseApple }: EmailScreenProps
 
   const canSubmit = EMAIL_RE.test(email) && captcha;
 
+  const handleSubmit = () => onSendCode?.(email);
+  const handleUseApple = () => onUseApple?.();
+
   return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{ flex: 1 }}
+    <ScreenLayout
+      avoidKeyboard
+      header={
+        <ScreenHeader
+          back={{ onPress: onBack }}
+          overline={tr('auth.email.overline')}
+          title={tr('auth.email.title')}
+          body={tr('auth.email.body')}
+        />
+      }
+      footer={
+        <View style={{ paddingHorizontal: t.layout.screenPaddingX, paddingBottom: t.spacing.base }}>
+          <TextButton label={tr('auth.email.useApple')} onPress={handleUseApple} />
+        </View>
+      }
+    >
+      <View
+        style={{
+          paddingHorizontal: t.layout.screenPaddingX,
+          paddingTop: t.spacing.xxl,
+        }}
       >
-        <View style={{ paddingHorizontal: t.spacing.sm, paddingTop: t.spacing.sm }}>
-          <BackButton variant="filled" onPress={onBack} />
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            paddingHorizontal: t.layout.screenPaddingX,
-            paddingTop: t.spacing.base,
-          }}
-        >
-          <Text variant="overline" color="fgFaint">
-            {tr('auth.email.overline')}
-          </Text>
-          <View style={{ marginTop: t.spacing.sm, gap: t.spacing.base }}>
-            <Heading variant="headingSection">{tr('auth.email.title')}</Heading>
-            <Text variant="bodyLarge" color="fgMuted">
-              {tr('auth.email.body')}
-            </Text>
-          </View>
-
-          <View style={{ marginTop: t.spacing.xxl, gap: t.spacing.base }}>
-            <TextInput
-              label={tr('auth.email.label')}
-              value={email}
-              onChangeText={setEmail}
-              placeholder={tr('auth.email.placeholder')}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="email"
-            />
-            <CaptchaRow
-              label={tr('auth.email.captcha')}
-              metaLabel={tr('auth.email.captchaMeta')}
-              checked={captcha}
-              onToggle={setCaptcha}
-            />
-          </View>
-
-          <CTAButton
-            style={{ marginTop: t.spacing.lg }}
-            label={tr('auth.email.cta')}
-            variant="dark"
-            disabled={!canSubmit}
-            onPress={() => onSendCode?.(email)}
+        <View style={{ gap: t.spacing.base }}>
+          <TextInput
+            label={tr('auth.email.label')}
+            value={email}
+            onChangeText={setEmail}
+            placeholder={tr('auth.email.placeholder')}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="email"
           />
-
-          <Text
-            variant="bodySmall"
-            color="fgFaint"
-            align="center"
-            style={{ marginTop: t.spacing.lg }}
-          >
-            {tr('auth.email.footer')}
-          </Text>
-
-          <View style={{ flex: 1 }} />
-
-          <Pressable
-            accessibilityRole="button"
-            onPress={onUseApple}
-            hitSlop={t.spacing.sm}
-            style={({ pressed }) => ({
-              paddingBottom: t.spacing.base,
-              opacity: pressed ? t.opacity.pressed : t.opacity.full,
-            })}
-          >
-            <Text variant="buttonLabelSocial" color="fgSubtle" align="center">
-              {tr('auth.email.useApple')}
-            </Text>
-          </Pressable>
+          <CaptchaRow
+            label={tr('auth.email.captcha')}
+            metaLabel={tr('auth.email.captchaMeta')}
+            checked={captcha}
+            onToggle={setCaptcha}
+          />
         </View>
-      </KeyboardAvoidingView>
-    </Screen>
+
+        <CTAButton
+          style={{ marginTop: t.spacing.lg }}
+          label={tr('auth.email.cta')}
+          variant="dark"
+          disabled={!canSubmit}
+          onPress={handleSubmit}
+        />
+
+        <Text
+          variant="bodySmall"
+          color="fgFaint"
+          align="center"
+          style={{ marginTop: t.spacing.lg }}
+        >
+          {tr('auth.email.footer')}
+        </Text>
+      </View>
+    </ScreenLayout>
   );
 }

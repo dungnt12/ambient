@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
-import { type LayoutChangeEvent, Pressable, ScrollView, View } from 'react-native';
+import { type LayoutChangeEvent, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight, Link2 } from 'lucide-react-native';
-import { Avatar, CTAButton, Screen, Text, TextInput, useTheme } from '../../design-system';
+import { Avatar, CTAButton, ScreenLayout, Text, TextInput, useTheme } from '../../design-system';
 import type { SavedInvite } from '../../mocks/group';
 
 type Segment = 'new' | 'join';
@@ -47,56 +47,53 @@ export function GroupCreateJoinScreen({
 
   const isJoin = segment === 'join';
 
+  const handleCreate = () => {
+    onCreate?.(name.trim() || tr('group.create.defaultName'));
+  };
+
+  const header = (
+    <View style={{ gap: t.spacing.xl, paddingTop: t.spacing.base }}>
+      <View style={{ minHeight: titleMinHeight }}>
+        <Text variant="headingScreen" color="fg" onLayout={onTitleLayout}>
+          {isJoin ? tr('group.join.title') : tr('group.create.title')}
+        </Text>
+      </View>
+      <View style={{ minHeight: bodyMinHeight }}>
+        <Text variant="bodyLarge" color="fgSubtle" onLayout={onBodyLayout}>
+          {isJoin ? tr('group.join.body') : tr('group.create.body')}
+        </Text>
+      </View>
+      <SegmentedControl value={segment} onChange={setSegment} />
+    </View>
+  );
+
+  const footer = isJoin ? undefined : (
+    <CTAButton variant="primary" label={tr('group.create.cta')} onPress={handleCreate} />
+  );
+
   return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingBottom: t.spacing.xl,
-          gap: t.spacing.xl,
-        }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={{ minHeight: titleMinHeight }}>
-          <Text variant="headingScreen" color="fg" onLayout={onTitleLayout}>
-            {isJoin ? tr('group.join.title') : tr('group.create.title')}
-          </Text>
-        </View>
-        <View style={{ minHeight: bodyMinHeight }}>
-          <Text variant="bodyLarge" color="fgSubtle" onLayout={onBodyLayout}>
-            {isJoin ? tr('group.join.body') : tr('group.create.body')}
-          </Text>
-        </View>
-
-        <SegmentedControl value={segment} onChange={setSegment} />
-
-        {isJoin ? (
-          <JoinBody
-            savedInvites={savedInvites}
-            onOpenInvite={onOpenInvite}
-            onSimulate={onSimulateIncomingLink}
-          />
-        ) : (
-          <CreateBody
-            name={name}
-            onChangeName={setName}
-            inviteUrl={inviteUrl}
-            onCopyInvite={onCopyInvite}
-          />
-        )}
-
-        <View style={{ flex: 1 }} />
-
-        {isJoin ? null : (
-          <CTAButton
-            variant="primary"
-            label={tr('group.create.cta')}
-            onPress={() => onCreate?.(name.trim() || tr('group.create.defaultName'))}
-          />
-        )}
-      </ScrollView>
-    </Screen>
+    <ScreenLayout
+      padHorizontal
+      avoidKeyboard
+      header={header}
+      footer={footer}
+      bodyContentContainerStyle={{ paddingTop: t.spacing.xl }}
+    >
+      {isJoin ? (
+        <JoinBody
+          savedInvites={savedInvites}
+          onOpenInvite={onOpenInvite}
+          onSimulate={onSimulateIncomingLink}
+        />
+      ) : (
+        <CreateBody
+          name={name}
+          onChangeName={setName}
+          inviteUrl={inviteUrl}
+          onCopyInvite={onCopyInvite}
+        />
+      )}
+    </ScreenLayout>
   );
 }
 

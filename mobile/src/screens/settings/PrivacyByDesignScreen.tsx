@@ -1,6 +1,13 @@
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { BackButton, CTAButton, Heading, Screen, Text, useTheme } from '../../design-system';
+import {
+  CTAButton,
+  Heading,
+  ScreenHeader,
+  ScreenLayout,
+  Text,
+  useTheme,
+} from '../../design-system';
 
 export type PrivacyByDesignScreenProps = {
   onAcknowledge: () => void;
@@ -20,14 +27,30 @@ export function PrivacyByDesignScreen({
   const t = useTheme();
   const { t: tr } = useTranslation();
 
+  const header = onClose ? <ScreenHeader back={{ onPress: onClose }} /> : undefined;
+
+  const footer = (
+    <View style={{ paddingHorizontal: t.layout.screenPaddingX }}>
+      <CTAButton variant="dark" label={tr('settings.privacy.cta')} onPress={onAcknowledge} />
+      <Pressable
+        accessibilityRole="button"
+        onPress={onReadPolicy}
+        style={({ pressed }) => ({
+          alignSelf: 'center',
+          paddingVertical: t.spacing.sm,
+          opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+        })}
+      >
+        <Text variant="bodySmall" color="fgMuted" align="center">
+          {tr('settings.privacy.readPolicy')}
+        </Text>
+      </Pressable>
+    </View>
+  );
+
   return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      {onClose ? (
-        <View style={{ paddingHorizontal: t.spacing.sm }}>
-          <BackButton variant="filled" onPress={onClose} />
-        </View>
-      ) : null}
-      <View style={{ flex: 1, paddingHorizontal: t.layout.screenPaddingX, gap: t.spacing.xl }}>
+    <ScreenLayout header={header} footer={footer}>
+      <View style={{ paddingHorizontal: t.layout.screenPaddingX, gap: t.spacing.xl }}>
         <View style={{ gap: t.spacing.md }}>
           <Text variant="overline" color="fgFaint">
             {tr('settings.privacy.eyebrow')}
@@ -48,25 +71,8 @@ export function PrivacyByDesignScreen({
             />
           ))}
         </FlowCard>
-
-        <View style={{ flex: 1 }} />
-
-        <CTAButton variant="dark" label={tr('settings.privacy.cta')} onPress={onAcknowledge} />
-        <Pressable
-          accessibilityRole="button"
-          onPress={onReadPolicy}
-          style={({ pressed }) => ({
-            alignSelf: 'center',
-            paddingVertical: t.spacing.sm,
-            opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-          })}
-        >
-          <Text variant="bodySmall" color="fgMuted" align="center">
-            {tr('settings.privacy.readPolicy')}
-          </Text>
-        </Pressable>
       </View>
-    </Screen>
+    </ScreenLayout>
   );
 }
 

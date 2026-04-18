@@ -1,6 +1,13 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { BackButton, CTAButton, Screen, Text, useTheme } from '../../design-system';
+import {
+  CTAButton,
+  CTAStack,
+  ScreenHeader,
+  ScreenLayout,
+  Text,
+  useTheme,
+} from '../../design-system';
 
 export type NotificationsPermissionScreenProps = {
   onAllow: () => void;
@@ -18,16 +25,26 @@ export function NotificationsPermissionScreen({
   const t = useTheme();
   const { t: tr } = useTranslation();
 
+  const header = onClose ? <ScreenHeader back={{ onPress: onClose }} /> : undefined;
+
+  const footer = (
+    <CTAStack
+      primary={
+        <CTAButton
+          variant="dark"
+          label={tr('settings.notificationsPermission.allow')}
+          onPress={onAllow}
+        />
+      }
+      secondary={{ label: tr('settings.notificationsPermission.skip'), onPress: onSkip }}
+      style={{ paddingHorizontal: t.layout.screenPaddingX }}
+    />
+  );
+
   return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      {onClose ? (
-        <View style={{ paddingHorizontal: t.spacing.sm }}>
-          <BackButton variant="filled" onPress={onClose} />
-        </View>
-      ) : null}
+    <ScreenLayout header={header} footer={footer}>
       <View
         style={{
-          flex: 1,
           paddingHorizontal: t.layout.screenPaddingX,
           paddingTop: t.spacing.sm,
         }}
@@ -57,33 +74,8 @@ export function NotificationsPermissionScreen({
         <Text variant="bodySmall" color="fgFaint">
           {tr('settings.notificationsPermission.caption')}
         </Text>
-
-        <View style={{ flex: 1 }} />
-
-        <CTAButton
-          variant="dark"
-          label={tr('settings.notificationsPermission.allow')}
-          onPress={onAllow}
-        />
-
-        <View style={{ height: t.spacing.base }} />
-
-        <Pressable
-          accessibilityRole="button"
-          onPress={onSkip}
-          style={({ pressed }) => ({
-            alignSelf: 'center',
-            paddingVertical: t.spacing.sm,
-            paddingHorizontal: t.spacing.base,
-            opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-          })}
-        >
-          <Text variant="buttonLabelSocial" color="fgSubtle">
-            {tr('settings.notificationsPermission.skip')}
-          </Text>
-        </Pressable>
       </View>
-    </Screen>
+    </ScreenLayout>
   );
 }
 

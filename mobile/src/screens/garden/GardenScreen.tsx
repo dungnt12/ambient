@@ -1,11 +1,12 @@
 import { memo, useCallback, useMemo } from 'react';
-import { FlatList, type ListRenderItem, View } from 'react-native';
+import { type ListRenderItem, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
+  FadeMask,
   GardenCell,
   GardenLegend,
   Heading,
-  Screen,
+  ScreenList,
   Text,
   useTheme,
   type GardenIllustrationName,
@@ -314,9 +315,11 @@ export function GardenScreen({
   );
 
   return (
-    <Screen edges={['top']} background="bg">
-      <FlatList
-        style={{ flex: 1 }}
+    <View style={{ flex: 1, backgroundColor: t.colors.bg }}>
+      <ScreenList
+        edges={['top']}
+        background="bg"
+        padHorizontal
         data={items}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
@@ -325,7 +328,7 @@ export function GardenScreen({
           <ListHeader t={t} year={year} subtitle={headerSubtitle} legendLabels={legendLabels} />
         }
         contentContainerStyle={{
-          paddingHorizontal: t.layout.screenPaddingX,
+          paddingTop: t.spacing.md,
           paddingBottom: t.spacing.xxl,
         }}
         showsVerticalScrollIndicator={false}
@@ -334,6 +337,7 @@ export function GardenScreen({
         maxToRenderPerBatch={2}
         removeClippedSubviews
       />
-    </Screen>
+      <FadeMask edge="top" height={t.spacing.xl} />
+    </View>
   );
 }

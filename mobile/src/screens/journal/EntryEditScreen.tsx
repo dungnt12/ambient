@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react-native';
 import {
   Heading,
   JournalTextarea,
   MoodPicker,
-  Screen,
+  ScreenLayout,
   Text,
   useTheme,
   type MoodLevel,
 } from '../../design-system';
-import { useKeyboardOpen } from '../../hooks';
+import { useKeyboardVisible } from '../../hooks/useKeyboardVisible';
 
 export type EntryEditScreenProps = {
   dateEyebrow: string;
@@ -34,16 +34,16 @@ export function EntryEditScreen({
   const { t: tr } = useTranslation();
   const [content, setContent] = useState(initialContent);
   const [mood, setMood] = useState<MoodLevel | null>(initialMood);
-  const keyboardOpen = useKeyboardOpen();
+  const keyboardOpen = useKeyboardVisible();
 
   const dirty = content !== initialContent || mood !== initialMood;
 
   return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{ flex: 1 }}
-      >
+    <ScreenLayout
+      avoidKeyboard
+      disableScroll
+      dismissKeyboardOnBodyTap
+      header={
         <View
           style={{
             flexDirection: 'row',
@@ -62,61 +62,59 @@ export function EntryEditScreen({
             disabled={!dirty}
           />
         </View>
+      }
+    >
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: t.layout.screenPaddingX,
+          paddingTop: t.spacing.base,
+          paddingBottom: t.spacing.md,
+          gap: t.spacing.lg,
+        }}
+      >
+        <Text variant="overline" color="fgFaint">
+          {dateEyebrow}
+        </Text>
+        <Heading variant="headingSub">{tr('journal.edit.title')}</Heading>
 
-        <Pressable
-          accessible={false}
-          onPress={Keyboard.dismiss}
-          style={{
-            flex: 1,
-            paddingHorizontal: t.layout.screenPaddingX,
-            paddingTop: t.spacing.base,
-            paddingBottom: t.spacing.md,
-            gap: t.spacing.lg,
-          }}
-        >
-          <Text variant="overline" color="fgFaint">
-            {dateEyebrow}
-          </Text>
-          <Heading variant="headingSub">{tr('journal.edit.title')}</Heading>
+        <JournalTextarea
+          value={content}
+          onChangeText={setContent}
+          maxLength={MAX_LENGTH}
+          showCounter
+          minHeight={t.layout.ctaHeight * 3}
+          style={{ flex: 1 }}
+        />
 
-          <JournalTextarea
-            value={content}
-            onChangeText={setContent}
-            maxLength={MAX_LENGTH}
-            showCounter
-            minHeight={t.layout.ctaHeight * 3}
-            style={{ flex: 1 }}
-          />
-
-          {keyboardOpen ? null : (
-            <>
-              <MoodPicker value={mood} onChange={setMood} />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: t.spacing.xs,
-                  backgroundColor: t.colors.bgMuted,
-                  borderRadius: t.radius.card,
-                  padding: t.spacing.base,
-                  marginBottom: t.spacing.base,
-                }}
-              >
-                <Sparkles
-                  size={t.iconSize.xs}
-                  strokeWidth={t.stroke.standard}
-                  color={t.colors.brand}
-                />
-                <Text variant="bodySmall" color="fgSubtle" align="center">
-                  {tr('journal.edit.aiHint')}
-                </Text>
-              </View>
-            </>
-          )}
-        </Pressable>
-      </KeyboardAvoidingView>
-    </Screen>
+        {keyboardOpen ? null : (
+          <>
+            <MoodPicker value={mood} onChange={setMood} />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: t.spacing.xs,
+                backgroundColor: t.colors.bgMuted,
+                borderRadius: t.radius.card,
+                padding: t.spacing.base,
+                marginBottom: t.spacing.base,
+              }}
+            >
+              <Sparkles
+                size={t.iconSize.xs}
+                strokeWidth={t.stroke.standard}
+                color={t.colors.brand}
+              />
+              <Text variant="bodySmall" color="fgSubtle" align="center">
+                {tr('journal.edit.aiHint')}
+              </Text>
+            </View>
+          </>
+        )}
+      </View>
+    </ScreenLayout>
   );
 }
 

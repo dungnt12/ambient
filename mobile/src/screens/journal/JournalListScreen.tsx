@@ -1,6 +1,6 @@
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Heading, Screen, Text, useTheme } from '../../design-system';
+import { Heading, ScreenLayout, Text, useTheme } from '../../design-system';
 
 export type JournalListEntry = {
   id: string;
@@ -18,24 +18,25 @@ export function JournalListScreen({ entries, onEntryPress }: JournalListScreenPr
   const { t: tr } = useTranslation();
 
   return (
-    <Screen edges={['top']} background="bg">
+    <ScreenLayout
+      edges={['top']}
+      padHorizontal
+      header={
+        <View
+          style={{
+            paddingTop: t.spacing.lg,
+            gap: t.spacing.sm,
+          }}
+        >
+          <Heading variant="headingSection">{tr('journal.list.title')}</Heading>
+          <Text variant="bodyLarge" color="fgSubtle">
+            {tr('journal.list.entryCount', { count: entries.length })}
+          </Text>
+        </View>
+      }
+    >
       <View
         style={{
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing.lg,
-          gap: t.spacing.sm,
-        }}
-      >
-        <Heading variant="headingSection">{tr('journal.list.title')}</Heading>
-        <Text variant="bodyLarge" color="fgSubtle">
-          {tr('journal.list.entryCount', { count: entries.length })}
-        </Text>
-      </View>
-
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: t.layout.screenPaddingX,
           paddingTop: t.spacing.xl,
           gap: t.spacing.xl,
         }}
@@ -60,6 +61,6 @@ export function JournalListScreen({ entries, onEntryPress }: JournalListScreenPr
           </Pressable>
         ))}
       </View>
-    </Screen>
+    </ScreenLayout>
   );
 }

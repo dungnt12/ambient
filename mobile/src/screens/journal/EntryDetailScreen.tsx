@@ -1,4 +1,4 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Lock, Sparkles } from 'lucide-react-native';
 import {
@@ -7,8 +7,9 @@ import {
   Checkbox,
   CTAButton,
   MoodGlyph,
-  Screen,
+  ScreenLayout,
   Text,
+  TextButton,
   useTheme,
   type MoodLevel,
 } from '../../design-system';
@@ -38,11 +39,30 @@ export function EntryDetailScreen({
   const { t: tr } = useTranslation();
 
   return (
-    <Screen edges={['top', 'bottom']} background="bg" scroll>
-      <View style={{ paddingHorizontal: t.spacing.sm, paddingTop: t.spacing.sm }}>
-        <BackButton variant="filled" onPress={onBack} />
-      </View>
-
+    <ScreenLayout
+      header={
+        <View style={{ paddingHorizontal: t.spacing.sm, paddingTop: t.spacing.sm }}>
+          <BackButton variant="filled" onPress={onBack} />
+        </View>
+      }
+      footer={
+        <View
+          style={{
+            paddingHorizontal: t.layout.screenPaddingX,
+            paddingTop: t.spacing.sm,
+            paddingBottom: t.spacing.sm,
+            gap: t.spacing.md,
+          }}
+        >
+          <CTAButton label={tr('journal.detail.editCta')} variant="dark" onPress={onEdit} />
+          <TextButton
+            variant="destructive"
+            label={tr('journal.detail.deleteCta')}
+            onPress={() => onDelete?.()}
+          />
+        </View>
+      }
+    >
       <View
         style={{
           paddingHorizontal: t.layout.screenPaddingX,
@@ -93,25 +113,8 @@ export function EntryDetailScreen({
         </View>
 
         <PrivacyNoteRow />
-
-        <View style={{ gap: t.spacing.md, paddingTop: t.spacing.sm }}>
-          <CTAButton label={tr('journal.detail.editCta')} variant="dark" onPress={onEdit} />
-          <Pressable
-            accessibilityRole="button"
-            onPress={onDelete}
-            hitSlop={t.spacing.sm}
-            style={({ pressed }) => ({
-              opacity: pressed ? t.opacity.pressed : t.opacity.full,
-              alignSelf: 'center',
-            })}
-          >
-            <Text variant="buttonLabel" style={{ color: t.colors.error }}>
-              {tr('journal.detail.deleteCta')}
-            </Text>
-          </Pressable>
-        </View>
       </View>
-    </Screen>
+    </ScreenLayout>
   );
 }
 

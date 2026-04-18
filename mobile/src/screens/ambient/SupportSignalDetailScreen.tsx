@@ -1,6 +1,13 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { BackButton, CTAButton, Screen, Text, useTheme } from '../../design-system';
+import {
+  CTAButton,
+  CTAStack,
+  ScreenHeader,
+  ScreenLayout,
+  Text,
+  useTheme,
+} from '../../design-system';
 import type { SupportSignal } from '../../mocks/ambient';
 
 export type SupportSignalDetailScreenProps = {
@@ -19,12 +26,9 @@ export function SupportSignalDetailScreen({
   const t = useTheme();
   const { t: tr } = useTranslation();
 
-  return (
-    <Screen edges={['top', 'bottom']} background="bg" scroll>
-      <View style={{ paddingHorizontal: t.spacing.sm, paddingTop: t.spacing.sm }}>
-        <BackButton variant="filled" onPress={onBack} />
-      </View>
-
+  const header = (
+    <View>
+      <ScreenHeader back={{ onPress: onBack }} />
       <View
         style={{
           paddingHorizontal: t.layout.screenPaddingX,
@@ -42,11 +46,35 @@ export function SupportSignalDetailScreen({
           {signal.body}
         </Text>
       </View>
+    </View>
+  );
 
+  const footer = (
+    <View style={{ paddingHorizontal: t.layout.screenPaddingX, paddingBottom: t.spacing.lg }}>
+      <CTAStack
+        primary={
+          <CTAButton
+            variant="dark"
+            label={tr('ambient.supportDetail.sendCta', { name: signal.memberName })}
+            onPress={onSend}
+          />
+        }
+        secondary={{
+          label: tr('ambient.supportDetail.later'),
+          onPress: () => onLater?.(),
+          tone: 'faint',
+        }}
+      />
+    </View>
+  );
+
+  return (
+    <ScreenLayout header={header} footer={footer}>
       <View
         style={{
           paddingHorizontal: t.layout.screenPaddingX,
           paddingTop: t.spacing.xxl,
+          gap: t.spacing.lg,
         }}
       >
         <View
@@ -69,42 +97,11 @@ export function SupportSignalDetailScreen({
             {tr('ambient.supportDetail.aiNoOneSees')}
           </Text>
         </View>
-      </View>
 
-      <View
-        style={{
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing.lg,
-        }}
-      >
         <Text variant="bodySmall" color="fgFaint">
           {tr('ambient.supportDetail.privacyNote', { name: signal.memberName })}
         </Text>
       </View>
-
-      <View
-        style={{
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing['3xl'],
-          paddingBottom: t.spacing.lg,
-          gap: t.spacing.sm,
-        }}
-      >
-        <CTAButton
-          variant="dark"
-          label={tr('ambient.supportDetail.sendCta', { name: signal.memberName })}
-          onPress={onSend}
-        />
-        <Pressable
-          accessibilityRole="button"
-          onPress={onLater}
-          style={{ paddingVertical: t.spacing.sm }}
-        >
-          <Text variant="buttonLabelSocial" color="fgFaint" align="center">
-            {tr('ambient.supportDetail.later')}
-          </Text>
-        </Pressable>
-      </View>
-    </Screen>
+    </ScreenLayout>
   );
 }

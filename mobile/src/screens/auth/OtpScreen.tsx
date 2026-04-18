@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
-  BackButton,
   CTAButton,
-  Heading,
   OtpInput,
-  Screen,
+  ScreenHeader,
+  ScreenLayout,
   Text,
   useTheme,
 } from '../../design-system';
@@ -36,69 +35,63 @@ export function OtpScreen({ email, onBack, onVerify }: OtpScreenProps) {
   const canSubmit = code.length === OTP_LENGTH;
   const formatted = `0:${seconds.toString().padStart(2, '0')}`;
 
-  return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{ flex: 1 }}
-      >
-        <View style={{ paddingHorizontal: t.spacing.sm, paddingTop: t.spacing.sm }}>
-          <BackButton variant="filled" onPress={onBack} />
-        </View>
+  const handleVerify = () => onVerify?.(code);
 
-        <View
+  return (
+    <ScreenLayout
+      avoidKeyboard
+      header={
+        <ScreenHeader
+          back={{ onPress: onBack }}
+          overline={tr('auth.otp.overline')}
+          title={tr('auth.otp.title')}
+          body={`${tr('auth.otp.bodyPrefix')} ${email}`}
+        />
+      }
+      footer={
+        <Text
+          variant="buttonLabelSocial"
+          color="fgSubtle"
+          align="center"
           style={{
-            flex: 1,
             paddingHorizontal: t.layout.screenPaddingX,
-            paddingTop: t.spacing.base,
+            paddingBottom: t.spacing.base,
           }}
         >
+          {tr('auth.otp.resendIn', { time: formatted })}
+        </Text>
+      }
+    >
+      <View
+        style={{
+          paddingHorizontal: t.layout.screenPaddingX,
+          paddingTop: t.spacing.xxl,
+        }}
+      >
+        <View style={{ gap: t.spacing.base }}>
           <Text variant="overline" color="fgFaint">
-            {tr('auth.otp.overline')}
+            {tr('auth.otp.label')}
           </Text>
-          <View style={{ marginTop: t.spacing.sm, gap: t.spacing.base }}>
-            <Heading variant="headingSection">{tr('auth.otp.title')}</Heading>
-            <Text variant="bodyLarge" color="fgMuted">
-              {tr('auth.otp.bodyPrefix')} {email}
-            </Text>
-          </View>
-
-          <View style={{ marginTop: t.spacing.xxl, gap: t.spacing.base }}>
-            <Text variant="overline" color="fgFaint">
-              {tr('auth.otp.label')}
-            </Text>
-            <OtpInput value={code} onChange={setCode} length={OTP_LENGTH} autoFocus />
-          </View>
-
-          <CTAButton
-            style={{ marginTop: t.spacing.lg }}
-            label={tr('auth.otp.cta')}
-            variant="primary"
-            disabled={!canSubmit}
-            onPress={() => onVerify?.(code)}
-          />
-
-          <Text
-            variant="bodySmall"
-            color="fgFaint"
-            align="center"
-            style={{ marginTop: t.spacing.lg }}
-          >
-            {tr('auth.otp.spamHint')}
-          </Text>
-
-          <View style={{ flex: 1 }} />
-
-          <Text
-            variant="buttonLabelSocial"
-            color="fgSubtle"
-            align="center"
-            style={{ paddingBottom: t.spacing.base }}
-          >
-            {tr('auth.otp.resendIn', { time: formatted })}
-          </Text>
+          <OtpInput value={code} onChange={setCode} length={OTP_LENGTH} autoFocus />
         </View>
-      </KeyboardAvoidingView>
-    </Screen>
+
+        <CTAButton
+          style={{ marginTop: t.spacing.lg }}
+          label={tr('auth.otp.cta')}
+          variant="primary"
+          disabled={!canSubmit}
+          onPress={handleVerify}
+        />
+
+        <Text
+          variant="bodySmall"
+          color="fgFaint"
+          align="center"
+          style={{ marginTop: t.spacing.lg }}
+        >
+          {tr('auth.otp.spamHint')}
+        </Text>
+      </View>
+    </ScreenLayout>
   );
 }

@@ -1,6 +1,13 @@
-import { Alert, Pressable, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { CTAButton, Heading, Screen, Text, useTheme } from '../../design-system';
+import {
+  CTAButton,
+  CTAStack,
+  ScreenHeader,
+  ScreenLayout,
+  Text,
+  useTheme,
+} from '../../design-system';
 
 export type DeleteAccountScreenProps = {
   onConfirmDelete: () => void;
@@ -32,17 +39,31 @@ export function DeleteAccountScreen({ onConfirmDelete, onKeep }: DeleteAccountSc
     tr('settings.deleteAccount.reason3'),
   ];
 
+  const footer = (
+    <CTAStack
+      primary={
+        <CTAButton
+          variant="destructive"
+          label={tr('settings.deleteAccount.cta')}
+          onPress={handleDeletePress}
+        />
+      }
+      secondary={{ label: tr('settings.deleteAccount.keep'), onPress: onKeep }}
+      style={{ paddingHorizontal: t.layout.screenPaddingX }}
+    />
+  );
+
   return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      <View style={{ flex: 1, paddingHorizontal: t.layout.screenPaddingX }}>
-        <Text variant="overline" color="fgFaint" style={{ marginTop: t.spacing.sm }}>
-          {tr('settings.deleteAccount.eyebrow')}
-        </Text>
-
-        <Heading variant="headingSection" color="fg" style={{ marginTop: t.spacing.md }}>
-          {tr('settings.deleteAccount.title')}
-        </Heading>
-
+    <ScreenLayout
+      header={
+        <ScreenHeader
+          overline={tr('settings.deleteAccount.eyebrow')}
+          title={tr('settings.deleteAccount.title')}
+        />
+      }
+      footer={footer}
+    >
+      <View style={{ paddingHorizontal: t.layout.screenPaddingX }}>
         <Text variant="bodyLarge" color="fgMuted" style={{ marginTop: t.spacing.lg }}>
           {tr('settings.deleteAccount.body')}
         </Text>
@@ -67,32 +88,8 @@ export function DeleteAccountScreen({ onConfirmDelete, onKeep }: DeleteAccountSc
         <Text variant="bodySmall" color="fgFaint" style={{ marginTop: t.spacing.lg }}>
           {tr('settings.deleteAccount.caption')}
         </Text>
-
-        <View style={{ flex: 1 }} />
-
-        <CTAButton
-          variant="destructive"
-          label={tr('settings.deleteAccount.cta')}
-          onPress={handleDeletePress}
-        />
-
-        <Pressable
-          accessibilityRole="button"
-          onPress={onKeep}
-          style={({ pressed }) => ({
-            marginTop: t.spacing.md,
-            alignSelf: 'center',
-            paddingVertical: t.spacing.sm,
-            paddingHorizontal: t.spacing.base,
-            opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-          })}
-        >
-          <Text variant="buttonLabelSocial" color="fgSubtle" align="center">
-            {tr('settings.deleteAccount.keep')}
-          </Text>
-        </Pressable>
       </View>
-    </Screen>
+    </ScreenLayout>
   );
 }
 

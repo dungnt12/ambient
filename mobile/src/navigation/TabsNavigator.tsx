@@ -1,15 +1,30 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
+import type { ReactNode } from 'react';
 import { GardenScreen } from '../screens/garden';
 import { JournalListScreen } from '../screens/journal';
 import { GroupCreateJoinScreen } from '../screens/group';
 import { SettingsScreen } from '../screens/settings';
 import { SAMPLE_ENTRIES } from '../mocks/journal';
 import { SAMPLE_GROUP, SAMPLE_PULSE_MEMBERS, SAMPLE_SAVED_INVITES } from '../mocks/group';
+import {
+  BottomBarInsetProvider,
+  TabBarVisibilityProvider,
+  useTabBarScrollY,
+} from '../design-system';
 import { AppTabBar } from './AppTabBar';
+import { useTabBarInset } from './useTabBarInset';
 import type { RootNav, TabParamList } from './types';
 
 const Tab = createBottomTabNavigator<TabParamList>();
+
+// Wraps every tab scene with BottomBarInsetProvider so any DS container
+// inside (Screen, ScreenLayout, or a component calling useBottomBarInset)
+// reserves space for the floating tab bar without prop drilling.
+function TabScreenLayout({ children }: { children: ReactNode }) {
+  const inset = useTabBarInset();
+  return <BottomBarInsetProvider value={inset}>{children}</BottomBarInsetProvider>;
+}
 
 function GardenTab() {
   return <GardenScreen />;
@@ -75,15 +90,24 @@ function YouTab() {
 }
 
 export function TabsNavigator() {
+  const scrollY = useTabBarScrollY();
   return (
-    <Tab.Navigator
-      screenOptions={{ headerShown: false, lazy: true }}
-      tabBar={(props) => <AppTabBar {...props} />}
-    >
-      <Tab.Screen name="Garden" component={GardenTab} />
-      <Tab.Screen name="Journal" component={JournalTab} />
-      <Tab.Screen name="Group" component={GroupTab} />
-      <Tab.Screen name="You" component={YouTab} />
-    </Tab.Navigator>
+    <TabBarVisibilityProvider scrollY={scrollY}>
+      <Tab.Navigator
+        screenOptions={{ headerShown: false, lazy: true }}
+        tabBar={(props) => <AppTabBar {...props} />}
+        screenLayout={({ children }) => <TabScreenLayout>{children}</TabScreenLayout>}
+        screenListeners={{
+          // Tab switch restores the bar so the newly focused scene never
+          // inherits a hidden state from the previous scroll position.
+          focus: () => scrollY.setValue(0),
+        }}
+      >
+        <Tab.Screen name="Garden" component={GardenTab} />
+        <Tab.Screen name="Journal" component={JournalTab} />
+        <Tab.Screen name="Group" component={GroupTab} />
+        <Tab.Screen name="You" component={YouTab} />
+      </Tab.Navigator>
+    </TabBarVisibilityProvider>
   );
 }

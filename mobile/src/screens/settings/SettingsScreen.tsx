@@ -1,7 +1,16 @@
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight } from 'lucide-react-native';
-import { Avatar, CTAButton, Screen, Text, Toggle, useTheme } from '../../design-system';
+import {
+  Avatar,
+  CTAButton,
+  ScreenHeader,
+  ScreenLayout,
+  Text,
+  TextButton,
+  Toggle,
+  useTheme,
+} from '../../design-system';
 
 export type SettingsScreenProps = {
   userName: string;
@@ -35,23 +44,24 @@ export function SettingsScreen({
   const t = useTheme();
   const { t: tr } = useTranslation();
 
-  return (
-    <Screen edges={['top', 'bottom']} background="bg" scroll>
-      <View
-        style={{
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing.base,
-          gap: t.spacing.sm,
-        }}
-      >
-        <Text variant="overline" color="fgFaint">
-          {tr('settings.eyebrow')}
-        </Text>
-        <Text variant="headingSection" color="fg">
-          {tr('settings.title')}
-        </Text>
-      </View>
+  const header = <ScreenHeader overline={tr('settings.eyebrow')} title={tr('settings.title')} />;
 
+  const footer = (
+    <View
+      style={{
+        paddingHorizontal: t.layout.screenPaddingX,
+        paddingTop: t.spacing.lg,
+        paddingBottom: t.spacing.xl,
+      }}
+    >
+      <Text variant="bodySmall" color="fgSubtle" align="center">
+        {tr('settings.footer')}
+      </Text>
+    </View>
+  );
+
+  return (
+    <ScreenLayout header={header} footer={footer}>
       <View
         style={{
           paddingHorizontal: t.layout.screenPaddingX,
@@ -113,34 +123,13 @@ export function SettingsScreen({
         }}
       >
         <CTAButton variant="dark" label={tr('settings.actions.signOut')} onPress={onSignOut} />
-        <Pressable
-          accessibilityRole="button"
+        <TextButton
+          variant="destructive"
+          label={tr('settings.actions.deleteAccount')}
           onPress={onDeleteAccount}
-          hitSlop={t.spacing.sm}
-          style={({ pressed }) => ({
-            opacity: pressed ? t.opacity.pressed : t.opacity.full,
-            alignSelf: 'center',
-            paddingVertical: t.spacing.sm,
-          })}
-        >
-          <Text variant="bodySmall" style={{ color: t.colors.error }}>
-            {tr('settings.actions.deleteAccount')}
-          </Text>
-        </Pressable>
+        />
       </View>
-
-      <View
-        style={{
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing.lg,
-          paddingBottom: t.spacing.xl,
-        }}
-      >
-        <Text variant="bodySmall" color="fgSubtle" align="center">
-          {tr('settings.footer')}
-        </Text>
-      </View>
-    </Screen>
+    </ScreenLayout>
   );
 }
 
