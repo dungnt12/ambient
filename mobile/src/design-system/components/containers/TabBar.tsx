@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, View, type ViewStyle } from 'react-native';
 import { BookOpen, Home, Plus, User, Users, type LucideIcon } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { Text } from '../Text';
 import { useTheme, type Theme } from '../../theme';
 import { palette } from '../../tokens/colors';
@@ -28,13 +29,6 @@ const FAB_SHADOW_OPACITY = 0.35;
 const FAB_PRESS_SCALE = 0.9;
 const GLASS_BORDER_ALPHA = '99'; // ~0.6 alpha — matches Figma rgba(255,255,255,0.6)
 const GLASS_BORDER_COLOR = `${palette.surface.white}${GLASS_BORDER_ALPHA}`;
-
-const DEFAULT_LABELS: TabBarLabels = {
-  garden: 'Garden',
-  journal: 'Journal',
-  group: 'Group',
-  you: 'You',
-};
 
 type TabDef = { key: TabKey; icon: LucideIcon };
 const LEFT_TABS: TabDef[] = [
@@ -130,6 +124,7 @@ function TabButton({
 type CenterFabProps = { t: Theme; onPress?: () => void };
 
 function CenterFab({ t, onPress }: CenterFabProps) {
+  const { t: tr } = useTranslation();
   const scale = useRef(new Animated.Value(1)).current;
   return (
     <View style={{ width: FAB_SIZE + t.spacing.xs * 2, alignItems: 'center' }}>
@@ -151,7 +146,7 @@ function CenterFab({ t, onPress }: CenterFabProps) {
       >
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="New entry"
+          accessibilityLabel={tr('nav.tabs.newEntry')}
           onPress={onPress}
           onPressIn={() => {
             Animated.spring(scale, {
@@ -191,7 +186,13 @@ function CenterFab({ t, onPress }: CenterFabProps) {
  */
 export function TabBar({ active, onChange, onFabPress, labels, style }: TabBarProps) {
   const t = useTheme();
-  const resolved = { ...DEFAULT_LABELS, ...labels };
+  const { t: tr } = useTranslation();
+  const resolved: TabBarLabels = {
+    garden: labels?.garden ?? tr('nav.tabs.garden'),
+    journal: labels?.journal ?? tr('nav.tabs.journal'),
+    group: labels?.group ?? tr('nav.tabs.group'),
+    you: labels?.you ?? tr('nav.tabs.you'),
+  };
   const activeTint = `${t.colors.brand}${ACTIVE_BG_OPACITY}`;
 
   const activeIndex = TABS.findIndex((tab) => tab.key === active);

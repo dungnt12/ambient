@@ -16,6 +16,15 @@
     "skip": "Skip",
     "retry": "Retry"
   },
+  "nav": {
+    "tabs": {
+      "garden": "Garden",
+      "journal": "Journal",
+      "group": "Group",
+      "you": "You",
+      "newEntry": "New entry"
+    }
+  },
   "journal": {
     "promptTitle": "Today's prompt",
     "emptyPlaceholder": "What stayed with you today?",

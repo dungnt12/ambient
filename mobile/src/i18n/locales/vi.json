@@ -16,6 +16,15 @@
     "skip": "Bỏ qua",
     "retry": "Thử lại"
   },
+  "nav": {
+    "tabs": {
+      "garden": "Khu vườn",
+      "journal": "Nhật ký",
+      "group": "Nhóm",
+      "you": "Bạn",
+      "newEntry": "Dòng mới"
+    }
+  },
   "journal": {
     "promptTitle": "Lời nhắc hôm nay",
     "emptyPlaceholder": "Điều gì đọng lại trong bạn hôm nay?",
