@@ -22,7 +22,6 @@ const ACTIVE_PILL_HEIGHT = 28;
 const ACTIVE_PILL_WIDTH = 40;
 const ACTIVE_PILL_RADIUS = 14;
 const ACTIVE_BG_OPACITY = '1a'; // ~0.1 alpha on the brand terracotta
-const ICON_ACTIVE_SCALE = 1.14;
 const PRESS_SCALE = 0.92;
 const FAB_SIZE = 48;
 const FAB_SHADOW_OPACITY = 0.35;
@@ -53,9 +52,7 @@ type PillFrame = { x: number; y: number; w: number; h: number };
 type TabButtonProps = {
   tab: TabDef;
   label: string;
-  index: number;
   isActive: boolean;
-  progress: Animated.Value;
   pressScale: Animated.Value;
   pillRef: (node: View | null) => void;
   onMeasure: () => void;
@@ -66,9 +63,7 @@ type TabButtonProps = {
 function TabButton({
   tab,
   label,
-  index,
   isActive,
-  progress,
   pressScale,
   pillRef,
   onMeasure,
@@ -77,11 +72,6 @@ function TabButton({
 }: TabButtonProps) {
   const { icon: Icon } = tab;
   const color = isActive ? t.colors.brand : t.colors.fgFaint;
-  const iconScale = progress.interpolate({
-    inputRange: [index - 1, index, index + 1],
-    outputRange: [1, ICON_ACTIVE_SCALE, 1],
-    extrapolate: 'clamp',
-  });
   return (
     <Pressable
       accessibilityRole="tab"
@@ -90,7 +80,7 @@ function TabButton({
       onPressIn={() => {
         Animated.spring(pressScale, {
           toValue: PRESS_SCALE,
-          useNativeDriver: true,
+          useNativeDriver: false,
           damping: 20,
           stiffness: 400,
           mass: 0.6,
@@ -99,7 +89,7 @@ function TabButton({
       onPressOut={() => {
         Animated.spring(pressScale, {
           toValue: 1,
-          useNativeDriver: true,
+          useNativeDriver: false,
           damping: 14,
           stiffness: 260,
           mass: 0.7,
@@ -127,9 +117,7 @@ function TabButton({
             justifyContent: 'center',
           }}
         >
-          <Animated.View style={{ transform: [{ scale: iconScale }] }}>
-            <Icon color={color} size={t.iconSize.tab} strokeWidth={t.stroke.standard} />
-          </Animated.View>
+          <Icon color={color} size={t.iconSize.tab} strokeWidth={t.stroke.standard} />
         </View>
         <Text variant="overline" style={{ color, textAlign: 'center' }}>
           {label}
@@ -168,7 +156,7 @@ function CenterFab({ t, onPress }: CenterFabProps) {
           onPressIn={() => {
             Animated.spring(scale, {
               toValue: FAB_PRESS_SCALE,
-              useNativeDriver: true,
+              useNativeDriver: false,
               damping: 18,
               stiffness: 380,
               mass: 0.6,
@@ -177,7 +165,7 @@ function CenterFab({ t, onPress }: CenterFabProps) {
           onPressOut={() => {
             Animated.spring(scale, {
               toValue: 1,
-              useNativeDriver: true,
+              useNativeDriver: false,
               damping: 10,
               stiffness: 220,
               mass: 0.7,
@@ -218,7 +206,7 @@ export function TabBar({ active, onChange, onFabPress, labels, style }: TabBarPr
   useEffect(() => {
     Animated.spring(progress, {
       toValue: activeIndex,
-      useNativeDriver: true,
+      useNativeDriver: false,
       damping: 18,
       stiffness: 220,
       mass: 0.9,
@@ -260,9 +248,7 @@ export function TabBar({ active, onChange, onFabPress, labels, style }: TabBarPr
       key={tab.key}
       tab={tab}
       label={resolved[tab.key]}
-      index={absoluteIndex}
       isActive={tab.key === active}
-      progress={progress}
       pressScale={pressScales[absoluteIndex]}
       pillRef={(node) => {
         pillRefs.current[absoluteIndex] = node;

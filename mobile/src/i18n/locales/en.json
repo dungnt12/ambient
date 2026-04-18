@@ -19,7 +19,32 @@
   "journal": {
     "promptTitle": "Today's prompt",
     "emptyPlaceholder": "What stayed with you today?",
-    "privacyNote": "Only you can see this."
+    "privacyNote": "Only you can see this.",
+    "compose": {
+      "onlyYou": "ONLY YOU",
+      "promptEyebrow": "TODAY'S PROMPT · CLAUDE",
+      "aiWillSummarize": "AI will summarize after you save",
+      "placeholder": "Write a few lines for yourself. No one else can read this.",
+      "keyboardHint": "Write freely — AI only reads the summary.",
+      "inlineSave": "Save",
+      "save": "Save entry"
+    },
+    "detail": {
+      "aiSignalHeading": "AI SIGNAL · WHAT THE GROUP SEES",
+      "privacyNote": "Only you see the original text",
+      "editCta": "Edit this entry",
+      "deleteCta": "Delete entry"
+    },
+    "edit": {
+      "title": "Edit a few lines for yourself.",
+      "aiHint": "AI will re-summarize after you save.",
+      "footerHint": "Changes only save when you press Save"
+    },
+    "list": {
+      "title": "Today's journal",
+      "entryCount_one": "{{count}} entry",
+      "entryCount_other": "{{count}} entries"
+    }
   },
   "group": {
     "pulseTitle": "The group this week",
