@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Sparkles } from 'lucide-react-native';
 import {
   Heading,
   JournalTextarea,
@@ -10,6 +11,7 @@ import {
   useTheme,
   type MoodLevel,
 } from '../../design-system';
+import { useKeyboardOpen } from '../../hooks';
 
 export type EntryEditScreenProps = {
   dateEyebrow: string;
@@ -32,6 +34,7 @@ export function EntryEditScreen({
   const { t: tr } = useTranslation();
   const [content, setContent] = useState(initialContent);
   const [mood, setMood] = useState<MoodLevel | null>(initialMood);
+  const keyboardOpen = useKeyboardOpen();
 
   const dirty = content !== initialContent || mood !== initialMood;
 
@@ -60,11 +63,14 @@ export function EntryEditScreen({
           />
         </View>
 
-        <View
+        <Pressable
+          accessible={false}
+          onPress={Keyboard.dismiss}
           style={{
             flex: 1,
             paddingHorizontal: t.layout.screenPaddingX,
             paddingTop: t.spacing.base,
+            paddingBottom: t.spacing.md,
             gap: t.spacing.lg,
           }}
         >
@@ -78,35 +84,37 @@ export function EntryEditScreen({
             onChangeText={setContent}
             maxLength={MAX_LENGTH}
             showCounter
-            minHeight={t.layout.ctaHeight * 6}
+            minHeight={t.layout.ctaHeight * 3}
+            style={{ flex: 1 }}
           />
 
-          <MoodPicker value={mood} onChange={setMood} />
-
-          <View
-            style={{
-              backgroundColor: t.colors.bgMuted,
-              borderRadius: t.radius.card,
-              padding: t.spacing.base,
-              alignItems: 'center',
-            }}
-          >
-            <Text variant="bodySmall" color="fgSubtle" align="center">
-              {tr('journal.edit.aiHint')}
-            </Text>
-          </View>
-
-          <View style={{ flex: 1 }} />
-
-          <Text
-            variant="bodySmall"
-            color="fgFaint"
-            align="center"
-            style={{ paddingBottom: t.spacing.base }}
-          >
-            {tr('journal.edit.footerHint')}
-          </Text>
-        </View>
+          {keyboardOpen ? null : (
+            <>
+              <MoodPicker value={mood} onChange={setMood} />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: t.spacing.xs,
+                  backgroundColor: t.colors.bgMuted,
+                  borderRadius: t.radius.card,
+                  padding: t.spacing.base,
+                  marginBottom: t.spacing.base,
+                }}
+              >
+                <Sparkles
+                  size={t.iconSize.xs}
+                  strokeWidth={t.stroke.standard}
+                  color={t.colors.brand}
+                />
+                <Text variant="bodySmall" color="fgSubtle" align="center">
+                  {tr('journal.edit.aiHint')}
+                </Text>
+              </View>
+            </>
+          )}
+        </Pressable>
       </KeyboardAvoidingView>
     </Screen>
   );

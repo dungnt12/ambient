@@ -30,6 +30,8 @@ export function Avatar({ size, variant = 'initial', initial, label, style }: Ava
           height: size,
           borderRadius: size / 2,
           backgroundColor: background,
+          borderWidth: isInitial ? 0 : theme.brand.border.hairline,
+          borderColor: theme.colors.borderSoft,
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',

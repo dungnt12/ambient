@@ -24,5 +24,5 @@ export const layout = {
   inputHeight: 56,
   tabBarHeight: 68,
   headerHeight: 56,
-  maxContentWidth: 342,
+  maxContentWidth: 640,
 } as const;

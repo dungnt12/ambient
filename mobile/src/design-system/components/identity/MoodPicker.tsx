@@ -1,4 +1,5 @@
-import { Pressable, View, type ViewStyle } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { Animated, Pressable, View, type ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme, type Theme } from '../../theme';
 import { type MoodLevel } from './types';
@@ -11,11 +12,36 @@ export type MoodPickerProps = {
 };
 
 const MOODS: readonly MoodLevel[] = [1, 2, 3, 4, 5];
+const PRESS_SPRING = { friction: 7, tension: 280, useNativeDriver: true } as const;
 
 export function MoodPicker({ value, onChange, style, accessibilityLabel }: MoodPickerProps) {
   const theme = useTheme();
   const mp = theme.brand.moodPicker;
-  const slotHeight = value === 5 ? mp.slotHeightLarge : mp.slotHeight;
+  // Keep the glyph slot at the larger height always so selecting mood 5 (which uses taller rays)
+  // doesn't bump the column height and shift surrounding layout.
+  const slotHeight = mp.slotHeightLarge;
+
+  const pressAnims = useRef(MOODS.map(() => new Animated.Value(1))).current;
+  const glyphAnim = useRef(new Animated.Value(value !== null ? 1 : 0)).current;
+
+  // Glyph reveal spring on mood change.
+  useEffect(() => {
+    Animated.spring(glyphAnim, {
+      toValue: value !== null ? 1 : 0,
+      ...PRESS_SPRING,
+    }).start();
+  }, [value, glyphAnim]);
+
+  const handlePress = (mood: MoodLevel, index: number) => {
+    const anim = pressAnims[index];
+    anim.stopAnimation();
+    anim.setValue(1);
+    Animated.sequence([
+      Animated.spring(anim, { toValue: 1.18, ...PRESS_SPRING }),
+      Animated.spring(anim, { toValue: 1, ...PRESS_SPRING }),
+    ]).start();
+    onChange(mood);
+  };
 
   return (
     <View
@@ -30,7 +56,7 @@ export function MoodPicker({ value, onChange, style, accessibilityLabel }: MoodP
           gap: mp.dotGap,
         }}
       >
-        {MOODS.map((mood) => {
+        {MOODS.map((mood, index) => {
           const isSelected = value === mood;
           const size = isSelected ? mp.dotSelectedSize : mp.dotSize;
           return (
@@ -38,15 +64,16 @@ export function MoodPicker({ value, onChange, style, accessibilityLabel }: MoodP
               key={mood}
               accessibilityRole="radio"
               accessibilityState={{ selected: isSelected }}
-              onPress={() => onChange(mood)}
+              onPress={() => handlePress(mood, index)}
+              hitSlop={mp.dotGap / 2}
               style={{
-                width: size,
-                height: size,
+                width: mp.dotSelectedSize,
+                height: mp.dotSelectedSize,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <View
+              <Animated.View
                 style={{
                   width: size,
                   height: size,
@@ -54,23 +81,30 @@ export function MoodPicker({ value, onChange, style, accessibilityLabel }: MoodP
                   backgroundColor: isSelected ? theme.colors.brand : theme.colors.bgMuted,
                   borderWidth: isSelected ? mp.dotSelectedBorder : mp.dotBorder,
                   borderColor: isSelected ? theme.colors.ringSoft : theme.colors.borderSoft,
+                  transform: [{ scale: pressAnims[index] }],
                 }}
               />
             </Pressable>
           );
         })}
       </View>
-      <View
+      <Animated.View
         style={{
           width: mp.slotWidth,
           height: slotHeight,
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
+          opacity: glyphAnim,
+          transform: [
+            {
+              scale: glyphAnim.interpolate({ inputRange: [0, 1], outputRange: [0.85, 1] }),
+            },
+          ],
         }}
       >
         {value ? <MoodWaveGlyph mood={value} theme={theme} /> : null}
-      </View>
+      </Animated.View>
     </View>
   );
 }

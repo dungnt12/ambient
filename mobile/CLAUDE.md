@@ -37,6 +37,7 @@ Auto-fix helpers:
 
 - Never bypass the pipeline (no `--no-verify`, no disabling rules inline unless justified in a comment).
 - Never add `any` to satisfy typecheck — fix the type.
+- **Xóa là xóa sạch (i18n cleanup)**: Mỗi lần xóa/refactor component, UI element, screen, hoặc feature — **bắt buộc** mở `src/i18n/locales/en.json` và `src/i18n/locales/vi.json`, gỡ bỏ tất cả key i18n không còn được tham chiếu. Quy trình: sau khi xóa code, grep cả `src/` cho từng key t(…) / `<Trans>` đã xóa; nếu không còn hit, xóa key ở **cả en.json và vi.json** (phải đồng bộ 2 file). Không để orphan keys tồn đọng.
 - If a rule is wrong for this codebase, adjust `eslint.config.js` instead of disabling per-file.
 - Keep `npm run check` green at all times; a red `main` blocks every downstream prompt.
 

@@ -34,8 +34,6 @@
       "promptEyebrow": "LỜI NHẮC HÔM NAY · CLAUDE",
       "aiWillSummarize": "AI sẽ tóm tắt sau khi bạn lưu",
       "placeholder": "Viết vài dòng cho chính bạn. Không ai khác đọc được.",
-      "keyboardHint": "Viết tự do — AI chỉ đọc bản tóm tắt.",
-      "inlineSave": "Lưu",
       "save": "Lưu nhật ký"
     },
     "detail": {
@@ -46,8 +44,7 @@
     },
     "edit": {
       "title": "Chỉnh sửa vài dòng cho chính bạn.",
-      "aiHint": "AI sẽ tóm tắt lại sau khi bạn lưu.",
-      "footerHint": "Thay đổi chỉ được lưu khi bạn nhấn Lưu"
+      "aiHint": "AI sẽ tóm tắt lại sau khi bạn lưu."
     },
     "list": {
       "title": "Nhật ký hôm nay",

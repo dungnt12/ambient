@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Sparkles, Bot } from 'lucide-react-native';
+import { Sparkles } from 'lucide-react-native';
 import { Text } from '../Text';
 import { useTheme } from '../../theme';
 
@@ -22,11 +22,6 @@ export function AILabelRow({ label }: AILabelRowProps) {
         size={theme.iconSize.sm}
         strokeWidth={theme.stroke.standard}
         color={theme.colors.brand}
-      />
-      <Bot
-        size={theme.iconSize.sm}
-        strokeWidth={theme.stroke.standard}
-        color={theme.colors.fgFaint}
       />
       <Text variant="bodySmall" color="fgMuted">
         {label}

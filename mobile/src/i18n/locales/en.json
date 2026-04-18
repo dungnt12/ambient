@@ -34,8 +34,6 @@
       "promptEyebrow": "TODAY'S PROMPT · CLAUDE",
       "aiWillSummarize": "AI will summarize after you save",
       "placeholder": "Write a few lines for yourself. No one else can read this.",
-      "keyboardHint": "Write freely — AI only reads the summary.",
-      "inlineSave": "Save",
       "save": "Save entry"
     },
     "detail": {
@@ -46,8 +44,7 @@
     },
     "edit": {
       "title": "Edit a few lines for yourself.",
-      "aiHint": "AI will re-summarize after you save.",
-      "footerHint": "Changes only save when you press Save"
+      "aiHint": "AI will re-summarize after you save."
     },
     "list": {
       "title": "Today's journal",

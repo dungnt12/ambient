@@ -39,9 +39,7 @@ export function BackButton({ variant = 'ghost', style, ...pressableProps }: Back
             width: INNER_SIZE,
             height: INNER_SIZE,
             borderRadius: INNER_SIZE / 2,
-            backgroundColor: theme.colors.bgCard,
-            borderWidth: theme.brand.border.hairline,
-            borderColor: theme.colors.border,
+            backgroundColor: theme.colors.bgMuted,
             alignItems: 'center',
             justifyContent: 'center',
           }}

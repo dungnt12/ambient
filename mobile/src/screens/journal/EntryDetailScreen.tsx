@@ -1,6 +1,6 @@
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Lock } from 'lucide-react-native';
+import { Lock, Sparkles } from 'lucide-react-native';
 import {
   Avatar,
   BackButton,
@@ -40,7 +40,7 @@ export function EntryDetailScreen({
   return (
     <Screen edges={['top', 'bottom']} background="bg" scroll>
       <View style={{ paddingHorizontal: t.spacing.sm, paddingTop: t.spacing.sm }}>
-        <BackButton variant="ghost" onPress={onBack} />
+        <BackButton variant="filled" onPress={onBack} />
       </View>
 
       <View
@@ -81,9 +81,12 @@ export function EntryDetailScreen({
             gap: t.spacing.sm,
           }}
         >
-          <Text variant="overline" color="fgFaint">
-            {tr('journal.detail.aiSignalHeading')}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.xs }}>
+            <Sparkles size={t.iconSize.xs} strokeWidth={t.stroke.standard} color={t.colors.brand} />
+            <Text variant="overline" color="fgFaint">
+              {tr('journal.detail.aiSignalHeading')}
+            </Text>
+          </View>
           <Text variant="bodyStandard" color="fg">
             {aiSummary}
           </Text>

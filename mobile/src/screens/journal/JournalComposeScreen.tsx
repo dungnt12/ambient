@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Lock } from 'lucide-react-native';
 import {
@@ -14,12 +14,14 @@ import {
   useTheme,
   type MoodLevel,
 } from '../../design-system';
+import { useKeyboardOpen } from '../../hooks';
 
 export type JournalComposeScreenProps = {
   dayLabel: string;
   promptEyebrow?: string;
   prompt: string;
   promptFollowup?: string;
+  onCancel?: () => void;
   onSave?: (draft: { content: string; mood: MoodLevel | null }) => void;
 };
 
@@ -30,13 +32,14 @@ export function JournalComposeScreen({
   promptEyebrow,
   prompt,
   promptFollowup,
+  onCancel,
   onSave,
 }: JournalComposeScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
   const [content, setContent] = useState('');
   const [mood, setMood] = useState<MoodLevel | null>(null);
-  const [composing, setComposing] = useState(false);
+  const keyboardOpen = useKeyboardOpen();
 
   const canSave = content.trim().length > 0 && mood !== null;
 
@@ -54,19 +57,36 @@ export function JournalComposeScreen({
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'flex-end',
+            alignItems: 'center',
+            justifyContent: 'space-between',
             paddingHorizontal: t.layout.screenPaddingX,
             paddingTop: t.spacing.md,
           }}
         >
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={tr('common.cancel')}
+            onPress={onCancel}
+            hitSlop={t.spacing.sm}
+            style={({ pressed }) => ({
+              opacity: pressed ? t.opacity.pressed : t.opacity.full,
+            })}
+          >
+            <Text variant="buttonLabel" color="fgMuted">
+              {tr('common.cancel')}
+            </Text>
+          </Pressable>
           <OnlyYouBadge label={tr('journal.compose.onlyYou')} />
         </View>
 
-        <View
+        <Pressable
+          accessible={false}
+          onPress={Keyboard.dismiss}
           style={{
             flex: 1,
             paddingHorizontal: t.layout.screenPaddingX,
             paddingTop: t.spacing.base,
+            paddingBottom: t.spacing.md,
             gap: t.spacing.base,
           }}
         >
@@ -85,46 +105,12 @@ export function JournalComposeScreen({
             placeholder={tr('journal.compose.placeholder')}
             maxLength={MAX_LENGTH}
             showCounter
-            onFocus={() => setComposing(true)}
-            onBlur={() => setComposing(false)}
+            minHeight={t.layout.ctaHeight * 2}
+            style={{ flex: 1 }}
           />
 
-          {composing ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingVertical: t.spacing.sm,
-              }}
-            >
-              <Text variant="bodySmall" color="fgFaint">
-                {tr('journal.compose.keyboardHint')}
-              </Text>
-              <Pressable
-                accessibilityRole="button"
-                disabled={!canSave}
-                onPress={handleSave}
-                hitSlop={t.spacing.sm}
-                style={({ pressed }) => ({
-                  opacity: !canSave
-                    ? t.opacity.disabled
-                    : pressed
-                      ? t.opacity.pressed
-                      : t.opacity.full,
-                })}
-              >
-                <Text variant="buttonLabel" color="brand">
-                  {tr('journal.compose.inlineSave')}
-                </Text>
-              </Pressable>
-            </View>
-          ) : null}
-
-          <View style={{ flex: 1 }} />
-
-          {!composing ? (
-            <View style={{ gap: t.spacing.lg, paddingBottom: t.spacing.base }}>
+          {keyboardOpen ? null : (
+            <View style={{ gap: t.spacing.lg }}>
               <MoodPicker value={mood} onChange={setMood} />
               <CTAButton
                 label={tr('journal.compose.save')}
@@ -133,8 +119,8 @@ export function JournalComposeScreen({
                 onPress={handleSave}
               />
             </View>
-          ) : null}
-        </View>
+          )}
+        </Pressable>
       </KeyboardAvoidingView>
     </Screen>
   );

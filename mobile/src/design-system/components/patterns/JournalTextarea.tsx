@@ -60,7 +60,13 @@ export function JournalTextarea({
           {date}
         </Text>
       ) : null}
-      <View style={{ flexGrow: 1, minHeight: minHeight - 80 }}>
+      <View
+        style={{
+          flex: 1,
+          minHeight: Math.max(minHeight - 80, 40),
+          paddingBottom: showCounter && maxLength ? theme.spacing.lg : 0,
+        }}
+      >
         {isEmpty ? (
           <Text
             pointerEvents="none"
@@ -104,7 +110,14 @@ export function JournalTextarea({
         />
       </View>
       {showCounter && maxLength ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <View
+          pointerEvents="none"
+          style={{
+            position: 'absolute',
+            right: theme.spacing.lg,
+            bottom: theme.spacing.base,
+          }}
+        >
           <Text variant="mono" color="fgFaint" style={{ fontSize: 12, lineHeight: 16 }}>
             {`${value.length} / ${maxLength}`}
           </Text>

@@ -120,7 +120,8 @@ const SAMPLE_ENTRY_BODY =
   "Morning coffee tastes different — must be the new beans. Watching sunlight fall onto the balcony, noticed the plants I forgot to water. Not sad, not happy. An ordinary morning, and ordinary feels enough right now. The 10am meeting ran long. Came home to mom's cooking. Tonight I'll finish the book I started.";
 
 function AuthFlow() {
-  const [route, setRoute] = useState<Route>('onboarding');
+  // TEMP: auth flow disabled for UI testing — flip back to 'onboarding' when auth is needed again.
+  const [route, setRoute] = useState<Route>('journalList');
   const [email, setEmail] = useState('');
   const previousRouteRef = useRef<Route>(route);
 
@@ -184,7 +185,8 @@ function AuthFlow() {
             dayLabel="THURSDAY · APR 17"
             prompt="Is anything lighter today than yesterday?"
             promptFollowup="Yesterday you wrote about feeling low. How's tonight?"
-            onSave={() => setRoute('journalList')}
+            onCancel={() => setRoute('journalList')}
+            onSave={() => setRoute('entryDetail')}
           />
         );
       case 'entryDetail':
