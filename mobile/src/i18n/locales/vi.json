@@ -1,0 +1,79 @@
+{
+  "app": {
+    "name": "Ambient",
+    "tagline": "Một nơi yên tĩnh để trở về."
+  },
+  "splash": {
+    "loading": "Đang tải"
+  },
+  "common": {
+    "continue": "Tiếp tục",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "done": "Xong",
+    "back": "Quay lại",
+    "next": "Tiếp",
+    "skip": "Bỏ qua",
+    "retry": "Thử lại"
+  },
+  "journal": {
+    "promptTitle": "Lời nhắc hôm nay",
+    "emptyPlaceholder": "Điều gì đọng lại trong bạn hôm nay?",
+    "privacyNote": "Chỉ bạn nhìn thấy."
+  },
+  "group": {
+    "pulseTitle": "Nhóm tuần này",
+    "inviteCta": "Mời người bạn yêu quý"
+  },
+  "onboarding": {
+    "signIn": "Tôi đã có tài khoản",
+    "welcome": {
+      "title": "Viết cho chính bạn.",
+      "body": "Vài dòng mỗi ngày, nhẹ như hơi thở. Không ai đọc — kể cả nhóm của bạn.",
+      "cta": "Tạo dòng đầu tiên"
+    },
+    "signal": {
+      "title": "Gần nhau, dù xa.",
+      "body": "Cảm nhận cảm xúc của nhau, không cần đọc một dòng nào.",
+      "cta": "Tiếp tục"
+    },
+    "hints": {
+      "title": "Chỉ khi thật sự cần.",
+      "body": "AI luôn lặng im. Chỉ khẽ gõ cửa khi cần thiết.",
+      "cta": "Bắt đầu"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "overline": "CHÀO MỪNG TRỞ LẠI",
+      "title": "Vài dòng nữa đang chờ bạn.",
+      "body": "Đăng nhập để tiếp tục nhịp nhật ký.",
+      "apple": "Tiếp tục với Apple",
+      "email": "Tiếp tục với email",
+      "terms": "Tiếp tục nghĩa là bạn đồng ý với Điều khoản và Chính sách bảo mật.",
+      "newHere": "Tôi là người mới",
+      "help": "Cần hỗ trợ?"
+    },
+    "email": {
+      "overline": "ĐĂNG NHẬP BẰNG EMAIL",
+      "title": "Email của bạn.",
+      "body": "Chúng tôi sẽ gửi mã đăng nhập — không cần mật khẩu.",
+      "label": "EMAIL CỦA BẠN",
+      "placeholder": "ban@vidu.com",
+      "captcha": "Tôi không phải robot",
+      "captchaMeta": "Bảo mật",
+      "cta": "Gửi mã",
+      "footer": "Chúng tôi không lưu mật khẩu. Mã hết hạn sau 10 phút.",
+      "useApple": "Dùng Apple thay thế"
+    },
+    "otp": {
+      "overline": "NHẬP MÃ",
+      "title": "Kiểm tra email.",
+      "bodyPrefix": "Mã 6 chữ số đã được gửi đến",
+      "label": "MÃ XÁC THỰC",
+      "cta": "Tiếp tục",
+      "spamHint": "Không thấy email? Kiểm tra thư mục spam.",
+      "resendIn": "Gửi lại sau {{time}}"
+    }
+  }
+}

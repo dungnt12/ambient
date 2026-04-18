@@ -1,0 +1,61 @@
+export const brand = {
+  border: {
+    hairline: 1,
+  },
+  mark: {
+    xs: 16,
+    sm: 24,
+    md: 40,
+    compact: 48,
+    lg: 56,
+    xl: 64,
+    default: 72,
+    hero: 96,
+    splash: 200,
+    strokeMin: 1,
+    strokeWidthRatio: 0.018,
+    dotRadiusRatio: 0.14,
+    innerRingRadiusRatio: 0.28,
+    outerRingRadiusRatio: 0.46,
+    innerRingOpacity: 0.62,
+    outerRingOpacity: 0.32,
+  },
+  logo: {
+    horizontalGapRatio: 0.28,
+    wordmarkScale: 0.72,
+  },
+  wordmark: {
+    defaultSize: 32,
+    splashSize: 28,
+    lineHeightRatio: 1.05,
+    letterSpacingRatio: -0.03,
+    entranceTranslateY: 8,
+  },
+  splash: {
+    dotScaleStart: 0.6,
+    wordmarkDelayMultiplier: 7,
+    ringPeakProgress: 0.6,
+    ringInnerPeakOpacity: 0.8,
+    ringOuterPeakOpacity: 0.5,
+  },
+  moodPicker: {
+    dotSize: 36,
+    dotSelectedSize: 44,
+    dotGap: 14,
+    dotBorder: 1,
+    dotSelectedBorder: 2,
+    dotRadius: 22,
+    slotWidth: 60,
+    slotHeight: 20,
+    slotHeightLarge: 24,
+    columnGap: 24,
+  },
+  showcase: {
+    tile: 72,
+    swatchCellBasis: '30%',
+    chipWidth: '100%',
+    chipAspectRatio: 1,
+  },
+} as const;
+
+export type BrandToken = typeof brand;

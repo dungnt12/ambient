@@ -1,0 +1,79 @@
+{
+  "app": {
+    "name": "Ambient",
+    "tagline": "A quiet place to return to."
+  },
+  "splash": {
+    "loading": "Loading"
+  },
+  "common": {
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "save": "Save",
+    "done": "Done",
+    "back": "Back",
+    "next": "Next",
+    "skip": "Skip",
+    "retry": "Retry"
+  },
+  "journal": {
+    "promptTitle": "Today's prompt",
+    "emptyPlaceholder": "What stayed with you today?",
+    "privacyNote": "Only you can see this."
+  },
+  "group": {
+    "pulseTitle": "The group this week",
+    "inviteCta": "Invite someone you love"
+  },
+  "onboarding": {
+    "signIn": "I already have an account",
+    "welcome": {
+      "title": "Write for yourself.",
+      "body": "A few lines a day, light as breath. No one reads it — not even your group.",
+      "cta": "Create your first entry"
+    },
+    "signal": {
+      "title": "Close, from afar.",
+      "body": "Feel each other's emotions, without reading a word.",
+      "cta": "Continue"
+    },
+    "hints": {
+      "title": "Only when it matters.",
+      "body": "AI stays quiet by default. A gentle knock only when needed.",
+      "cta": "Get started"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "overline": "WELCOME BACK",
+      "title": "A few more lines are waiting.",
+      "body": "Sign in to continue your journal pulse.",
+      "apple": "Continue with Apple",
+      "email": "Continue with email",
+      "terms": "By continuing, you agree to our Terms and Privacy Policy.",
+      "newHere": "I'm new here",
+      "help": "Need help?"
+    },
+    "email": {
+      "overline": "SIGN IN WITH EMAIL",
+      "title": "Your email.",
+      "body": "We'll send a sign-in code — no password needed.",
+      "label": "YOUR EMAIL",
+      "placeholder": "you@example.com",
+      "captcha": "I'm not a robot",
+      "captchaMeta": "Privacy",
+      "cta": "Send code",
+      "footer": "We don't store passwords. Code expires in 10 minutes.",
+      "useApple": "Use Apple instead"
+    },
+    "otp": {
+      "overline": "ENTER CODE",
+      "title": "Check your email.",
+      "bodyPrefix": "A 6-digit code was sent to",
+      "label": "VERIFICATION CODE",
+      "cta": "Continue",
+      "spamHint": "Didn't see the email? Check your spam folder.",
+      "resendIn": "Resend in {{time}}"
+    }
+  }
+}
