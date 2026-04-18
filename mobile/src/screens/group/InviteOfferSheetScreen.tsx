@@ -1,7 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { Animated, Dimensions, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Avatar, BottomSheet, CTAButton, Text, useTheme } from '../../design-system';
+import { Avatar, BottomSheetModal, CTAButton, Text, useTheme } from '../../design-system';
 
 export type InviteOfferSheetScreenProps = {
   inviterName: string;
@@ -12,8 +11,6 @@ export type InviteOfferSheetScreenProps = {
   onJoin?: () => void;
   onSaveForLater?: () => void;
 };
-
-const SLIDE_DISTANCE = Dimensions.get('window').height;
 
 export function InviteOfferSheetScreen({
   inviterName,
@@ -26,57 +23,12 @@ export function InviteOfferSheetScreen({
 }: InviteOfferSheetScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
-  const backdropOpacity = useRef(new Animated.Value(0)).current;
-  const sheetTranslate = useRef(new Animated.Value(SLIDE_DISTANCE)).current;
-
-  useEffect(() => {
-    Animated.parallel([
-      Animated.timing(backdropOpacity, {
-        toValue: t.opacity.pressedGhost,
-        duration: t.motion.duration.base,
-        easing: t.motion.easing.entrance,
-        useNativeDriver: true,
-      }),
-      Animated.timing(sheetTranslate, {
-        toValue: 0,
-        duration: t.motion.duration.base,
-        easing: t.motion.easing.entrance,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [backdropOpacity, sheetTranslate, t.motion, t.opacity.pressedGhost]);
+  const close = onSaveForLater ?? (() => {});
 
   return (
-    <View style={{ flex: 1 }}>
-      <Animated.View
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: t.colors.bgInverse,
-          opacity: backdropOpacity,
-        }}
-      >
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={tr('common.cancel')}
-          onPress={onSaveForLater}
-          style={{ flex: 1 }}
-        />
-      </Animated.View>
-
-      <Animated.View
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          transform: [{ translateY: sheetTranslate }],
-        }}
-      >
-        <BottomSheet>
+    <BottomSheetModal onDismiss={close}>
+      {({ dismiss }) => (
+        <>
           <View style={{ gap: t.spacing.md }}>
             <Text variant="metaLabel" color="fgFaint">
               {tr('group.inviteOffer.eyebrow', { name: inviterName.toUpperCase() })}
@@ -102,18 +54,22 @@ export function InviteOfferSheetScreen({
             </View>
           </View>
 
-          <CTAButton variant="primary" label={tr('group.inviteOffer.join')} onPress={onJoin} />
+          <CTAButton
+            variant="primary"
+            label={tr('group.inviteOffer.join')}
+            onPress={() => dismiss(onJoin)}
+          />
           <Pressable
             accessibilityRole="button"
-            onPress={onSaveForLater}
+            onPress={() => dismiss(onSaveForLater)}
             style={{ paddingVertical: t.spacing.sm }}
           >
             <Text variant="buttonLabelSocial" color="fgFaint" align="center">
               {tr('group.inviteOffer.later')}
             </Text>
           </Pressable>
-        </BottomSheet>
-      </Animated.View>
-    </View>
+        </>
+      )}
+    </BottomSheetModal>
   );
 }

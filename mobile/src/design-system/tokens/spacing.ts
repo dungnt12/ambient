@@ -37,4 +37,6 @@ export const layout = {
   timelineDot: 10,
   rowHeight: 56,
   maxContentWidth: 640,
+  sheetSwipeActivation: 8,
+  sheetSwipeHorizontalFail: 20,
 } as const;
