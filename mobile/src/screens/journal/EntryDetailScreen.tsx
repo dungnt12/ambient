@@ -127,7 +127,7 @@ function PrivacyNoteRow() {
         gap: t.spacing.md,
         paddingHorizontal: t.spacing.lg,
         paddingVertical: t.spacing.base,
-        backgroundColor: t.colors.bgCard,
+        backgroundColor: t.colors.bgRaised,
         borderRadius: t.radius.card,
         borderWidth: t.brand.border.hairline,
         borderColor: t.colors.borderSoft,
