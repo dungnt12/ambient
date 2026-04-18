@@ -56,6 +56,40 @@
     "pulseTitle": "Nhóm tuần này",
     "inviteCta": "Mời người bạn yêu quý"
   },
+  "garden": {
+    "subtitle": "{{done}} / {{total}} ngày · cuộn để xem cả năm",
+    "cellLabel": "{{month}} {{day}}",
+    "legend": {
+      "empty": "Trống",
+      "today": "Hôm nay",
+      "written": "Đã viết"
+    },
+    "months": {
+      "jan": "Tháng 1",
+      "feb": "Tháng 2",
+      "mar": "Tháng 3",
+      "apr": "Tháng 4",
+      "may": "Tháng 5",
+      "jun": "Tháng 6",
+      "jul": "Tháng 7",
+      "aug": "Tháng 8",
+      "sep": "Tháng 9",
+      "oct": "Tháng 10",
+      "nov": "Tháng 11",
+      "dec": "Tháng 12"
+    },
+    "monthSubtitle": {
+      "live": "{{done}} ngày đã qua · cuộn sang tháng khác",
+      "completed": "{{done}} / {{total}} ngày",
+      "completedNote": "{{done}} / {{total}} ngày · {{note}}",
+      "ahead": "{{total}} ngày · Phía trước"
+    },
+    "notes": {
+      "jan": "Khởi đầu chậm, vẫn đang tìm giọng của mình",
+      "feb": "Lạnh, ngắn, nhiều buổi tĩnh lặng",
+      "mar": "Ấm dần lên, bắt đầu rời khỏi nhà"
+    }
+  },
   "onboarding": {
     "signIn": "Tôi đã có tài khoản",
     "welcome": {

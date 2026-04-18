@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Seedling } from './Seedling';
 import { Leaf } from './Leaf';
 import { Sun } from './Sun';
@@ -43,7 +44,7 @@ type GardenIllustrationProps = {
   size?: number;
 };
 
-export function GardenIllustration({ name, size = 60 }: GardenIllustrationProps) {
+function GardenIllustrationImpl({ name, size = 60 }: GardenIllustrationProps) {
   switch (name) {
     case 'seedling':
       return <Seedling size={size} />;
@@ -71,3 +72,5 @@ export function GardenIllustration({ name, size = 60 }: GardenIllustrationProps)
       return <Acorn size={size} />;
   }
 }
+
+export const GardenIllustration = memo(GardenIllustrationImpl);

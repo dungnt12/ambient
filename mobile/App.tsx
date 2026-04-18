@@ -11,6 +11,7 @@ import {
   useAppFonts,
   useTheme,
   type RouteDirection,
+  type TabKey,
 } from './src/design-system';
 import { OnboardingWelcomeScreen } from './src/screens/onboarding';
 import { EmailScreen, OtpScreen, SignInScreen } from './src/screens/auth';
@@ -21,6 +22,7 @@ import {
   JournalListScreen,
   type JournalListEntry,
 } from './src/screens/journal';
+import { GardenScreen } from './src/screens/garden';
 
 SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
@@ -56,7 +58,7 @@ function AppInner() {
       {fontsLoaded ? (
         <>
           <AuthFlow />
-          <StatusBar style="dark" translucent backgroundColor="transparent" />
+          <StatusBar style="dark" />
         </>
       ) : null}
       {overlayMounted ? (
@@ -76,6 +78,7 @@ type Route =
   | 'signIn'
   | 'email'
   | 'otp'
+  | 'garden'
   | 'journalList'
   | 'journalCompose'
   | 'entryDetail'
@@ -86,11 +89,32 @@ const ROUTE_ORDER: Route[] = [
   'signIn',
   'email',
   'otp',
+  'garden',
   'journalList',
   'journalCompose',
   'entryDetail',
   'entryEdit',
 ];
+
+const TAB_ROUTES: Record<TabKey, TabRoute> = {
+  garden: 'garden',
+  journal: 'journalList',
+  group: 'journalList',
+  you: 'journalList',
+};
+
+type TabRoute = 'garden' | 'journalList';
+
+const TAB_ROUTE_SET = new Set<Route>(['garden', 'journalList']);
+const TAB_LAYER_KEY = 'tabs';
+
+function isTabRoute(route: Route): route is TabRoute {
+  return TAB_ROUTE_SET.has(route);
+}
+
+function transitionKey(route: Route): string {
+  return isTabRoute(route) ? TAB_LAYER_KEY : route;
+}
 
 const SAMPLE_ENTRIES: JournalListEntry[] = [
   {
@@ -119,15 +143,85 @@ const SAMPLE_ENTRIES: JournalListEntry[] = [
 const SAMPLE_ENTRY_BODY =
   "Morning coffee tastes different — must be the new beans. Watching sunlight fall onto the balcony, noticed the plants I forgot to water. Not sad, not happy. An ordinary morning, and ordinary feels enough right now. The 10am meeting ran long. Came home to mom's cooking. Tonight I'll finish the book I started.";
 
+type TabsLayerProps = {
+  activeRoute: TabRoute;
+  activeTabKey: TabKey;
+  onTabChange: (tab: TabKey) => void;
+  onFabPress: () => void;
+  onEntryPress: () => void;
+};
+
+function TabsLayer({
+  activeRoute,
+  activeTabKey,
+  onTabChange,
+  onFabPress,
+  onEntryPress,
+}: TabsLayerProps) {
+  const [mounted, setMounted] = useState<Set<TabRoute>>(() => new Set([activeRoute]));
+
+  if (!mounted.has(activeRoute)) {
+    // Lazy-mount a tab the first time it becomes active.
+    setMounted((prev) => {
+      if (prev.has(activeRoute)) return prev;
+      const next = new Set(prev);
+      next.add(activeRoute);
+      return next;
+    });
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      {mounted.has('garden') ? (
+        <View
+          style={[
+            StyleSheet.absoluteFillObject,
+            { display: activeRoute === 'garden' ? 'flex' : 'none' },
+          ]}
+        >
+          <GardenScreen
+            activeTab={activeTabKey}
+            onTabChange={onTabChange}
+            onFabPress={onFabPress}
+          />
+        </View>
+      ) : null}
+      {mounted.has('journalList') ? (
+        <View
+          style={[
+            StyleSheet.absoluteFillObject,
+            { display: activeRoute === 'journalList' ? 'flex' : 'none' },
+          ]}
+        >
+          <JournalListScreen
+            entries={SAMPLE_ENTRIES}
+            activeTab={activeTabKey}
+            onTabChange={onTabChange}
+            onFabPress={onFabPress}
+            onEntryPress={onEntryPress}
+          />
+        </View>
+      ) : null}
+    </View>
+  );
+}
+
 function AuthFlow() {
   // TEMP: auth flow disabled for UI testing — flip back to 'onboarding' when auth is needed again.
-  const [route, setRoute] = useState<Route>('journalList');
+  const [route, setRoute] = useState<Route>('garden');
+  const [tabKey, setTabKey] = useState<TabKey>('garden');
   const [email, setEmail] = useState('');
   const previousRouteRef = useRef<Route>(route);
+
+  const handleTabChange = useCallback((next: TabKey) => {
+    setTabKey(next);
+    setRoute(TAB_ROUTES[next]);
+  }, []);
 
   const direction: RouteDirection = useMemo(() => {
     const prev = previousRouteRef.current;
     if (prev === route) return 'none';
+    if (transitionKey(prev) === transitionKey(route)) return 'none';
     return ROUTE_ORDER.indexOf(route) >= ROUTE_ORDER.indexOf(prev) ? 'forward' : 'backward';
   }, [route]);
 
@@ -171,10 +265,13 @@ function AuthFlow() {
             onVerify={() => setRoute('journalList')}
           />
         );
+      case 'garden':
       case 'journalList':
         return (
-          <JournalListScreen
-            entries={SAMPLE_ENTRIES}
+          <TabsLayer
+            activeRoute={route}
+            activeTabKey={tabKey}
+            onTabChange={handleTabChange}
             onFabPress={() => setRoute('journalCompose')}
             onEntryPress={() => setRoute('entryDetail')}
           />
@@ -215,7 +312,7 @@ function AuthFlow() {
   })();
 
   return (
-    <RouteTransition routeKey={route} direction={direction}>
+    <RouteTransition routeKey={transitionKey(route)} direction={direction}>
       {screen}
     </RouteTransition>
   );

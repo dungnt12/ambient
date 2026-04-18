@@ -56,6 +56,40 @@
     "pulseTitle": "The group this week",
     "inviteCta": "Invite someone you love"
   },
+  "garden": {
+    "subtitle": "{{done}} / {{total}} days · scroll to see the whole year",
+    "cellLabel": "{{month}} {{day}}",
+    "legend": {
+      "empty": "Empty",
+      "today": "Today",
+      "written": "Written"
+    },
+    "months": {
+      "jan": "January",
+      "feb": "February",
+      "mar": "March",
+      "apr": "April",
+      "may": "May",
+      "jun": "June",
+      "jul": "July",
+      "aug": "August",
+      "sep": "September",
+      "oct": "October",
+      "nov": "November",
+      "dec": "December"
+    },
+    "monthSubtitle": {
+      "live": "{{done}} days in · scroll to other months",
+      "completed": "{{done}} / {{total}} days",
+      "completedNote": "{{done}} / {{total}} days · {{note}}",
+      "ahead": "{{total}} days · Ahead"
+    },
+    "notes": {
+      "jan": "Slow start, still finding your voice",
+      "feb": "Cold, short, many quiet sittings",
+      "mar": "Warming up, starting to leave home"
+    }
+  },
   "onboarding": {
     "signIn": "I already have an account",
     "welcome": {

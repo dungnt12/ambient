@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Heading, Screen, TabBar, Text, useTheme, type TabKey } from '../../design-system';
+
+const noop = () => undefined;
 
 export type JournalListEntry = {
   id: string;
@@ -26,12 +27,6 @@ export function JournalListScreen({
 }: JournalListScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
-  const [tab, setTab] = useState<TabKey>(activeTab);
-
-  const handleTabChange = (next: TabKey) => {
-    setTab(next);
-    onTabChange?.(next);
-  };
 
   return (
     <Screen edges={['top', 'bottom']} background="bg">
@@ -79,7 +74,7 @@ export function JournalListScreen({
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          <TabBar active={tab} onChange={handleTabChange} onFabPress={onFabPress} />
+          <TabBar active={activeTab} onChange={onTabChange ?? noop} onFabPress={onFabPress} />
         </View>
       </View>
     </Screen>
