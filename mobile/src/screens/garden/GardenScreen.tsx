@@ -6,11 +6,9 @@ import {
   GardenLegend,
   Heading,
   Screen,
-  TabBar,
   Text,
   useTheme,
   type GardenIllustrationName,
-  type TabKey,
   type Theme,
 } from '../../design-system';
 
@@ -20,9 +18,6 @@ export type GardenScreenProps = {
   daysInYear?: number;
   todayMonthIndex?: number;
   todayDayOfMonth?: number;
-  activeTab?: TabKey;
-  onTabChange?: (tab: TabKey) => void;
-  onFabPress?: () => void;
 };
 
 const MONTH_KEYS = [
@@ -59,8 +54,6 @@ const ILLUSTRATION_CYCLE: GardenIllustrationName[] = [
 
 const DAYS_PER_ROW = 7;
 const CELL_SIZE = 40;
-
-const noop = () => undefined;
 
 function daysInMonth(year: number, monthIndex: number): number {
   return new Date(year, monthIndex + 1, 0).getDate();
@@ -232,9 +225,6 @@ export function GardenScreen({
   daysInYear = 365,
   todayMonthIndex = 3,
   todayDayOfMonth = 17,
-  activeTab = 'garden',
-  onTabChange,
-  onFabPress,
 }: GardenScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
@@ -324,32 +314,26 @@ export function GardenScreen({
   );
 
   return (
-    <Screen edges={['top', 'bottom']} background="bg">
-      <View style={{ flex: 1 }}>
-        <FlatList
-          style={{ flex: 1 }}
-          data={items}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ItemSeparatorComponent={ItemSeparator}
-          ListHeaderComponent={
-            <ListHeader t={t} year={year} subtitle={headerSubtitle} legendLabels={legendLabels} />
-          }
-          contentContainerStyle={{
-            paddingHorizontal: t.layout.screenPaddingX,
-            paddingBottom: t.layout.tabBarHeight + t.spacing.xxl,
-          }}
-          showsVerticalScrollIndicator={false}
-          initialNumToRender={3}
-          windowSize={5}
-          maxToRenderPerBatch={2}
-          removeClippedSubviews
-        />
-
-        <View style={{ alignItems: 'center' }}>
-          <TabBar active={activeTab} onChange={onTabChange ?? noop} onFabPress={onFabPress} />
-        </View>
-      </View>
+    <Screen edges={['top']} background="bg">
+      <FlatList
+        style={{ flex: 1 }}
+        data={items}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        ItemSeparatorComponent={ItemSeparator}
+        ListHeaderComponent={
+          <ListHeader t={t} year={year} subtitle={headerSubtitle} legendLabels={legendLabels} />
+        }
+        contentContainerStyle={{
+          paddingHorizontal: t.layout.screenPaddingX,
+          paddingBottom: t.spacing.xxl,
+        }}
+        showsVerticalScrollIndicator={false}
+        initialNumToRender={3}
+        windowSize={5}
+        maxToRenderPerBatch={2}
+        removeClippedSubviews
+      />
     </Screen>
   );
 }

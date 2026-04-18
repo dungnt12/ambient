@@ -1,0 +1,48 @@
+import type {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
+import type { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type {
+  CompositeNavigationProp,
+  NavigatorScreenParams,
+  RouteProp,
+} from '@react-navigation/native';
+
+export type TabParamList = {
+  Garden: undefined;
+  Journal: undefined;
+  Group: undefined;
+  You: undefined;
+};
+
+export type RootStackParamList = {
+  Onboarding: undefined;
+  SignIn: undefined;
+  Email: undefined;
+  Otp: { email: string };
+  Tabs: NavigatorScreenParams<TabParamList> | undefined;
+  JournalCompose: undefined;
+  EntryDetail: { entryId: string };
+  EntryEdit: { entryId: string };
+};
+
+export type RootNav<T extends keyof RootStackParamList = keyof RootStackParamList> =
+  NativeStackNavigationProp<RootStackParamList, T>;
+
+export type RootRoute<T extends keyof RootStackParamList> = RouteProp<RootStackParamList, T>;
+
+export type RootScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
+  RootStackParamList,
+  T
+>;
+
+export type TabScreenProps<T extends keyof TabParamList> = CompositeNavigationProp<
+  BottomTabNavigationProp<TabParamList, T>,
+  RootNav<'Tabs'>
+>;
+
+export type TabBottomScreenProps<T extends keyof TabParamList> = BottomTabScreenProps<
+  TabParamList,
+  T
+>;

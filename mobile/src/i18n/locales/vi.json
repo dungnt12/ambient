@@ -25,6 +25,12 @@
       "newEntry": "Dòng mới"
     }
   },
+  "you": {
+    "placeholder": {
+      "title": "Bạn",
+      "body": "Hồ sơ và cài đặt sẽ sớm có mặt."
+    }
+  },
   "journal": {
     "promptTitle": "Lời nhắc hôm nay",
     "emptyPlaceholder": "Điều gì đọng lại trong bạn hôm nay?",
@@ -54,7 +60,11 @@
   },
   "group": {
     "pulseTitle": "Nhóm tuần này",
-    "inviteCta": "Mời người bạn yêu quý"
+    "inviteCta": "Mời người bạn yêu quý",
+    "placeholder": {
+      "title": "Nhịp nhóm",
+      "body": "Tín hiệu chung của cả nhóm sẽ xuất hiện ở đây."
+    }
   },
   "garden": {
     "subtitle": "{{done}} / {{total}} ngày · cuộn để xem cả năm",

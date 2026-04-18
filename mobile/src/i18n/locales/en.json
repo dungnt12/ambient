@@ -25,6 +25,12 @@
       "newEntry": "New entry"
     }
   },
+  "you": {
+    "placeholder": {
+      "title": "You",
+      "body": "Profile and settings coming soon."
+    }
+  },
   "journal": {
     "promptTitle": "Today's prompt",
     "emptyPlaceholder": "What stayed with you today?",
@@ -54,7 +60,11 @@
   },
   "group": {
     "pulseTitle": "The group this week",
-    "inviteCta": "Invite someone you love"
+    "inviteCta": "Invite someone you love",
+    "placeholder": {
+      "title": "Group pulse",
+      "body": "Your shared signal will live here."
+    }
   },
   "garden": {
     "subtitle": "{{done}} / {{total}} days · scroll to see the whole year",
