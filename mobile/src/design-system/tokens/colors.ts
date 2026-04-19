@@ -31,6 +31,25 @@ export const palette = {
     error: '#b53333',
     focusBlue: '#3898ec',
   },
+  illo: {
+    sage: '#9aa68a',
+    sageSoft: '#bcc4ad',
+    ochre: '#c4b68a',
+    ochreSoft: '#dbd1ac',
+    slate: '#9bb0c4',
+    slateSoft: '#c0cfde',
+    nutCap: '#6f5842',
+    cloud: '#d9d5c6',
+  },
+  // Per-illustration tint seeds. Garden cell background = seed @ 22% over parchment.
+  illoTint: {
+    sage: '#9aaf95',
+    sand: '#b8926b',
+    rose: '#c9b5a3',
+    ochre: '#b8a57a',
+    brand: '#c96442',
+    coral: '#d97757',
+  },
 } as const;
 
 export const colors = {
@@ -59,6 +78,15 @@ export const colors = {
 
   error: palette.semantic.error,
   focus: palette.semantic.focusBlue,
+
+  illoSage: palette.illo.sage,
+  illoSageSoft: palette.illo.sageSoft,
+  illoOchre: palette.illo.ochre,
+  illoOchreSoft: palette.illo.ochreSoft,
+  illoSlate: palette.illo.slate,
+  illoSlateSoft: palette.illo.slateSoft,
+  illoNutCap: palette.illo.nutCap,
+  illoCloud: palette.illo.cloud,
 } as const;
 
 export type ColorToken = keyof typeof colors;

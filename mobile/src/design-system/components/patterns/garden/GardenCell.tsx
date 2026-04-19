@@ -2,7 +2,11 @@ import { memo } from 'react';
 import { Pressable, View, type ViewStyle } from 'react-native';
 import { Text } from '../../Text';
 import { useTheme } from '../../../theme';
-import { GardenIllustration, type GardenIllustrationName } from '../../illustrations/garden';
+import {
+  GardenIllustration,
+  getGardenCellTint,
+  type GardenIllustrationName,
+} from '../../illustrations/garden';
 
 export type GardenCellState = 'empty' | 'today' | 'written';
 
@@ -39,9 +43,7 @@ function GardenCellImpl({ state, illustration, label, day, style, onPress }: Gar
     };
   } else if (state === 'written') {
     variantStyle = {
-      backgroundColor: theme.colors.bgMuted,
-      borderWidth: theme.brand.border.hairline,
-      borderColor: theme.colors.border,
+      backgroundColor: illustration ? getGardenCellTint(illustration) : theme.colors.bgMuted,
     };
   } else {
     variantStyle = {

@@ -1,49 +1,20 @@
-import Svg, { Line, Path } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../../../theme';
 
-type Props = { size?: number; color?: string };
+type Props = { size?: number };
 
-export function Leaf({ size = 60, color }: Props) {
-  const theme = useTheme();
-  const stroke = color ?? theme.colors.fgMuted;
+export function Leaf({ size = 60 }: Props) {
+  const t = useTheme();
   return (
     <Svg width={size} height={size} viewBox="0 0 60 60" fill="none">
       <Path
-        d="M14 46 C14 28 28 14 46 14 C46 32 32 46 14 46Z"
-        fill={theme.colors.bgMuted}
-        stroke={stroke}
+        d="M46 12 C32 16 22 28 16 46 C30 44 40 32 46 12 Z"
+        fill={t.colors.illoSageSoft}
+        stroke={t.colors.illoSage}
         strokeWidth={1.5}
         strokeLinejoin="round"
       />
-      {/* central vein */}
-      <Line
-        x1={16}
-        y1={44}
-        x2={44}
-        y2={16}
-        stroke={stroke}
-        strokeWidth={1.5}
-        strokeLinecap="round"
-      />
-      {/* small vein */}
-      <Line
-        x1={22}
-        y1={38}
-        x2={30}
-        y2={34}
-        stroke={theme.colors.fgFaint}
-        strokeWidth={1.5}
-        strokeLinecap="round"
-      />
-      <Line
-        x1={28}
-        y1={32}
-        x2={36}
-        y2={28}
-        stroke={theme.colors.fgFaint}
-        strokeWidth={1.5}
-        strokeLinecap="round"
-      />
+      <Path d="M44 14 L18 44" stroke={t.colors.illoSage} strokeWidth={1.25} strokeLinecap="round" />
     </Svg>
   );
 }

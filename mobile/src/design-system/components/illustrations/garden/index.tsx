@@ -24,6 +24,7 @@ export { Spark } from './Spark';
 export { Crescent } from './Crescent';
 export { Fern } from './Fern';
 export { Acorn } from './Acorn';
+export { getGardenCellTint } from './tint';
 
 export type GardenIllustrationName =
   | 'seedling'
