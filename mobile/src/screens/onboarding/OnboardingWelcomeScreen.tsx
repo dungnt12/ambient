@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import {
+  Animated,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
   Pressable,
@@ -25,6 +26,7 @@ export function OnboardingWelcomeScreen({ onContinue, onSignIn }: OnboardingWelc
   const { t: tr } = useTranslation();
   const { width } = useWindowDimensions();
   const scrollRef = useRef<ScrollView>(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
   const [active, setActive] = useState(0);
 
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -47,24 +49,29 @@ export function OnboardingWelcomeScreen({ onContinue, onSignIn }: OnboardingWelc
   return (
     <Screen edges={['top', 'bottom']} background="bg">
       <View style={{ flex: 1 }}>
-        <ScrollView
+        <Animated.ScrollView
           ref={scrollRef}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={handleScroll}
           scrollEventThrottle={16}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+            useNativeDriver: false,
+          })}
         >
-          {STEPS.map((step) => (
+          {STEPS.map((step, i) => (
             <Slide
               key={step}
               step={step}
+              index={i}
               width={width}
+              scrollX={scrollX}
               title={tr(`onboarding.${step}.title`)}
               body={tr(`onboarding.${step}.body`)}
             />
           ))}
-        </ScrollView>
+        </Animated.ScrollView>
 
         <View
           style={{
@@ -73,7 +80,7 @@ export function OnboardingWelcomeScreen({ onContinue, onSignIn }: OnboardingWelc
             gap: t.spacing.xl,
           }}
         >
-          <PageDots total={STEPS.length} active={active} />
+          <PageDots total={STEPS.length} width={width} scrollX={scrollX} />
           <CTAButton
             label={tr(`onboarding.${currentStep}.cta`)}
             variant="primary"
@@ -105,58 +112,104 @@ export function OnboardingWelcomeScreen({ onContinue, onSignIn }: OnboardingWelc
 
 function Slide({
   step,
+  index,
   width,
+  scrollX,
   title,
   body,
 }: {
   step: Step;
+  index: number;
   width: number;
+  scrollX: Animated.Value;
   title: string;
   body: string;
 }) {
   const t = useTheme();
+  const inputRange = [(index - 1) * width, index * width, (index + 1) * width];
+  const heroTranslate = scrollX.interpolate({
+    inputRange,
+    outputRange: [width * 0.25, 0, -width * 0.25],
+    extrapolate: 'clamp',
+  });
+  const textTranslate = scrollX.interpolate({
+    inputRange,
+    outputRange: [width * 0.5, 0, -width * 0.5],
+    extrapolate: 'clamp',
+  });
+  const opacity = scrollX.interpolate({
+    inputRange,
+    outputRange: [t.opacity.muted, t.opacity.full, t.opacity.muted],
+    extrapolate: 'clamp',
+  });
   return (
     <View
       style={{
         width,
         paddingHorizontal: t.layout.screenPaddingX,
         paddingTop: t.spacing['3xl'],
-        gap: t.spacing['4xl'],
+        gap: t.spacing.xxl,
       }}
     >
-      <View style={{ alignItems: 'center' }}>
+      <Animated.View
+        style={{ alignItems: 'center', opacity, transform: [{ translateX: heroTranslate }] }}
+      >
         <HeroIllustration step={step} />
-      </View>
-      <View style={{ gap: t.spacing.base }}>
+      </Animated.View>
+      <Animated.View
+        style={{ gap: t.spacing.base, opacity, transform: [{ translateX: textTranslate }] }}
+      >
         <Heading variant="displayHero">{title}</Heading>
         <Text variant="bodyLarge" color="fgSubtle">
           {body}
         </Text>
-      </View>
+      </Animated.View>
     </View>
   );
 }
 
-function PageDots({ total, active }: { total: number; active: number }) {
+function PageDots({
+  total,
+  width,
+  scrollX,
+}: {
+  total: number;
+  width: number;
+  scrollX: Animated.Value;
+}) {
   const t = useTheme();
+  const dotSize = t.spacing.sm;
+  const dotActiveWidth = t.spacing.xl;
   return (
     <View
       style={{
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         gap: t.spacing.sm,
       }}
     >
       {Array.from({ length: total }).map((_, i) => {
-        const isActive = i === active;
+        const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
+        const dotWidth = scrollX.interpolate({
+          inputRange,
+          outputRange: [dotSize, dotActiveWidth, dotSize],
+          extrapolate: 'clamp',
+        });
+        const opacity = scrollX.interpolate({
+          inputRange,
+          outputRange: [t.opacity.muted, t.opacity.full, t.opacity.muted],
+          extrapolate: 'clamp',
+        });
         return (
-          <View
+          <Animated.View
             key={i}
             style={{
-              width: t.spacing.sm,
-              height: t.spacing.sm,
-              borderRadius: t.spacing.xs,
-              backgroundColor: isActive ? t.colors.brand : t.colors.ringSoft,
+              width: dotWidth,
+              height: dotSize,
+              borderRadius: t.radius.pill,
+              backgroundColor: t.colors.brand,
+              opacity,
             }}
           />
         );
