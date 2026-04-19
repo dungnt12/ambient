@@ -7,6 +7,7 @@ export { ScreenHeader, type ScreenHeaderProps } from './ScreenHeader';
 export { CTAStack, type CTAStackProps, type CTASecondary } from './CTAStack';
 export { TextButton, type TextButtonProps } from './TextButton';
 export { FadeMask, type FadeMaskProps } from './FadeMask';
+export { FadeUnderHeader, type FadeUnderHeaderProps } from './FadeUnderHeader';
 export * from './buttons';
 export * from './inputs';
 export * from './identity';

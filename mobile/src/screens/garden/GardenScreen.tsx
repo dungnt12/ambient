@@ -2,7 +2,6 @@ import { memo, useCallback, useMemo } from 'react';
 import { type ListRenderItem, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
-  FadeMask,
   GardenCell,
   GardenLegend,
   Heading,
@@ -315,29 +314,27 @@ export function GardenScreen({
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: t.colors.bg }}>
-      <ScreenList
-        edges={['top']}
-        background="bg"
-        padHorizontal
-        data={items}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        ItemSeparatorComponent={ItemSeparator}
-        ListHeaderComponent={
-          <ListHeader t={t} year={year} subtitle={headerSubtitle} legendLabels={legendLabels} />
-        }
-        contentContainerStyle={{
-          paddingTop: t.spacing.md,
-          paddingBottom: t.spacing.xxl,
-        }}
-        showsVerticalScrollIndicator={false}
-        initialNumToRender={3}
-        windowSize={5}
-        maxToRenderPerBatch={2}
-        removeClippedSubviews
-      />
-      <FadeMask edge="top" height={t.spacing.xl} />
-    </View>
+    <ScreenList
+      edges={['top']}
+      background="bg"
+      padHorizontal
+      enableTabBarHideOnScroll
+      pinnedHeader={
+        <ListHeader t={t} year={year} subtitle={headerSubtitle} legendLabels={legendLabels} />
+      }
+      data={items}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      ItemSeparatorComponent={ItemSeparator}
+      contentContainerStyle={{
+        paddingTop: t.spacing.md,
+        paddingBottom: t.spacing.xxl,
+      }}
+      showsVerticalScrollIndicator={false}
+      initialNumToRender={3}
+      windowSize={5}
+      maxToRenderPerBatch={2}
+      removeClippedSubviews
+    />
   );
 }

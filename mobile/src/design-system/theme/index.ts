@@ -5,7 +5,10 @@ export {
   TabBarVisibilityProvider,
   useTabBarVisibility,
   useTabBarVisibilityScrollY,
-  useTabBarScrollProps,
+  useScrollSurfaceBehavior,
   useTabBarScrollY,
-  type TabBarScrollProps,
+  TAB_BAR_HIDE_MIN_OVERFLOW,
+  type ScrollSurfaceBehavior,
+  type ScrollSurfaceMeasurementProps,
+  type ScrollSurfaceMode,
 } from './TabBarVisibilityContext';

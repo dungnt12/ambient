@@ -1,4 +1,4 @@
-import { View, type ViewStyle } from 'react-native';
+import { Pressable, View, type ViewStyle } from 'react-native';
 import { Shield } from 'lucide-react-native';
 import { Text } from '../Text';
 import { useTheme } from '../../theme';
@@ -26,8 +26,13 @@ export function CaptchaRow({
   const theme = useTheme();
 
   return (
-    <View
-      style={[
+    <Pressable
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked, disabled }}
+      accessibilityLabel={label}
+      disabled={disabled}
+      onPress={() => onToggle(!checked)}
+      style={({ pressed }) => [
         {
           width: '100%',
           height: CONTAINER_HEIGHT,
@@ -39,6 +44,11 @@ export function CaptchaRow({
           flexDirection: 'row',
           alignItems: 'center',
           gap: theme.spacing.md,
+          opacity: disabled
+            ? theme.opacity.disabled
+            : pressed
+              ? theme.opacity.pressedSubtle
+              : theme.opacity.full,
         },
         style,
       ]}
@@ -57,6 +67,6 @@ export function CaptchaRow({
           {metaLabel}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 }

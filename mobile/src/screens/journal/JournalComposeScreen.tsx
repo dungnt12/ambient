@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Lock } from 'lucide-react-native';
 import {
@@ -9,7 +9,7 @@ import {
   JournalTextarea,
   MoodPicker,
   PromptCard,
-  ScreenLayout,
+  Screen,
   Text,
   useTheme,
   type MoodLevel,
@@ -49,11 +49,11 @@ export function JournalComposeScreen({
   };
 
   return (
-    <ScreenLayout
-      avoidKeyboard
-      disableScroll
-      dismissKeyboardOnBodyTap
-      header={
+    <Screen edges={['top', 'bottom']} background="bg">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
         <View
           style={{
             flexDirection: 'row',
@@ -78,49 +78,51 @@ export function JournalComposeScreen({
           </Pressable>
           <OnlyYouBadge label={tr('journal.compose.onlyYou')} />
         </View>
-      }
-    >
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: t.layout.screenPaddingX,
-          paddingTop: t.spacing.base,
-          paddingBottom: t.spacing.md,
-          gap: t.spacing.base,
-        }}
-      >
-        <DayHeader label={dayLabel} />
-        <PromptCard
-          variant="muted"
-          sparkle
-          eyebrow={promptEyebrow ?? tr('journal.compose.promptEyebrow')}
-          prompt={prompt}
-          followup={promptFollowup}
-        />
-        <AILabelRow label={tr('journal.compose.aiWillSummarize')} />
-        <JournalTextarea
-          value={content}
-          onChangeText={setContent}
-          placeholder={tr('journal.compose.placeholder')}
-          maxLength={MAX_LENGTH}
-          showCounter
-          minHeight={t.layout.ctaHeight * 2}
-          style={{ flex: 1 }}
-        />
 
-        {keyboardOpen ? null : (
-          <View style={{ gap: t.spacing.lg }}>
-            <MoodPicker value={mood} onChange={setMood} />
-            <CTAButton
-              label={tr('journal.compose.save')}
-              variant="primary"
-              disabled={!canSave}
-              onPress={handleSave}
-            />
-          </View>
-        )}
-      </View>
-    </ScreenLayout>
+        <Pressable
+          accessible={false}
+          onPress={Keyboard.dismiss}
+          style={{
+            flex: 1,
+            paddingHorizontal: t.layout.screenPaddingX,
+            paddingTop: t.spacing.base,
+            paddingBottom: t.spacing.md,
+            gap: t.spacing.base,
+          }}
+        >
+          <DayHeader label={dayLabel} />
+          <PromptCard
+            variant="muted"
+            sparkle
+            eyebrow={promptEyebrow ?? tr('journal.compose.promptEyebrow')}
+            prompt={prompt}
+            followup={promptFollowup}
+          />
+          <AILabelRow label={tr('journal.compose.aiWillSummarize')} />
+          <JournalTextarea
+            value={content}
+            onChangeText={setContent}
+            placeholder={tr('journal.compose.placeholder')}
+            maxLength={MAX_LENGTH}
+            showCounter
+            minHeight={t.layout.ctaHeight * 2}
+            style={{ flex: 1 }}
+          />
+
+          {keyboardOpen ? null : (
+            <View style={{ gap: t.spacing.lg }}>
+              <MoodPicker value={mood} onChange={setMood} />
+              <CTAButton
+                label={tr('journal.compose.save')}
+                variant="primary"
+                disabled={!canSave}
+                onPress={handleSave}
+              />
+            </View>
+          )}
+        </Pressable>
+      </KeyboardAvoidingView>
+    </Screen>
   );
 }
 

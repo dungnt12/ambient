@@ -1,6 +1,6 @@
 import { Animated, View, type ScrollViewProps, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets, type Edge } from 'react-native-safe-area-context';
-import { useBottomBarInset, useTabBarScrollProps, useTheme } from '../theme';
+import { useBottomBarInset, useScrollSurfaceBehavior, useTheme } from '../theme';
 import type { ColorToken } from '../tokens/colors';
 
 export type ScreenProps = {
@@ -8,6 +8,8 @@ export type ScreenProps = {
   edges?: Edge[];
   background?: ColorToken;
   scroll?: boolean;
+  /** When true, this screen's scroll drives the floating tab bar hide/show animation. */
+  enableTabBarHideOnScroll?: boolean;
   padHorizontal?: boolean;
   contentContainerStyle?: ViewStyle;
   scrollProps?: Omit<ScrollViewProps, 'contentContainerStyle' | 'style'>;
@@ -22,6 +24,7 @@ export function Screen({
   edges = ['top'],
   background = 'bg',
   scroll = false,
+  enableTabBarHideOnScroll = false,
   padHorizontal = false,
   contentContainerStyle,
   scrollProps,
@@ -57,15 +60,21 @@ export function Screen({
   };
 
   const bg = t.colors[background];
-
-  const tabBarScrollProps = useTabBarScrollProps();
+  const scrollSurface = useScrollSurfaceBehavior({
+    mode: scroll ? 'always' : 'never',
+    enableTabBarHideOnScroll,
+  });
 
   if (scroll) {
     return (
       <Animated.ScrollView
         style={{ flex: 1, backgroundColor: bg }}
         contentContainerStyle={[padding, contentContainerStyle]}
-        {...tabBarScrollProps}
+        scrollEnabled={scrollSurface.scrollEnabled}
+        bounces={scrollSurface.bounces}
+        showsVerticalScrollIndicator={scrollSurface.showsVerticalScrollIndicator}
+        {...scrollSurface.measurementProps}
+        {...scrollSurface.scrollProps}
         {...scrollProps}
       >
         {children}
