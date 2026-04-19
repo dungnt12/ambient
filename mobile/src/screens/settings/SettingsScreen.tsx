@@ -1,10 +1,11 @@
-import { View, type ViewStyle } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight } from 'lucide-react-native';
 import {
   Avatar,
   Card,
   CTAButton,
+  ListRow,
   ScreenHeader,
   ScreenLayout,
   Text,
@@ -185,15 +186,6 @@ function ProfileCard({ name, email, initial }: { name: string; email: string; in
   );
 }
 
-const rowCardStyle = (height: number, radius: number): ViewStyle => ({
-  height,
-  paddingVertical: 0,
-  borderRadius: radius,
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-});
-
 function ValueRow({
   label,
   value,
@@ -205,21 +197,22 @@ function ValueRow({
 }) {
   const t = useTheme();
   return (
-    <Card density="row" onPress={onPress} style={rowCardStyle(t.layout.rowHeight, t.radius.base)}>
-      <Text variant="buttonLabelSocial" color="fg" style={{ flexShrink: 1 }}>
-        {label}
-      </Text>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.xs }}>
-        <Text variant="bodyStandard" color="fgFaint">
-          {value}
-        </Text>
-        <ChevronRight
-          size={t.iconSize.sm}
-          strokeWidth={t.stroke.standard}
-          color={t.colors.fgFaint}
-        />
-      </View>
-    </Card>
+    <ListRow
+      label={label}
+      onPress={onPress}
+      trailing={
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.xs }}>
+          <Text variant="bodyStandard" color="fgFaint">
+            {value}
+          </Text>
+          <ChevronRight
+            size={t.iconSize.sm}
+            strokeWidth={t.stroke.standard}
+            color={t.colors.fgFaint}
+          />
+        </View>
+      }
+    />
   );
 }
 
@@ -232,15 +225,7 @@ function ToggleRow({
   value: boolean;
   onChange: (next: boolean) => void;
 }) {
-  const t = useTheme();
-  return (
-    <Card style={rowCardStyle(t.layout.rowHeight, t.radius.base)}>
-      <Text variant="buttonLabelSocial" color="fg" style={{ flexShrink: 1 }}>
-        {label}
-      </Text>
-      <Toggle value={value} onChange={onChange} />
-    </Card>
-  );
+  return <ListRow label={label} trailing={<Toggle value={value} onChange={onChange} />} />;
 }
 
 function LinkRow({
@@ -254,13 +239,14 @@ function LinkRow({
 }) {
   const t = useTheme();
   return (
-    <Card density="row" onPress={onPress} style={rowCardStyle(t.layout.rowHeight, t.radius.base)}>
-      <Text variant="buttonLabelSocial" color="fg" style={{ flexShrink: 1 }}>
-        {label}
-      </Text>
-      <Text variant="buttonLabelSocial" style={{ color: t.colors.brand }}>
-        {linkLabel}
-      </Text>
-    </Card>
+    <ListRow
+      label={label}
+      onPress={onPress}
+      trailing={
+        <Text variant="buttonLabelSocial" style={{ color: t.colors.brand }}>
+          {linkLabel}
+        </Text>
+      }
+    />
   );
 }

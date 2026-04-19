@@ -1,4 +1,5 @@
 export { Card, type CardProps, type CardTone, type CardDensity } from './Card';
+export { ListRow, type ListRowProps, type ListRowTrailing } from './ListRow';
 export { Text, type TextProps } from './Text';
 export { Heading, type HeadingProps } from './Heading';
 export { Screen, type ScreenProps } from './Screen';

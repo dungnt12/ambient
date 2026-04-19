@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ChevronRight } from 'lucide-react-native';
-import { Card, CTAButton, Screen, Text, useTheme } from '../../design-system';
+import { CTAButton, ListRow, Screen, Text, useTheme } from '../../design-system';
 
 export type GroupJoinedScreenProps = {
   groupName: string;
@@ -79,32 +78,7 @@ function NextRow({
   label: string;
   onPress?: () => void;
 }) {
-  const t = useTheme();
   return (
-    <Card
-      onPress={onPress}
-      style={{
-        borderRadius: t.radius.lg,
-        paddingHorizontal: t.spacing.lg,
-        paddingVertical: t.spacing.lg,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: t.spacing.md,
-      }}
-    >
-      <View style={{ flex: 1, gap: t.spacing.xs }}>
-        <Text variant="metaLabel" color="fgFaint">
-          {eyebrow}
-        </Text>
-        <Text variant="buttonLabelSocial" color="fg">
-          {label}
-        </Text>
-      </View>
-      <ChevronRight
-        size={t.iconSize.base}
-        strokeWidth={t.stroke.standard}
-        color={t.colors.fgFaint}
-      />
-    </Card>
+    <ListRow eyebrow={eyebrow} label={label} onPress={onPress} trailing="chevron" tone="raised" />
   );
 }
