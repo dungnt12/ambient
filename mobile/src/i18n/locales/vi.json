@@ -215,6 +215,11 @@
       },
       "leave": "Rời nhóm"
     },
+    "thinkingOfYou": {
+      "eyebrow": "TỪ NHÓM CỦA BẠN",
+      "title_one": "{{count}} người đang nghĩ về bạn",
+      "title_other": "{{count}} người đang nghĩ về bạn"
+    },
     "insights": {
       "dismiss": "Để sau",
       "meetupEyebrow": "MỘT BUỔI GẶP NHẸ NHÀNG · CUỐI TUẦN NÀY",
@@ -239,6 +244,7 @@
       "close": "Đóng",
       "all": "Tất cả nhóm",
       "newGroup": "Tạo nhóm mới",
+      "capReached": "Đã đạt giới hạn — 5 vòng tròn là đủ cho nhịp ambient",
       "proBadge": "Pro",
       "memberCount_one": "{{count}} thành viên",
       "memberCount_other": "{{count}} thành viên"
@@ -275,6 +281,24 @@
       "privacyNote": "Ambient không ép bạn nhắn tin. Và cũng không nói với {{name}} rằng AI đã gợi ý.",
       "sendCta": "Gửi {{name}} một lời nhắn",
       "later": "Để sau"
+    },
+    "noteComposer": {
+      "title": "Viết cho {{name}}",
+      "subtitle": "Chỉ một dòng. Không trả lời, không thread — chỉ một tín hiệu nhỏ.",
+      "placeholder": "Mình đang nghĩ về cậu…",
+      "remaining_one": "Còn {{count}} ký tự",
+      "remaining_other": "Còn {{count}} ký tự",
+      "sendCta": "Gửi {{name}}",
+      "footer": "Lời nhắn của bạn sẽ phai sau 48 giờ."
+    },
+    "receivedNotes": {
+      "title_one": "{{count}} người đang nghĩ về bạn",
+      "title_other": "{{count}} người đang nghĩ về bạn",
+      "subtitle": "Những dòng nhỏ từ nhóm của bạn. Sẽ phai sau 48 giờ.",
+      "hoursAgo_one": "{{count}} giờ trước",
+      "hoursAgo_other": "{{count}} giờ trước",
+      "yesterday": "hôm qua",
+      "footer": "Không cần trả lời."
     }
   },
   "garden": {

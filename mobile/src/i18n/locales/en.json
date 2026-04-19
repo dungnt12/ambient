@@ -215,6 +215,11 @@
       },
       "leave": "Leave group"
     },
+    "thinkingOfYou": {
+      "eyebrow": "FROM YOUR GROUPS",
+      "title_one": "{{count}} person is thinking of you",
+      "title_other": "{{count}} people are thinking of you"
+    },
     "insights": {
       "dismiss": "Not now",
       "meetupEyebrow": "A GENTLE MEETUP · THIS WEEKEND",
@@ -239,6 +244,7 @@
       "close": "Close",
       "all": "All groups",
       "newGroup": "New group",
+      "capReached": "You've reached the limit — 5 circles is enough for ambient awareness",
       "proBadge": "Pro",
       "memberCount_one": "{{count}} member",
       "memberCount_other": "{{count}} members"
@@ -275,6 +281,24 @@
       "privacyNote": "Ambient doesn't push you to message. And it won't tell {{name}} that AI suggested this.",
       "sendCta": "Send {{name}} a line",
       "later": "Later"
+    },
+    "noteComposer": {
+      "title": "Write to {{name}}",
+      "subtitle": "A single line. No reply, no thread — just a small signal.",
+      "placeholder": "I'm thinking of you…",
+      "remaining_one": "{{count}} character left",
+      "remaining_other": "{{count}} characters left",
+      "sendCta": "Send to {{name}}",
+      "footer": "Your note fades in 48 hours."
+    },
+    "receivedNotes": {
+      "title_one": "{{count}} person is thinking of you",
+      "title_other": "{{count}} people are thinking of you",
+      "subtitle": "Small notes from your groups. They fade after 48 hours.",
+      "hoursAgo_one": "{{count}} hour ago",
+      "hoursAgo_other": "{{count}} hours ago",
+      "yesterday": "yesterday",
+      "footer": "No reply needed."
     }
   },
   "garden": {

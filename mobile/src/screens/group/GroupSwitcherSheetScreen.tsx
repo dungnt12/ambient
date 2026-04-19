@@ -11,7 +11,7 @@ import {
   type PulseMood,
   type Theme,
 } from '../../design-system';
-import type { GroupSummary, Tier } from '../../mocks/group';
+import { groupLimitForTier, type GroupSummary, type Tier } from '../../mocks/group';
 
 export type GroupSwitcherSheetScreenProps = {
   groups: GroupSummary[];
@@ -47,7 +47,11 @@ export function GroupSwitcherSheetScreen({
   const t = useTheme();
   const { t: tr } = useTranslation();
 
-  const locked = tier === 'free' && groups.length >= 1;
+  // Free: locked after 1 group — upsell to Pro.
+  // Pro: locked after hitting the Pro cap — hard ceiling, no upsell.
+  const atLimit = groups.length >= groupLimitForTier(tier);
+  const locked = atLimit;
+  const lockedReason: 'upsell' | 'capReached' = tier === 'free' && atLimit ? 'upsell' : 'capReached';
   const totalMembers = groups.reduce((sum, g) => sum + g.memberCount, 0);
 
   return (
@@ -76,7 +80,11 @@ export function GroupSwitcherSheetScreen({
                 onPress={() => dismiss(() => onSelectGroup(g.id))}
               />
             ))}
-            <NewGroupRow locked={locked} onPress={() => dismiss(() => onCreateNew())} />
+            <NewGroupRow
+              locked={locked}
+              lockedReason={lockedReason}
+              onPress={() => dismiss(() => onCreateNew())}
+            />
           </View>
         </>
       )}
@@ -189,7 +197,15 @@ function MoodDot({ mood, theme }: { mood: PulseMood; theme: Theme }) {
   );
 }
 
-function NewGroupRow({ locked, onPress }: { locked: boolean; onPress: () => void }) {
+function NewGroupRow({
+  locked,
+  lockedReason,
+  onPress,
+}: {
+  locked: boolean;
+  lockedReason: 'upsell' | 'capReached';
+  onPress: () => void;
+}) {
   const t = useTheme();
   const { t: tr } = useTranslation();
   const textColor: ColorToken = locked ? 'fgFaint' : 'fg';
@@ -220,10 +236,17 @@ function NewGroupRow({ locked, onPress }: { locked: boolean; onPress: () => void
       >
         <Plus size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgFaint} />
       </View>
-      <Text variant="buttonLabelSocial" color={textColor} style={{ flex: 1 }}>
-        {tr('group.switcher.newGroup')}
-      </Text>
-      {locked ? <ProPill /> : null}
+      <View style={{ flex: 1, gap: t.spacing.xxs }}>
+        <Text variant="buttonLabelSocial" color={textColor}>
+          {tr('group.switcher.newGroup')}
+        </Text>
+        {locked && lockedReason === 'capReached' ? (
+          <Text variant="metaLabel" color="fgFaint">
+            {tr('group.switcher.capReached')}
+          </Text>
+        ) : null}
+      </View>
+      {locked && lockedReason === 'upsell' ? <ProPill /> : null}
     </Card>
   );
 }

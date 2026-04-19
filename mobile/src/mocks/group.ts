@@ -32,6 +32,17 @@ export type GroupSummary = {
 
 export type Tier = 'free' | 'pro';
 
+// Product constants — intimacy scales with smallness. Keeping these small is
+// load-bearing for AI signal quality (context budget, meetup/support precision)
+// and for the "ambient, not social-media" tone. See CLAUDE.md Monetization.
+export const MAX_GROUP_MEMBERS = 8;
+export const MAX_GROUPS_FREE = 1;
+export const MAX_GROUPS_PRO = 5;
+
+export function groupLimitForTier(tier: Tier): number {
+  return tier === 'pro' ? MAX_GROUPS_PRO : MAX_GROUPS_FREE;
+}
+
 // Demo tier flag — flip to 'free' to preview the gated "+ New group" row.
 export const SAMPLE_TIER: Tier = 'pro';
 
