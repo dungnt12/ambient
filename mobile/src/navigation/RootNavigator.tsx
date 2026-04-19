@@ -1,7 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { OnboardingWelcomeScreen } from '../screens/onboarding';
 import { EmailScreen, OtpScreen, SignInScreen } from '../screens/auth';
-import { EntryDetailScreen, EntryEditScreen, JournalComposeScreen } from '../screens/journal';
+import {
+  DayScreen,
+  EntryDetailScreen,
+  EntryEditScreen,
+  JournalComposeScreen,
+} from '../screens/journal';
 import {
   GroupAcceptInviteScreen,
   GroupCreateJoinScreen,
@@ -24,7 +29,7 @@ import {
   PrivacyByDesignScreen,
   SettingsScreen,
 } from '../screens/settings';
-import { SAMPLE_ENTRY_BODY } from '../mocks/journal';
+import { SAMPLE_DAY_ENTRIES, SAMPLE_ENTRY_BODY } from '../mocks/journal';
 import { SAMPLE_GROUP, SAMPLE_PULSE_MEMBERS, SAMPLE_SAVED_INVITES } from '../mocks/group';
 import {
   SAMPLE_MEETUP_PROPOSAL,
@@ -102,6 +107,39 @@ function EntryDetailRoute({ navigation, route }: RootScreenProps<'EntryDetail'>)
       mood={3}
       onBack={() => navigation.goBack()}
       onEdit={() => navigation.navigate('EntryEdit', { entryId })}
+    />
+  );
+}
+
+const MONTH_LABELS_EN = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+] as const;
+
+function DayRoute({ navigation, route }: RootScreenProps<'Day'>) {
+  const { year, monthIndex, day } = route.params;
+  const today = new Date();
+  const isToday =
+    today.getFullYear() === year && today.getMonth() === monthIndex && today.getDate() === day;
+  const dayLabel = `${day} ${MONTH_LABELS_EN[monthIndex]} ${year}`;
+  return (
+    <DayScreen
+      dayLabel={dayLabel}
+      entries={SAMPLE_DAY_ENTRIES}
+      isToday={isToday}
+      onBack={() => navigation.goBack()}
+      onEntryPress={(entry) => navigation.navigate('EntryDetail', { entryId: entry.id })}
+      onAddMore={() => navigation.navigate('JournalCompose')}
     />
   );
 }
@@ -348,6 +386,7 @@ export function RootNavigator() {
       <Stack.Screen name="Otp" component={OtpRoute} />
       <Stack.Screen name="Tabs" component={TabsNavigator} options={{ animation: 'fade' }} />
       <Stack.Screen name="JournalCompose" component={JournalComposeRoute} />
+      <Stack.Screen name="Day" component={DayRoute} />
       <Stack.Screen name="EntryEdit" component={EntryEditRoute} />
       <Stack.Screen name="EntryDetail" component={EntryDetailRoute} />
       <Stack.Screen name="GroupCreate" component={GroupCreateRoute} />

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { View, type ViewStyle } from 'react-native';
+import { Pressable, View, type ViewStyle } from 'react-native';
 import { Text } from '../../Text';
 import { useTheme } from '../../../theme';
 import { GardenIllustration, type GardenIllustrationName } from '../../illustrations/garden';
@@ -12,13 +12,14 @@ export type GardenCellProps = {
   label?: string;
   day?: number;
   style?: ViewStyle;
+  onPress?: () => void;
 };
 
 const CELL_SIZE = 40;
 const ILLUSTRATION_SIZE = 32;
 const TODAY_BORDER_WIDTH = 2;
 
-function GardenCellImpl({ state, illustration, label, day, style }: GardenCellProps) {
+function GardenCellImpl({ state, illustration, label, day, style, onPress }: GardenCellProps) {
   const theme = useTheme();
 
   const base: ViewStyle = {
@@ -51,6 +52,50 @@ function GardenCellImpl({ state, illustration, label, day, style }: GardenCellPr
     };
   }
 
+  const dayBadge =
+    day !== undefined ? (
+      <View
+        pointerEvents="none"
+        style={{
+          position: 'absolute',
+          top: theme.spacing.xs,
+          right: theme.spacing.xs,
+        }}
+      >
+        <Text variant="overline" color="fgGhost">
+          {String(day)}
+        </Text>
+      </View>
+    ) : null;
+
+  const content = (
+    <>
+      {state === 'written' && illustration ? (
+        <GardenIllustration name={illustration} size={ILLUSTRATION_SIZE} />
+      ) : null}
+      {dayBadge}
+    </>
+  );
+
+  if (onPress) {
+    return (
+      <Pressable
+        accessibilityLabel={label}
+        accessibilityRole="button"
+        onPress={onPress}
+        hitSlop={theme.spacing.xxs}
+        style={({ pressed }) => [
+          base,
+          variantStyle,
+          style,
+          { opacity: pressed ? theme.opacity.pressedSubtle : theme.opacity.full },
+        ]}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
   return (
     <View
       accessible
@@ -58,23 +103,7 @@ function GardenCellImpl({ state, illustration, label, day, style }: GardenCellPr
       accessibilityRole="image"
       style={[base, variantStyle, style]}
     >
-      {state === 'written' && illustration ? (
-        <GardenIllustration name={illustration} size={ILLUSTRATION_SIZE} />
-      ) : null}
-      {day !== undefined ? (
-        <View
-          pointerEvents="none"
-          style={{
-            position: 'absolute',
-            top: theme.spacing.xs,
-            right: theme.spacing.xs,
-          }}
-        >
-          <Text variant="overline" color="fgGhost">
-            {String(day)}
-          </Text>
-        </View>
-      ) : null}
+      {content}
     </View>
   );
 }

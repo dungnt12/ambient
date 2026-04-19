@@ -45,6 +45,7 @@ export function QuietNotesScreen({ notes, onSelect, onClose }: QuietNotesScreenP
           <QuietNoteRow
             key={note.id}
             note={note}
+            isFirst={index === 0}
             isLast={index === notes.length - 1}
             onPress={onSelect ? () => onSelect(note) : undefined}
           />
@@ -56,15 +57,19 @@ export function QuietNotesScreen({ notes, onSelect, onClose }: QuietNotesScreenP
 
 function QuietNoteRow({
   note,
+  isFirst,
   isLast,
   onPress,
 }: {
   note: QuietNote;
+  isFirst: boolean;
   isLast: boolean;
   onPress?: () => void;
 }) {
   const t = useTheme();
   const dotColor = toneDotColor(t, note.tone);
+  // Center the 1px line under the dot: half of (dot - hairline).
+  const lineOffset = (t.layout.timelineDot - t.brand.border.hairline) / 2;
 
   return (
     <Pressable
@@ -72,18 +77,27 @@ function QuietNoteRow({
       disabled={!onPress}
       style={({ pressed }) => ({
         flexDirection: 'row',
-        paddingBottom: isLast ? 0 : t.spacing.xxl,
         opacity: pressed && onPress ? t.opacity.pressed : 1,
       })}
     >
       <View style={{ width: t.layout.timelineGutter, alignItems: 'flex-start' }}>
+        {!isFirst ? (
+          <View
+            style={{
+              width: t.brand.border.hairline,
+              height: t.spacing.xs,
+              backgroundColor: t.colors.border,
+              marginLeft: lineOffset,
+            }}
+          />
+        ) : null}
         <View
           style={{
             width: t.layout.timelineDot,
             height: t.layout.timelineDot,
             borderRadius: t.radius.pill,
             backgroundColor: dotColor,
-            marginTop: t.spacing.xs,
+            marginTop: isFirst ? t.spacing.xs : 0,
           }}
         />
         {!isLast ? (
@@ -92,14 +106,18 @@ function QuietNoteRow({
               width: t.brand.border.hairline,
               flex: 1,
               backgroundColor: t.colors.border,
-              // Center the 1px line under the dot: half of (dot - hairline).
-              marginLeft: (t.layout.timelineDot - t.brand.border.hairline) / 2,
-              marginTop: t.spacing.sm,
+              marginLeft: lineOffset,
             }}
           />
         ) : null}
       </View>
-      <View style={{ flex: 1, gap: t.spacing.sm }}>
+      <View
+        style={{
+          flex: 1,
+          gap: t.spacing.sm,
+          paddingBottom: isLast ? 0 : t.spacing.xxl,
+        }}
+      >
         <Text variant="metaLabel" color="fgFaint">
           {note.dateLabel}
         </Text>

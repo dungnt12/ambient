@@ -23,6 +23,7 @@ export type RootStackParamList = {
   Otp: { email: string };
   Tabs: NavigatorScreenParams<TabParamList> | undefined;
   JournalCompose: undefined;
+  Day: { year: number; monthIndex: number; day: number };
   EntryDetail: { entryId: string };
   EntryEdit: { entryId: string };
   GroupCreate: undefined;

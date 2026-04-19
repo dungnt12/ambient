@@ -117,7 +117,6 @@
     },
     "detail": {
       "aiSignalHeading": "TÍN HIỆU AI · NHÓM THẤY GÌ",
-      "privacyNote": "Chỉ bạn thấy bản gốc.",
       "editCta": "Chỉnh sửa",
       "deleteCta": "Xóa nhật ký"
     },
@@ -129,6 +128,11 @@
       "title": "Nhật ký của bạn",
       "entryCount_one": "{{count}} bài",
       "entryCount_other": "{{count}} bài"
+    },
+    "day": {
+      "entryCount_one": "{{count}} ghi chú",
+      "entryCount_other": "{{count}} ghi chú",
+      "addMore": "Viết thêm hôm nay"
     }
   },
   "group": {

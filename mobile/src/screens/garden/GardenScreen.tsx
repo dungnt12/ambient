@@ -12,12 +12,20 @@ import {
   type Theme,
 } from '../../design-system';
 
+export type GardenDayRef = {
+  year: number;
+  monthIndex: number;
+  day: number;
+  state: 'today' | 'written';
+};
+
 export type GardenScreenProps = {
   year?: number;
   daysWritten?: number;
   daysInYear?: number;
   todayMonthIndex?: number;
   todayDayOfMonth?: number;
+  onDayPress?: (ref: GardenDayRef) => void;
 };
 
 const MONTH_KEYS = [
@@ -131,6 +139,7 @@ type MonthItemProps = {
   hairline: number;
   borderSoftColor: string;
   cellLabelFor: (monthLabel: string, day: number) => string;
+  onCellPress?: (monthIndex: number, day: number, state: 'today' | 'written') => void;
 };
 
 const MonthItem = memo(function MonthItem({
@@ -144,6 +153,7 @@ const MonthItem = memo(function MonthItem({
   hairline,
   borderSoftColor,
   cellLabelFor,
+  onCellPress,
 }: MonthItemProps) {
   return (
     <View style={{ gap: gapSm }}>
@@ -178,6 +188,11 @@ const MonthItem = memo(function MonthItem({
                 day={cell.day}
                 illustration={cell.kind === 'written' ? cell.illustration : undefined}
                 label={cellLabelFor(monthLabel, cell.day)}
+                onPress={
+                  cell.kind !== 'empty' && onCellPress
+                    ? () => onCellPress(month.monthIndex, cell.day, cell.kind)
+                    : undefined
+                }
               />
             ))}
             {row.length < DAYS_PER_ROW
@@ -225,6 +240,7 @@ export function GardenScreen({
   daysInYear = 365,
   todayMonthIndex = 3,
   todayDayOfMonth = 17,
+  onDayPress,
 }: GardenScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
@@ -281,6 +297,13 @@ export function GardenScreen({
     [months, todayMonthIndex, daysWritten, tr],
   );
 
+  const onCellPress = useCallback(
+    (monthIndex: number, day: number, state: 'today' | 'written') => {
+      onDayPress?.({ year, monthIndex, day, state });
+    },
+    [onDayPress, year],
+  );
+
   const renderItem: ListRenderItem<(typeof items)[number]> = useCallback(
     ({ item }) => (
       <MonthItem
@@ -294,9 +317,10 @@ export function GardenScreen({
         hairline={t.brand.border.hairline}
         borderSoftColor={t.colors.borderSoft}
         cellLabelFor={cellLabelFor}
+        onCellPress={onCellPress}
       />
     ),
-    [t, cellLabelFor],
+    [t, cellLabelFor, onCellPress],
   );
 
   const keyExtractor = useCallback((item: (typeof items)[number]) => item.month.key, []);

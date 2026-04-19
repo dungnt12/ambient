@@ -6,3 +6,4 @@ export {
   type JournalListScreenProps,
   type JournalListEntry,
 } from './JournalListScreen';
+export { DayScreen, type DayScreenProps, type DayEntryItem } from './DayScreen';

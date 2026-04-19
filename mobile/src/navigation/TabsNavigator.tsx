@@ -27,7 +27,14 @@ function TabScreenLayout({ children }: { children: ReactNode }) {
 }
 
 function GardenTab() {
-  return <GardenScreen />;
+  const rootNav = useNavigation<RootNav<'Tabs'>>();
+  return (
+    <GardenScreen
+      onDayPress={({ year, monthIndex, day }) => {
+        rootNav.navigate('Day', { year, monthIndex, day });
+      }}
+    />
+  );
 }
 
 function JournalTab() {

@@ -1,12 +1,12 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Lock, Sparkles } from 'lucide-react-native';
+import { Sparkles } from 'lucide-react-native';
 import {
   Avatar,
   BackButton,
-  Checkbox,
   CTAButton,
   MoodGlyph,
+  PrivacyBadge,
   ScreenLayout,
   Text,
   TextButton,
@@ -70,9 +70,19 @@ export function EntryDetailScreen({
           gap: t.spacing.lg,
         }}
       >
-        <Text variant="overline" color="fgFaint">
-          {dateEyebrow}
-        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: t.spacing.sm,
+          }}
+        >
+          <Text variant="overline" color="fgFaint" style={{ flexShrink: 1 }}>
+            {dateEyebrow}
+          </Text>
+          <PrivacyBadge kind="lock" label={tr('journal.compose.onlyYou')} />
+        </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.md }}>
           <Avatar size={32} variant="empty" />
@@ -111,36 +121,7 @@ export function EntryDetailScreen({
             {aiSummary}
           </Text>
         </View>
-
-        <PrivacyNoteRow />
       </View>
     </ScreenLayout>
-  );
-}
-
-function PrivacyNoteRow() {
-  const t = useTheme();
-  const { t: tr } = useTranslation();
-
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: t.spacing.md,
-        paddingHorizontal: t.spacing.lg,
-        paddingVertical: t.spacing.base,
-        backgroundColor: t.colors.bgRaised,
-        borderRadius: t.radius.card,
-        borderWidth: t.brand.border.hairline,
-        borderColor: t.colors.borderSoft,
-      }}
-    >
-      <Checkbox value onChange={() => undefined} />
-      <Text variant="bodyStandard" color="fg" style={{ flexGrow: 1, flexShrink: 1 }}>
-        {tr('journal.detail.privacyNote')}
-      </Text>
-      <Lock size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgSubtle} />
-    </View>
   );
 }
