@@ -18,8 +18,10 @@ import {
 } from '../screens/group';
 import {
   MeetupProposalSheetScreen,
+  NoteComposerSheetScreen,
   QuietNotesEmptyScreen,
   QuietNotesScreen,
+  ReceivedNotesSheetScreen,
   SupportSignalDetailScreen,
   WeeklyDigestNeedsWarmthScreen,
   WeeklyDigestScreen,
@@ -29,6 +31,7 @@ import {
   NotificationsPermissionScreen,
   PrivacyByDesignScreen,
 } from '../screens/settings';
+import { SubscriptionScreen } from '../screens/subscription';
 import { SAMPLE_DAY_ENTRIES, SAMPLE_ENTRY_BODY } from '../mocks/journal';
 import {
   SAMPLE_GROUPS,
@@ -37,15 +40,19 @@ import {
   SAMPLE_TIER,
 } from '../mocks/group';
 import { useActiveGroup } from '../state/activeGroup';
+import { useGroupInsights } from '../state/groupInsights';
+import { addMeetupToCalendar } from '../lib/calendar';
 import {
-  SAMPLE_MEETUP_PROPOSAL,
   SAMPLE_QUIET_NOTES,
+  SAMPLE_RECEIVED_NOTES,
   SAMPLE_SUPPORT_SIGNAL,
   SAMPLE_WEEKLY_DIGEST,
   SAMPLE_WEEKLY_DIGEST_WARMTH,
 } from '../mocks/ambient';
 import { TabsNavigator } from './TabsNavigator';
 import type { RootScreenProps, RootStackParamList } from './types';
+
+const CURRENT_USER = { id: 'self', name: 'You' };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -221,20 +228,25 @@ function GroupAcceptInviteRoute({ navigation, route }: RootScreenProps<'GroupAcc
 
 function GroupJoinedRoute({ navigation, route }: RootScreenProps<'GroupJoined'>) {
   const { groupName } = route.params;
-  const primary = SAMPLE_GROUPS[0];
-  const primaryMembers = SAMPLE_PULSE_MEMBERS[primary.id] ?? [];
+  const { setActiveGroupId } = useActiveGroup();
+  const matched = SAMPLE_GROUPS.find((g) => g.name === groupName) ?? SAMPLE_GROUPS[0];
+  const members = SAMPLE_PULSE_MEMBERS[matched.id] ?? [];
   return (
     <GroupJoinedScreen
       groupName={groupName}
-      memberNames={primaryMembers.map((m) => m.name)}
+      memberNames={members.map((m) => m.name)}
       onWriteFirst={() => navigation.navigate('JournalCompose')}
-      onEnterPulse={() => navigation.replace('GroupPulse', { groupName })}
+      onEnterPulse={() => {
+        setActiveGroupId(matched.id);
+        navigation.replace('Tabs', { screen: 'Group' });
+      }}
     />
   );
 }
 
 function GroupPulseRoute({ navigation, route }: RootScreenProps<'GroupPulse'>) {
   const { groupName } = route.params;
+  const { proposals } = useGroupInsights();
   const active = SAMPLE_GROUPS.find((g) => g.name === groupName) ?? SAMPLE_GROUPS[0];
   const members = SAMPLE_PULSE_MEMBERS[active.id] ?? [];
   const insight = SAMPLE_GROUP_INSIGHTS[active.id] ?? null;
@@ -250,7 +262,11 @@ function GroupPulseRoute({ navigation, route }: RootScreenProps<'GroupPulse'>) {
       onInviteMore={() => navigation.navigate('GroupCreate')}
       onWriteFirst={() => navigation.navigate('JournalCompose')}
       onDismissInsight={() => {}}
-      onProposeMeetup={() => navigation.navigate('MeetupProposal')}
+      onProposeMeetup={(proposalId) => navigation.navigate('MeetupProposal', { proposalId })}
+      onAddMeetupToCalendar={(proposalId) => {
+        const proposal = proposals[proposalId];
+        if (proposal) void addMeetupToCalendar(proposal);
+      }}
       onOpenDigest={() => navigation.navigate('WeeklyDigest')}
       onCheckInOnMember={() => navigation.navigate('SupportSignalDetail')}
       onLeaveGroup={() => navigation.navigate('LeaveGroup', { groupName: active.name })}
@@ -302,7 +318,13 @@ function QuietNotesRoute({ navigation }: RootScreenProps<'QuietNotes'>) {
   return (
     <QuietNotesScreen
       notes={SAMPLE_QUIET_NOTES}
-      onSelect={(note) => navigation.navigate(note.target)}
+      onSelect={(note) => {
+        if (note.target === 'MeetupProposal') {
+          navigation.navigate('MeetupProposal', { proposalId: 'sample-meetup-1' });
+        } else {
+          navigation.navigate(note.target);
+        }
+      }}
       onClose={exit}
     />
   );
@@ -318,7 +340,7 @@ function WeeklyDigestRoute({ navigation }: RootScreenProps<'WeeklyDigest'>) {
   return (
     <WeeklyDigestScreen
       digest={SAMPLE_WEEKLY_DIGEST}
-      onPropose={() => navigation.navigate('MeetupProposal')}
+      onPropose={() => navigation.navigate('MeetupProposal', { proposalId: 'sample-meetup-1' })}
       onClose={() => navigation.goBack()}
     />
   );
@@ -335,11 +357,18 @@ function WeeklyNeedsWarmthRoute({ navigation }: RootScreenProps<'WeeklyNeedsWarm
   );
 }
 
-function MeetupProposalRoute({ navigation }: RootScreenProps<'MeetupProposal'>) {
+function MeetupProposalRoute({ navigation, route }: RootScreenProps<'MeetupProposal'>) {
+  const { proposalId } = route.params;
+  const { proposals, markProposed } = useGroupInsights();
+  const proposal = proposals[proposalId];
+  if (!proposal) {
+    navigation.goBack();
+    return null;
+  }
   return (
     <MeetupProposalSheetScreen
-      proposal={SAMPLE_MEETUP_PROPOSAL}
-      onPropose={() => navigation.goBack()}
+      proposal={proposal}
+      onPropose={() => markProposed(proposalId, CURRENT_USER)}
       onDismiss={() => navigation.goBack()}
     />
   );
@@ -380,7 +409,41 @@ function SupportSignalDetailRoute({ navigation }: RootScreenProps<'SupportSignal
     <SupportSignalDetailScreen
       signal={SAMPLE_SUPPORT_SIGNAL}
       onBack={() => navigation.goBack()}
-      onSend={() => navigation.goBack()}
+      onUseDraft={(draft) =>
+        navigation.navigate('NoteCompose', {
+          recipientName: SAMPLE_SUPPORT_SIGNAL.memberName,
+          initialMessage: draft,
+        })
+      }
+      onWriteOwn={() =>
+        navigation.navigate('NoteCompose', { recipientName: SAMPLE_SUPPORT_SIGNAL.memberName })
+      }
+    />
+  );
+}
+
+function NoteComposeRoute({ navigation, route }: RootScreenProps<'NoteCompose'>) {
+  return (
+    <NoteComposerSheetScreen
+      recipientName={route.params.recipientName}
+      initialMessage={route.params.initialMessage}
+      onSend={() => navigation.popToTop()}
+      onDismiss={() => navigation.goBack()}
+    />
+  );
+}
+
+function ReceivedNotesRoute({ navigation }: RootScreenProps<'ReceivedNotes'>) {
+  return (
+    <ReceivedNotesSheetScreen notes={SAMPLE_RECEIVED_NOTES} onDismiss={() => navigation.goBack()} />
+  );
+}
+
+function SubscriptionRoute({ navigation }: RootScreenProps<'Subscription'>) {
+  return (
+    <SubscriptionScreen
+      onBack={() => navigation.goBack()}
+      onStart={() => navigation.goBack()}
       onLater={() => navigation.goBack()}
     />
   );
@@ -444,9 +507,26 @@ export function RootNavigator() {
       <Stack.Screen name="NotificationsPermission" component={NotificationsPermissionRoute} />
       <Stack.Screen name="PrivacyByDesign" component={PrivacyByDesignRoute} />
       <Stack.Screen name="DeleteAccount" component={DeleteAccountRoute} />
+      <Stack.Screen name="Subscription" component={SubscriptionRoute} />
       <Stack.Screen
         name="MeetupProposal"
         component={MeetupProposalRoute}
+        options={{
+          presentation: 'transparentModal',
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="NoteCompose"
+        component={NoteComposeRoute}
+        options={{
+          presentation: 'transparentModal',
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="ReceivedNotes"
+        component={ReceivedNotesRoute}
         options={{
           presentation: 'transparentModal',
           animation: 'none',

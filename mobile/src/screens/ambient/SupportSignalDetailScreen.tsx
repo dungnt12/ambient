@@ -13,15 +13,17 @@ import type { SupportSignal } from '../../mocks/ambient';
 export type SupportSignalDetailScreenProps = {
   signal: SupportSignal;
   onBack?: () => void;
-  onSend?: () => void;
-  onLater?: () => void;
+  /** Open the note composer pre-filled with the AI draft. */
+  onUseDraft?: (draft: string) => void;
+  /** Open the note composer empty, for writing from scratch. */
+  onWriteOwn?: () => void;
 };
 
 export function SupportSignalDetailScreen({
   signal,
   onBack,
-  onSend,
-  onLater,
+  onUseDraft,
+  onWriteOwn,
 }: SupportSignalDetailScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
@@ -55,13 +57,13 @@ export function SupportSignalDetailScreen({
         primary={
           <CTAButton
             variant="dark"
-            label={tr('ambient.supportDetail.sendCta', { name: signal.memberName })}
-            onPress={onSend}
+            label={tr('ambient.supportDetail.useDraftCta')}
+            onPress={() => onUseDraft?.(signal.aiBody)}
           />
         }
         secondary={{
-          label: tr('ambient.supportDetail.later'),
-          onPress: () => onLater?.(),
+          label: tr('ambient.supportDetail.writeOwn'),
+          onPress: () => onWriteOwn?.(),
           tone: 'faint',
         }}
       />
@@ -88,13 +90,13 @@ export function SupportSignalDetailScreen({
           }}
         >
           <Text variant="overline" color="fgFaint">
-            {tr('ambient.supportDetail.aiEyebrow')}
+            {tr('ambient.supportDetail.draftEyebrow')}
           </Text>
-          <Text variant="bodyStandard" color="fgSubtle">
+          <Text variant="bodySerif" color="fg">
             {signal.aiBody}
           </Text>
           <Text variant="overline" color="fgFaint">
-            {tr('ambient.supportDetail.aiNoOneSees')}
+            {tr('ambient.supportDetail.draftHint')}
           </Text>
         </View>
 

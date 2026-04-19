@@ -9,11 +9,16 @@
     "sections": {
       "reminders": "NHẮC NHỞ & THÔNG BÁO",
       "ambient": "TRÍ TUỆ AMBIENT",
+      "membership": "GÓI THÀNH VIÊN",
       "privacy": "QUYỀN RIÊNG TƯ"
     },
     "ambient": {
       "quietNotes": "Quiet notes từ AI",
       "open": "Mở →"
+    },
+    "membership": {
+      "pro": "Ambient Pro",
+      "open": "Xem →"
     },
     "reminders": {
       "dailyWrite": "Nhắc viết nhật ký mỗi ngày",
@@ -199,8 +204,6 @@
       "body": "Bắt đầu bằng vài dòng cho riêng mình. Nhịp của bạn sẽ dần được cả nhóm cảm nhận.",
       "nextWriteEyebrow": "TIẾP THEO · HÔM NAY",
       "nextWriteLabel": "Viết bài đầu tiên",
-      "nextPulseEyebrow": "NHỊP NHÓM",
-      "nextPulseLabel": "Xem nhịp nhóm",
       "andYou": "và bạn",
       "memberListBody": "Mỗi người một nhịp riêng — kết nối qua những tín hiệu nhỏ.",
       "cta": "Vào nhịp nhóm"
@@ -225,6 +228,9 @@
       "meetupEyebrow": "MỘT BUỔI GẶP NHẸ NHÀNG · CUỐI TUẦN NÀY",
       "meetupBody": "Tuần này mọi người dường như đều có năng lượng nhẹ nhàng hơn. Chiều thứ Bảy có thể là thời điểm đẹp.",
       "meetupPropose": "Mở đề xuất",
+      "meetupProposedEyebrow": "ĐÃ ĐỀ XUẤT · {{when}}",
+      "meetupProposedBy": "{{name}} đã đề xuất cho cả nhóm.",
+      "meetupAddToCalendar": "Thêm vào lịch của tôi",
       "supportEyebrow": "MỘT NGƯỜI ĐANG TRẦM XUỐNG · 3 NGÀY",
       "supportBody": "{{name}} có vẻ trầm lắng hơn tuần này. Một lời nhắn nhỏ từ bạn có thể rất ý nghĩa.",
       "supportCheckIn": "Nhắn một dòng cho {{name}}",
@@ -270,17 +276,19 @@
     },
     "meetupProposal": {
       "eyebrow": "GỢI Ý TỪ AI · DỰA TRÊN NHỊP NHÓM",
-      "mayJoin": "CÓ THỂ THAM GIA",
+      "sentEyebrow": "ĐÃ GỬI NHÓM · VỪA XONG",
+      "freeEnergy": "AI THẤY NHỮNG NGƯỜI NÀY ĐANG CÓ NĂNG LƯỢNG TUẦN NÀY",
       "proposeCta": "Đề xuất cho nhóm",
-      "footer": "Nếu bạn gửi đề xuất, mọi người sẽ thấy sự kiện trong lịch chung."
+      "sentCta": "Đã đề xuất ✓",
+      "footer": "Khi bạn đề xuất, cả nhóm sẽ thấy trong Pulse. Mỗi người tự thêm vào lịch của mình."
     },
     "supportDetail": {
       "eyebrow": "TÍN HIỆU HỖ TRỢ · {{count}} NGÀY",
-      "aiEyebrow": "GỢI Ý TỪ AI",
-      "aiNoOneSees": "KHÔNG AI BIẾT BẠN ĐÃ NHẮN",
+      "draftEyebrow": "BẢN VIẾT SẴN TỪ AI · DÙNG ĐƯỢC LUÔN",
+      "draftHint": "CHỈNH LẠI, HOẶC TỰ VIẾT",
       "privacyNote": "Ambient không ép bạn nhắn tin. Và cũng không nói với {{name}} rằng AI đã gợi ý.",
-      "sendCta": "Gửi {{name}} một lời nhắn",
-      "later": "Để sau"
+      "useDraftCta": "Dùng bản này",
+      "writeOwn": "Tự viết"
     },
     "noteComposer": {
       "title": "Viết cho {{name}}",
@@ -289,7 +297,13 @@
       "remaining_one": "Còn {{count}} ký tự",
       "remaining_other": "Còn {{count}} ký tự",
       "sendCta": "Gửi {{name}}",
-      "footer": "Lời nhắn của bạn sẽ phai sau 48 giờ."
+      "footer": "Lời nhắn của bạn sẽ phai sau 48 giờ.",
+      "confirmAlert": {
+        "title": "Gửi cho {{name}}?",
+        "body": "Đã gửi thì không thu hồi được.",
+        "cancel": "Tiếp tục viết",
+        "confirm": "Gửi"
+      }
     },
     "receivedNotes": {
       "title_one": "{{count}} người đang nghĩ về bạn",
@@ -300,6 +314,53 @@
       "yesterday": "hôm qua",
       "footer": "Không cần trả lời."
     }
+  },
+  "subscription": {
+    "eyebrow": "AMBIENT PRO",
+    "title": "Giữ cho ambient luôn hiện diện.",
+    "body": "Một khoản nhỏ mỗi tháng để Ambient tiếp tục chạy — và mở từ một lên tới năm vòng bạn thân gần gũi.",
+    "plan": {
+      "monthly": {
+        "eyebrow": "HÀNG THÁNG",
+        "per": "/ tháng",
+        "body": "Thanh toán mỗi tháng. Tạm dừng hoặc huỷ bất kỳ lúc nào."
+      },
+      "yearly": {
+        "eyebrow": "HÀNG NĂM",
+        "per": "/ năm",
+        "body": "Thanh toán một lần mỗi năm. Huỷ sẽ dừng kỳ gia hạn tiếp theo."
+      },
+      "savingsPill": "TIẾT KIỆM {{percent}}%"
+    },
+    "features": {
+      "eyebrow": "BẠN SẼ CÓ THÊM",
+      "circles": {
+        "title": "Tối đa 5 vòng nhỏ",
+        "body": "Giữ bạn bè, gia đình và người thương làm những chốn yên riêng biệt."
+      },
+      "intelligence": {
+        "title": "AI đọc nhóm sâu hơn",
+        "body": "Claude Sonnet dệt những tóm tắt giàu hơn về người bạn quan tâm."
+      },
+      "meetups": {
+        "title": "Gợi ý gặp mặt",
+        "body": "Khi nhóm có khoảng trống chung trong tuần, AI nhẹ nhàng đề xuất một dịp."
+      },
+      "rhythm": {
+        "title": "Nhịp nhắc tuỳ biến",
+        "body": "Chọn lúc được nhắc — hoặc để Ambient hoàn toàn im lặng."
+      },
+      "export": {
+        "title": "Xuất nhật ký",
+        "body": "Tải toàn bộ những gì bạn đã viết dưới dạng PDF riêng tư, bất cứ khi nào."
+      }
+    },
+    "cta": {
+      "startMonthly": "Bắt đầu theo tháng · {{price}}",
+      "startYearly": "Bắt đầu theo năm · {{price}}",
+      "later": "Để sau"
+    },
+    "trustNote": "Không streak, không ép buộc. Huỷ bất cứ lúc nào trong Cài đặt."
   },
   "garden": {
     "subtitle": "{{done}} / {{total}} ngày · cuộn để xem cả năm",

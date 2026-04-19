@@ -1,5 +1,6 @@
 import type { PulseMood } from '../design-system';
 import type { GroupInsight } from '../screens/group';
+import { SAMPLE_MEETUP_PROPOSAL } from './ambient';
 
 export type PulseMember = {
   id: string;
@@ -159,7 +160,7 @@ export const SAMPLE_PULSE_MEMBERS: Record<string, PulseMember[]> = {
 
 // Per-group AI insights. Silence (null) is a valid state per the product vision.
 export const SAMPLE_GROUP_INSIGHTS: Record<string, GroupInsight | null> = {
-  sunday: { kind: 'meetup' },
+  sunday: { kind: 'meetup', proposalId: SAMPLE_MEETUP_PROPOSAL.id },
   family: null,
   duo: { kind: 'support', targetName: 'Linh' },
 };

@@ -104,17 +104,32 @@ export type MeetupProposalCandidate = {
   initial: string;
 };
 
+export type MeetupProposalStatus = 'open' | 'proposed';
+
+export type MeetupProposalActor = {
+  id: string;
+  name: string;
+};
+
 export type MeetupProposal = {
+  id: string;
   groupName: string;
   headline: string;
   body: string;
+  suggestedAt: string;
   candidates: MeetupProposalCandidate[];
+  status: MeetupProposalStatus;
+  proposedBy?: MeetupProposalActor;
+  proposedAt?: string;
 };
 
 export const SAMPLE_MEETUP_PROPOSAL: MeetupProposal = {
+  id: 'sample-meetup-1',
   groupName: 'Sunday Group',
   headline: 'Saturday, Apr 19 around 3 PM?',
   body: 'The group leans toward a slow weekend. A short afternoon walk, or tea somewhere quiet. No pressure — no one has to confirm right away.',
+  suggestedAt: '2026-04-19T15:00:00+07:00',
+  status: 'open',
   candidates: [
     { id: 'phong', name: 'Phong', initial: 'P' },
     { id: 'linh', name: 'Linh', initial: 'L' },
@@ -131,11 +146,48 @@ export type SupportSignal = {
   aiBody: string;
 };
 
+export type ReceivedNote = {
+  id: string;
+  senderName: string;
+  senderInitial: string;
+  /** Group the sender wrote from — shown as eyebrow to disambiguate same names across circles. */
+  fromGroup: string;
+  body: string;
+  /** Hours since the note was sent, used for the relative label. */
+  hoursAgo: number;
+};
+
+export const SAMPLE_RECEIVED_NOTES: ReceivedNote[] = [
+  {
+    id: 'note-an',
+    senderName: 'An',
+    senderInitial: 'A',
+    fromGroup: 'Sunday Group',
+    body: 'Nghĩ về cậu sáng nay. Không cần trả lời đâu.',
+    hoursAgo: 2,
+  },
+  {
+    id: 'note-minh',
+    senderName: 'Minh',
+    senderInitial: 'M',
+    fromGroup: 'Gia đình',
+    body: 'Nếu tuần này nặng, mình ở đây.',
+    hoursAgo: 9,
+  },
+  {
+    id: 'note-phong',
+    senderName: 'Phong',
+    senderInitial: 'P',
+    fromGroup: 'Sunday Group',
+    body: 'Một cái ôm từ xa.',
+    hoursAgo: 26,
+  },
+];
+
 export const SAMPLE_SUPPORT_SIGNAL: SupportSignal = {
   memberName: 'Linh',
   days: 3,
   headline: 'Linh moves slower this week.',
   body: "Linh's signal has softened since Tuesday. Nothing intense — just a quiet stretch lasting longer than usual.",
-  aiBody:
-    "You don't need to say much. A small message — even a single emoji — is often enough to let them know you're thinking of them.",
+  aiBody: 'Nghĩ về cậu vài hôm nay. Không cần trả lời — chỉ muốn cậu biết thôi.',
 };

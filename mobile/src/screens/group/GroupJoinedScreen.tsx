@@ -31,20 +31,17 @@ export function GroupJoinedScreen({
           {tr('group.joined.body')}
         </Text>
 
-        <View style={{ gap: t.spacing.lg, marginTop: t.spacing.xxl }}>
-          <NextRow
+        <View style={{ marginTop: t.spacing.xxl }}>
+          <ListRow
             eyebrow={tr('group.joined.nextWriteEyebrow')}
             label={tr('group.joined.nextWriteLabel')}
             onPress={onWriteFirst}
-          />
-          <NextRow
-            eyebrow={tr('group.joined.nextPulseEyebrow')}
-            label={tr('group.joined.nextPulseLabel')}
-            onPress={onEnterPulse}
+            trailing="chevron"
+            tone="raised"
           />
         </View>
 
-        <View style={{ gap: t.spacing.md, marginTop: t.spacing.xxl }}>
+        <View style={{ gap: t.spacing.md, marginTop: t.spacing.xl }}>
           <Text variant="bodySerifTight" color="fgSubtle">
             {memberNames.join(' · ') + ' · ' + tr('group.joined.andYou')}
           </Text>
@@ -53,7 +50,7 @@ export function GroupJoinedScreen({
           </Text>
         </View>
 
-        <View style={{ flex: 1 }} />
+        <View style={{ flex: 1, minHeight: t.spacing.xl }} />
 
         <CTAButton variant="primary" label={tr('group.joined.cta')} onPress={onEnterPulse} />
         <Text
@@ -66,19 +63,5 @@ export function GroupJoinedScreen({
         </Text>
       </View>
     </Screen>
-  );
-}
-
-function NextRow({
-  eyebrow,
-  label,
-  onPress,
-}: {
-  eyebrow: string;
-  label: string;
-  onPress?: () => void;
-}) {
-  return (
-    <ListRow eyebrow={eyebrow} label={label} onPress={onPress} trailing="chevron" tone="raised" />
   );
 }

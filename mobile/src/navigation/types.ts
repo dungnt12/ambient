@@ -42,12 +42,15 @@ export type RootStackParamList = {
   QuietNotes: undefined;
   QuietNotesEmpty: undefined;
   WeeklyDigest: undefined;
-  MeetupProposal: undefined;
+  MeetupProposal: { proposalId: string };
   SupportSignalDetail: undefined;
+  NoteCompose: { recipientName: string; initialMessage?: string };
+  ReceivedNotes: undefined;
   WeeklyNeedsWarmth: undefined;
   NotificationsPermission: { returnTo?: 'tabs' | 'back' } | undefined;
   PrivacyByDesign: undefined;
   DeleteAccount: undefined;
+  Subscription: undefined;
 };
 
 export type RootNav<T extends keyof RootStackParamList = keyof RootStackParamList> =

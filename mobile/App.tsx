@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider } from './src/design-system';
 import { BootGate, RootNavigator } from './src/navigation';
 import { ActiveGroupProvider } from './src/state/activeGroup';
+import { GroupInsightsProvider } from './src/state/groupInsights';
 
 export default function App() {
   return (
@@ -14,10 +15,12 @@ export default function App() {
         <ThemeProvider>
           <BootGate>
             <ActiveGroupProvider>
-              <NavigationContainer>
-                <StatusBar style="dark" />
-                <RootNavigator />
-              </NavigationContainer>
+              <GroupInsightsProvider>
+                <NavigationContainer>
+                  <StatusBar style="dark" />
+                  <RootNavigator />
+                </NavigationContainer>
+              </GroupInsightsProvider>
             </ActiveGroupProvider>
           </BootGate>
         </ThemeProvider>

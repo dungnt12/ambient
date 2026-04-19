@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   Animated,
   Dimensions,
+  Keyboard,
+  Platform,
   Pressable,
   View,
   type LayoutChangeEvent,
@@ -52,8 +54,35 @@ export function BottomSheetModal({
   const backdropOpacity = useRef(new Animated.Value(0)).current;
   const baseTranslate = useRef(new Animated.Value(FALLBACK_HEIGHT)).current;
   const dragTranslate = useRef(new Animated.Value(0)).current;
+  const keyboardOffset = useRef(new Animated.Value(0)).current;
   const mountedRef = useRef(false);
   const dismissingRef = useRef(false);
+
+  // Lift the sheet above the soft keyboard so TextInput stays visible.
+  useEffect(() => {
+    const showEvt = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvt = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const showSub = Keyboard.addListener(showEvt, (e) => {
+      Animated.timing(keyboardOffset, {
+        toValue: e.endCoordinates.height,
+        duration: t.motion.duration.base,
+        easing: t.motion.easing.entrance,
+        useNativeDriver: true,
+      }).start();
+    });
+    const hideSub = Keyboard.addListener(hideEvt, () => {
+      Animated.timing(keyboardOffset, {
+        toValue: 0,
+        duration: t.motion.duration.quick,
+        easing: t.motion.easing.exit,
+        useNativeDriver: true,
+      }).start();
+    });
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, [keyboardOffset, t.motion]);
 
   const animateIn = useCallback(() => {
     Animated.parallel([
@@ -145,12 +174,15 @@ export function BottomSheetModal({
     [baseTranslate, dismiss, dragTranslate, sheetHeight, t.motion.spring.standard],
   );
 
-  const translateY = Animated.add(
-    baseTranslate,
-    dragTranslate.interpolate({
-      inputRange: [-1, 0, 1],
-      outputRange: [0, 0, 1],
-    }),
+  const translateY = Animated.subtract(
+    Animated.add(
+      baseTranslate,
+      dragTranslate.interpolate({
+        inputRange: [-1, 0, 1],
+        outputRange: [0, 0, 1],
+      }),
+    ),
+    keyboardOffset,
   );
 
   const rendered = typeof children === 'function' ? children({ dismiss }) : children;

@@ -9,11 +9,16 @@
     "sections": {
       "reminders": "REMINDERS & NOTIFICATIONS",
       "ambient": "AMBIENT INTELLIGENCE",
+      "membership": "MEMBERSHIP",
       "privacy": "PRIVACY"
     },
     "ambient": {
       "quietNotes": "Quiet notes from AI",
       "open": "Open →"
+    },
+    "membership": {
+      "pro": "Ambient Pro",
+      "open": "View →"
     },
     "reminders": {
       "dailyWrite": "Daily write reminder",
@@ -199,8 +204,6 @@
       "body": "Start with a few lines for yourself — the group will gradually feel your rhythm.",
       "nextWriteEyebrow": "NEXT · TODAY",
       "nextWriteLabel": "Write your first journal lines",
-      "nextPulseEyebrow": "GROUP PULSE",
-      "nextPulseLabel": "See how everyone's doing",
       "andYou": "and you",
       "memberListBody": "Four people, four distinct rhythms — connected through small signals.",
       "cta": "Enter group pulse"
@@ -225,6 +228,9 @@
       "meetupEyebrow": "A GENTLE MEETUP · THIS WEEKEND",
       "meetupBody": "Everyone's a bit freer this week. Saturday afternoon could be the right time.",
       "meetupPropose": "Open proposal",
+      "meetupProposedEyebrow": "PROPOSED · {{when}}",
+      "meetupProposedBy": "{{name}} proposed this for the group.",
+      "meetupAddToCalendar": "Add to my calendar",
       "supportEyebrow": "SOMEONE IS LOW · 3 DAYS",
       "supportBody": "{{name}} seems quieter this week. You don't need to say much — a small message is enough warmth.",
       "supportCheckIn": "Check in on {{name}}",
@@ -270,17 +276,19 @@
     },
     "meetupProposal": {
       "eyebrow": "AI SUGGESTION · FROM GROUP PULSE",
-      "mayJoin": "MAY JOIN",
+      "sentEyebrow": "SENT TO GROUP · JUST NOW",
+      "freeEnergy": "AI THINKS THESE PEOPLE HAVE FREE ENERGY THIS WEEK",
       "proposeCta": "Propose to group",
-      "footer": "If you propose, a tentative event joins everyone's calendar."
+      "sentCta": "Proposed ✓",
+      "footer": "If you propose, the group sees it in Pulse. Everyone adds it to their own calendar."
     },
     "supportDetail": {
       "eyebrow": "SUPPORT SIGNAL · {{count}} DAYS",
-      "aiEyebrow": "AI SUGGESTION",
-      "aiNoOneSees": "NO ONE SEES THAT YOU MESSAGED",
+      "draftEyebrow": "A DRAFT FROM AI · TAP TO USE",
+      "draftHint": "EDIT IT, OR WRITE YOUR OWN",
       "privacyNote": "Ambient doesn't push you to message. And it won't tell {{name}} that AI suggested this.",
-      "sendCta": "Send {{name}} a line",
-      "later": "Later"
+      "useDraftCta": "Use this draft",
+      "writeOwn": "Write my own"
     },
     "noteComposer": {
       "title": "Write to {{name}}",
@@ -289,7 +297,13 @@
       "remaining_one": "{{count}} character left",
       "remaining_other": "{{count}} characters left",
       "sendCta": "Send to {{name}}",
-      "footer": "Your note fades in 48 hours."
+      "footer": "Your note fades in 48 hours.",
+      "confirmAlert": {
+        "title": "Send to {{name}}?",
+        "body": "You can't take it back once sent.",
+        "cancel": "Keep editing",
+        "confirm": "Send"
+      }
     },
     "receivedNotes": {
       "title_one": "{{count}} person is thinking of you",
@@ -300,6 +314,53 @@
       "yesterday": "yesterday",
       "footer": "No reply needed."
     }
+  },
+  "subscription": {
+    "eyebrow": "AMBIENT PRO",
+    "title": "Keep the ambient on.",
+    "body": "A small monthly contribution keeps the signal going — and opens up to five close circles instead of one.",
+    "plan": {
+      "monthly": {
+        "eyebrow": "MONTHLY",
+        "per": "/ month",
+        "body": "Billed each month. Pause or stop whenever."
+      },
+      "yearly": {
+        "eyebrow": "YEARLY",
+        "per": "/ year",
+        "body": "Billed once a year. Cancelling stops the next renewal."
+      },
+      "savingsPill": "SAVE {{percent}}%"
+    },
+    "features": {
+      "eyebrow": "WHAT YOU UNLOCK",
+      "circles": {
+        "title": "Up to 5 small circles",
+        "body": "Keep friends, family, and a partner as separate quiet spaces."
+      },
+      "intelligence": {
+        "title": "Deeper group reading",
+        "body": "Claude Sonnet weaves richer summaries from the people you care about."
+      },
+      "meetups": {
+        "title": "Meetup suggestions",
+        "body": "When the group has shared room in the week, AI proposes a gentle time."
+      },
+      "rhythm": {
+        "title": "Custom reminder rhythm",
+        "body": "Choose when to be nudged — or ask Ambient to stay fully silent."
+      },
+      "export": {
+        "title": "Export your journal",
+        "body": "Download everything you've written as a private PDF, anytime."
+      }
+    },
+    "cta": {
+      "startMonthly": "Start monthly · {{price}}",
+      "startYearly": "Start yearly · {{price}}",
+      "later": "Maybe later"
+    },
+    "trustNote": "No streaks, no shame. Cancel anytime from Settings."
   },
   "garden": {
     "subtitle": "{{done}} / {{total}} days · scroll to see the whole year",

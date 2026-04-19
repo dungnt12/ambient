@@ -15,6 +15,7 @@ import {
   getAllPulseMembers,
   getTotalMemberCount,
 } from '../mocks/group';
+import { SAMPLE_RECEIVED_NOTES } from '../mocks/ambient';
 import {
   BottomBarInsetProvider,
   TabBarVisibilityProvider,
@@ -24,6 +25,8 @@ import { AppTabBar } from './AppTabBar';
 import { useTabBarInset } from './useTabBarInset';
 import type { RootNav, TabParamList } from './types';
 import { useActiveGroup } from '../state/activeGroup';
+import { useGroupInsights } from '../state/groupInsights';
+import { addMeetupToCalendar } from '../lib/calendar';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -74,6 +77,7 @@ function GroupTab() {
 function GroupPulseAllScene() {
   const rootNav = useNavigation<RootNav<'Tabs'>>();
   const { t: tr } = useTranslation();
+  const { proposals } = useGroupInsights();
   const members = getAllPulseMembers();
   const insights = getAllInsights().map((e) => ({ insight: e.insight, groupName: e.groupName }));
   return (
@@ -89,15 +93,23 @@ function GroupPulseAllScene() {
       onInviteMore={() => rootNav.navigate('GroupCreate')}
       onWriteFirst={() => rootNav.navigate('JournalCompose')}
       onDismissInsight={() => {}}
-      onProposeMeetup={() => rootNav.navigate('MeetupProposal')}
+      onProposeMeetup={(proposalId) => rootNav.navigate('MeetupProposal', { proposalId })}
+      onAddMeetupToCalendar={(proposalId) => {
+        const proposal = proposals[proposalId];
+        if (proposal) void addMeetupToCalendar(proposal);
+      }}
       onOpenDigest={() => rootNav.navigate('WeeklyDigest')}
       onCheckInOnMember={() => rootNav.navigate('SupportSignalDetail')}
+      receivedNotesCount={SAMPLE_RECEIVED_NOTES.length}
+      receivedNotesSenderInitials={SAMPLE_RECEIVED_NOTES.map((n) => n.senderInitial)}
+      onOpenReceivedNotes={() => rootNav.navigate('ReceivedNotes')}
     />
   );
 }
 
 function GroupPulseTabScene({ activeGroupId }: { activeGroupId: string }) {
   const rootNav = useNavigation<RootNav<'Tabs'>>();
+  const { proposals } = useGroupInsights();
   const active = SAMPLE_GROUPS.find((g) => g.id === activeGroupId) ?? SAMPLE_GROUPS[0];
   const members = SAMPLE_PULSE_MEMBERS[active.id] ?? [];
   const insight = SAMPLE_GROUP_INSIGHTS[active.id] ?? null;
@@ -114,10 +126,17 @@ function GroupPulseTabScene({ activeGroupId }: { activeGroupId: string }) {
       onInviteMore={() => rootNav.navigate('GroupCreate')}
       onWriteFirst={() => rootNav.navigate('JournalCompose')}
       onDismissInsight={() => {}}
-      onProposeMeetup={() => rootNav.navigate('MeetupProposal')}
+      onProposeMeetup={(proposalId) => rootNav.navigate('MeetupProposal', { proposalId })}
+      onAddMeetupToCalendar={(proposalId) => {
+        const proposal = proposals[proposalId];
+        if (proposal) void addMeetupToCalendar(proposal);
+      }}
       onOpenDigest={() => rootNav.navigate('WeeklyDigest')}
       onCheckInOnMember={() => rootNav.navigate('SupportSignalDetail')}
       onLeaveGroup={() => rootNav.navigate('LeaveGroup', { groupName: active.name })}
+      receivedNotesCount={SAMPLE_RECEIVED_NOTES.length}
+      receivedNotesSenderInitials={SAMPLE_RECEIVED_NOTES.map((n) => n.senderInitial)}
+      onOpenReceivedNotes={() => rootNav.navigate('ReceivedNotes')}
     />
   );
 }
@@ -161,6 +180,7 @@ function YouTab() {
       onOpenNotifications={() => rootNav.navigate('NotificationsPermission', { returnTo: 'back' })}
       onOpenAmbient={() => rootNav.navigate('QuietNotes')}
       onOpenPrivacy={() => rootNav.navigate('PrivacyByDesign')}
+      onOpenSubscription={() => rootNav.navigate('Subscription')}
       onSignOut={() => rootNav.reset({ index: 0, routes: [{ name: 'Onboarding' }] })}
       onDeleteAccount={() => rootNav.navigate('DeleteAccount')}
     />

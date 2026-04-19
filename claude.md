@@ -305,15 +305,22 @@ Run the pre-ship checklist in `@design.md §12` before marking any screen comple
 
 **Free tier:**
 - Solo journaling (unlimited entries)
-- 1 group (up to 3 members)
+- 1 group (up to 8 members)
 - Basic AI prompts
 
 **Pro — $4.99/month or $39.99/year:**
-- Unlimited groups + members
+- Up to 5 groups, max 8 members each
 - Full AI analysis and scheduling
 - Weekly digests
 - Export journal as PDF
 - Custom notification schedules
+
+**Why the caps are hard limits, not upsell gates:**
+- Ambient awareness breaks down past 8 people per circle — "close friends/family" stops being the right shape.
+- More than 5 circles turns passive awareness into a to-do list of relationships. Most real users have 2–3 circles (friends / family / partner).
+- AI signal quality: Group Context prompts grow linearly with members; precision of meetup/support inference drops as circles multiply.
+- Notification budget: max 1 AI notification/user/day. Unlimited circles → meaningful insights get crowded out → AI feels useless.
+- Constants in `mobile/src/mocks/group.ts`: `MAX_GROUP_MEMBERS = 8`, `MAX_GROUPS_FREE = 1`, `MAX_GROUPS_PRO = 5`.
 
 **Unit economics at 1,000 active Pro users:**
 - Revenue: ~$4,000/month

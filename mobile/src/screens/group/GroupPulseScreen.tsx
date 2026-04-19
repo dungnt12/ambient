@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronRight, MessageCircleHeart, Sparkles, X } from 'lucide-react-native';
 import {
+  Avatar,
   Card,
   CTAButton,
   CTAStack,
@@ -14,11 +15,12 @@ import {
   type PulseMood,
 } from '../../design-system';
 import type { PulseMember } from '../../mocks/group';
+import { useGroupInsights } from '../../state/groupInsights';
 
 export type GroupInsightKind = 'meetup' | 'support' | 'digest';
 
 export type GroupInsight =
-  | { kind: 'meetup' }
+  | { kind: 'meetup'; proposalId: string }
   | { kind: 'support'; targetName: string }
   | { kind: 'digest' };
 
@@ -46,9 +48,16 @@ export type GroupPulseScreenProps = {
   onInviteMore?: () => void;
   onDismissInsight?: () => void;
   onOpenDigest?: () => void;
-  onProposeMeetup?: () => void;
+  onProposeMeetup?: (proposalId: string) => void;
+  onAddMeetupToCalendar?: (proposalId: string) => void;
   onCheckInOnMember?: (memberName: string) => void;
   onLeaveGroup?: () => void;
+  /** Number of one-line notes sent by others that the viewer hasn't acknowledged. */
+  receivedNotesCount?: number;
+  /** Initials of senders — shown as a small avatar stack (max 3). */
+  receivedNotesSenderInitials?: string[];
+  /** Tap on the thinking-of-you card opens the received-notes sheet. */
+  onOpenReceivedNotes?: () => void;
   /** Tapping the group name opens the switcher sheet. */
   onOpenSwitcher?: () => void;
   /** When false, the name renders without a chevron affordance. */
@@ -68,10 +77,14 @@ export function GroupPulseScreen({
   onDismissInsight,
   onOpenDigest,
   onProposeMeetup,
+  onAddMeetupToCalendar,
   onCheckInOnMember,
   onLeaveGroup,
   onOpenSwitcher,
   hasMultipleGroups = false,
+  receivedNotesCount = 0,
+  receivedNotesSenderInitials = [],
+  onOpenReceivedNotes,
 }: GroupPulseScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
@@ -119,6 +132,13 @@ export function GroupPulseScreen({
       bodyContentContainerStyle={{ paddingTop: t.spacing.xxl }}
       bodyGap={t.rhythm.list}
     >
+      {receivedNotesCount > 0 ? (
+        <ThinkingOfYouCard
+          count={receivedNotesCount}
+          initials={receivedNotesSenderInitials}
+          onPress={onOpenReceivedNotes}
+        />
+      ) : null}
       {insights.map((entry, idx) => (
         <InsightCard
           key={`${entry.insight.kind}-${entry.groupName ?? 'single'}-${idx}`}
@@ -127,6 +147,7 @@ export function GroupPulseScreen({
           onDismiss={onDismissInsight}
           onOpenDigest={onOpenDigest}
           onProposeMeetup={onProposeMeetup}
+          onAddMeetupToCalendar={onAddMeetupToCalendar}
           onCheckIn={onCheckInOnMember}
         />
       ))}
@@ -266,13 +287,15 @@ function InsightCard({
   onDismiss,
   onOpenDigest,
   onProposeMeetup,
+  onAddMeetupToCalendar,
   onCheckIn,
 }: {
   insight: GroupInsight;
   groupName?: string;
   onDismiss?: () => void;
   onOpenDigest?: () => void;
-  onProposeMeetup?: () => void;
+  onProposeMeetup?: (proposalId: string) => void;
+  onAddMeetupToCalendar?: (proposalId: string) => void;
   onCheckIn?: (name: string) => void;
 }) {
   if (insight.kind === 'support') {
@@ -287,7 +310,13 @@ function InsightCard({
   }
   if (insight.kind === 'meetup') {
     return (
-      <MeetupInsightCard groupName={groupName} onPropose={onProposeMeetup} onDismiss={onDismiss} />
+      <MeetupInsightCard
+        proposalId={insight.proposalId}
+        groupName={groupName}
+        onPropose={() => onProposeMeetup?.(insight.proposalId)}
+        onAddToCalendar={() => onAddMeetupToCalendar?.(insight.proposalId)}
+        onDismiss={onDismiss}
+      />
     );
   }
   return <DigestInsightCard groupName={groupName} onOpen={onOpenDigest} onDismiss={onDismiss} />;
@@ -355,16 +384,62 @@ function InsightShell({
 }
 
 function MeetupInsightCard({
+  proposalId,
   groupName,
   onPropose,
+  onAddToCalendar,
   onDismiss,
 }: {
+  proposalId: string;
   groupName?: string;
   onPropose?: () => void;
+  onAddToCalendar?: () => void;
   onDismiss?: () => void;
 }) {
   const t = useTheme();
-  const { t: tr } = useTranslation();
+  const { t: tr, i18n } = useTranslation();
+  const { proposals } = useGroupInsights();
+  const proposal = proposals[proposalId];
+  const isProposed = proposal?.status === 'proposed';
+
+  if (isProposed && proposal) {
+    const when = formatRelativeTime(proposal.proposedAt, i18n.language);
+    return (
+      <InsightShell tone="brand">
+        <InsightGroupEyebrow groupName={groupName} onBrand />
+        <Text variant="metaLabel" color="fgOnBrand">
+          {tr('group.insights.meetupProposedEyebrow', { when })}
+        </Text>
+        <Text variant="bodySerifTight" color="fgOnBrand">
+          {proposal.headline}
+        </Text>
+        <Text variant="bodySmall" color="fgOnBrand">
+          {tr('group.insights.meetupProposedBy', { name: proposal.proposedBy?.name ?? '—' })}
+        </Text>
+        <Pressable
+          accessibilityRole="button"
+          onPress={onAddToCalendar}
+          style={({ pressed }) => ({
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: t.spacing.xs,
+            paddingTop: t.spacing.sm,
+            opacity: pressed ? t.opacity.pressed : t.opacity.full,
+          })}
+        >
+          <Text variant="buttonLabelSocial" color="fgOnBrand">
+            {tr('group.insights.meetupAddToCalendar')}
+          </Text>
+          <ChevronRight
+            size={t.iconSize.sm}
+            strokeWidth={t.stroke.standard}
+            color={t.colors.fgOnBrand}
+          />
+        </Pressable>
+      </InsightShell>
+    );
+  }
+
   return (
     <InsightShell tone="brand" onDismiss={onDismiss}>
       <InsightGroupEyebrow groupName={groupName} onBrand />
@@ -396,6 +471,22 @@ function MeetupInsightCard({
       </Pressable>
     </InsightShell>
   );
+}
+
+function formatRelativeTime(iso: string | undefined, locale: string): string {
+  if (!iso) return '';
+  const date = new Date(iso);
+  const diffMin = Math.max(0, Math.round((Date.now() - date.getTime()) / 60000));
+  if (diffMin < 1) return locale.startsWith('vi') ? 'vừa xong' : 'just now';
+  if (diffMin < 60) {
+    return locale.startsWith('vi') ? `${diffMin} phút trước` : `${diffMin} min ago`;
+  }
+  const diffHr = Math.round(diffMin / 60);
+  if (diffHr < 24) {
+    return locale.startsWith('vi') ? `${diffHr} giờ trước` : `${diffHr}h ago`;
+  }
+  const diffDay = Math.round(diffHr / 24);
+  return locale.startsWith('vi') ? `${diffDay} ngày trước` : `${diffDay}d ago`;
 }
 
 function SupportInsightCard({
@@ -482,6 +573,70 @@ function DigestInsightCard({
         />
       </Pressable>
     </InsightShell>
+  );
+}
+
+function ThinkingOfYouCard({
+  count,
+  initials,
+  onPress,
+}: {
+  count: number;
+  initials: string[];
+  onPress?: () => void;
+}) {
+  const t = useTheme();
+  const { t: tr } = useTranslation();
+  const shown = initials.slice(0, 3);
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={tr('group.thinkingOfYou.title', { count })}
+      onPress={onPress}
+      hitSlop={t.spacing.xs}
+      style={({ pressed }) => ({
+        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+      })}
+    >
+      <Card tone="raised">
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.rhythm.inner }}>
+          <AvatarStack initials={shown} />
+          <View style={{ flex: 1, gap: t.spacing.xxs }}>
+            <Text variant="metaLabel" color="fgFaint">
+              {tr('group.thinkingOfYou.eyebrow')}
+            </Text>
+            <Text variant="bodySerifTight" color="fg">
+              {tr('group.thinkingOfYou.title', { count })}
+            </Text>
+          </View>
+          <ChevronRight
+            size={t.iconSize.base}
+            strokeWidth={t.stroke.standard}
+            color={t.colors.fgFaint}
+          />
+        </View>
+      </Card>
+    </Pressable>
+  );
+}
+
+function AvatarStack({ initials }: { initials: string[] }) {
+  const t = useTheme();
+  if (initials.length === 0) return null;
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      {initials.map((letter, idx) => (
+        <View
+          key={`${letter}-${idx}`}
+          style={{
+            marginLeft: idx === 0 ? 0 : -t.layout.avatarOverlapTight,
+          }}
+        >
+          <Avatar size={32} initial={letter} />
+        </View>
+      ))}
+    </View>
   );
 }
 

@@ -28,6 +28,7 @@ export type SettingsScreenProps = {
   onOpenNotifications: () => void;
   onOpenAmbient: () => void;
   onOpenPrivacy: () => void;
+  onOpenSubscription: () => void;
   onSignOut: () => void;
   onDeleteAccount: () => void;
 };
@@ -45,6 +46,7 @@ export function SettingsScreen({
   onOpenNotifications,
   onOpenAmbient,
   onOpenPrivacy,
+  onOpenSubscription,
   onSignOut,
   onDeleteAccount,
 }: SettingsScreenProps) {
@@ -106,6 +108,14 @@ export function SettingsScreen({
           label={tr('settings.ambient.quietNotes')}
           linkLabel={tr('settings.ambient.open')}
           onPress={onOpenAmbient}
+        />
+      </Section>
+
+      <Section overline={tr('settings.sections.membership')}>
+        <LinkRow
+          label={tr('settings.membership.pro')}
+          linkLabel={tr('settings.membership.open')}
+          onPress={onOpenSubscription}
         />
       </Section>
 

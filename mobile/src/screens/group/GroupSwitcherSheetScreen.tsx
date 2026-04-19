@@ -51,7 +51,8 @@ export function GroupSwitcherSheetScreen({
   // Pro: locked after hitting the Pro cap — hard ceiling, no upsell.
   const atLimit = groups.length >= groupLimitForTier(tier);
   const locked = atLimit;
-  const lockedReason: 'upsell' | 'capReached' = tier === 'free' && atLimit ? 'upsell' : 'capReached';
+  const lockedReason: 'upsell' | 'capReached' =
+    tier === 'free' && atLimit ? 'upsell' : 'capReached';
   const totalMembers = groups.reduce((sum, g) => sum + g.memberCount, 0);
 
   return (
