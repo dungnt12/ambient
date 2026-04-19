@@ -4,7 +4,7 @@ import {
   Card,
   CTAButton,
   CTAStack,
-  ScreenHeader,
+  EditorialHeader,
   ScreenLayout,
   Text,
   useTheme,
@@ -57,7 +57,7 @@ export function DeleteAccountScreen({ onConfirmDelete, onKeep }: DeleteAccountSc
   return (
     <ScreenLayout
       header={
-        <ScreenHeader
+        <EditorialHeader
           overline={tr('settings.deleteAccount.eyebrow')}
           title={tr('settings.deleteAccount.title')}
         />

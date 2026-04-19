@@ -6,7 +6,7 @@ import {
   Card,
   CTAButton,
   ListRow,
-  ScreenHeader,
+  EditorialHeader,
   ScreenLayout,
   Text,
   TextButton,
@@ -50,7 +50,7 @@ export function SettingsScreen({
   const t = useTheme();
   const { t: tr } = useTranslation();
 
-  const header = <ScreenHeader overline={tr('settings.eyebrow')} title={tr('settings.title')} />;
+  const header = <EditorialHeader overline={tr('settings.eyebrow')} title={tr('settings.title')} />;
 
   const footer = (
     <View

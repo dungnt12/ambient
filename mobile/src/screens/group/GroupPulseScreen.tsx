@@ -6,6 +6,7 @@ import {
   Card,
   CTAButton,
   CTAStack,
+  ScreenHeader,
   ScreenLayout,
   Text,
   useTheme,
@@ -84,16 +85,16 @@ export function GroupPulseScreen({
     <ScreenLayout
       padHorizontal
       header={
-        <View style={{ paddingTop: t.rhythm.header.padTop, gap: t.rhythm.header.gap }}>
-          <GroupNameRow
-            groupName={groupName}
-            hasMultipleGroups={hasMultipleGroups}
-            onOpenSwitcher={onOpenSwitcher}
-          />
-          <Text variant="bodySmall" color="fgFaint">
-            {subtitle}
-          </Text>
-        </View>
+        <ScreenHeader
+          title={
+            <GroupNameRow
+              groupName={groupName}
+              hasMultipleGroups={hasMultipleGroups}
+              onOpenSwitcher={onOpenSwitcher}
+            />
+          }
+          subtitle={subtitle}
+        />
       }
       footer={
         <View style={{ paddingTop: t.spacing.xl }}>
@@ -457,16 +458,7 @@ function PulseEmpty({
   return (
     <ScreenLayout
       padHorizontal
-      header={
-        <View style={{ paddingTop: t.spacing.base }}>
-          <Text variant="headingPulse" color="fg">
-            {groupName}
-          </Text>
-          <Text variant="bodySmall" color="fgFaint" style={{ marginTop: t.spacing.md }}>
-            {subtitle}
-          </Text>
-        </View>
-      }
+      header={<ScreenHeader title={groupName} titleVariant="headingPulse" subtitle={subtitle} />}
       footer={
         <CTAStack
           primary={

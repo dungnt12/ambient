@@ -1,69 +1,96 @@
-import { View } from 'react-native';
-import { BackButton } from './buttons';
-import { Heading } from './Heading';
+import type { ReactNode } from 'react';
+import { Pressable, View } from 'react-native';
 import { Text } from './Text';
 import { useTheme } from '../theme';
+import type { TypographyVariant } from '../tokens/typography';
 
 export type ScreenHeaderProps = {
-  /**
-   * `false` / undefined: no back row. `true`: render a filled BackButton with
-   * no onPress (parent navigation handles it via accessibility). Object form:
-   * render BackButton with the given onPress.
-   */
-  back?: boolean | { onPress?: () => void };
-  /** Already-translated overline string (UPPERCASE convention). */
-  overline?: string;
-  /** Already-translated heading string. */
-  title?: string;
-  /** Already-translated supporting body string. */
-  body?: string;
+  /** Title text (string → default variant) or fully custom node. */
+  title: string | ReactNode;
+  /** Rendered as `bodySmall` fgFaint below the title row. */
+  subtitle?: string;
+  /** Rendered as `overline` fgFaint above the title row. */
+  eyebrow?: string;
+  /** Variant for the title when `title` is a string. Default `'headingScreen'`. */
+  titleVariant?: TypographyVariant;
+  /** Slot on the right side of the title row (chevron, badge, icon...). */
+  titleAccessory?: ReactNode;
+  /** When set, title + accessory become Pressable that opens this action. */
+  onPressTitle?: () => void;
+  accessibilityLabel?: string;
 };
 
 /**
- * Standard screen header: optional back button row + editorial stack of
- * overline / title / body. Matches spacing used across auth + settings
- * screens so migrations are a drop-in replacement.
- *
- * Caller is responsible for translation — this component never calls `t()`.
+ * Pinned screen header primitive. Bakes `rhythm.header.padTop` and
+ * `rhythm.header.gap` so screens don't re-specify top padding and inter-row
+ * spacing. Zero i18n — caller passes already-translated strings.
  */
-export function ScreenHeader({ back, overline, title, body }: ScreenHeaderProps) {
+export function ScreenHeader({
+  title,
+  subtitle,
+  eyebrow,
+  titleVariant,
+  titleAccessory,
+  onPressTitle,
+  accessibilityLabel,
+}: ScreenHeaderProps) {
   const t = useTheme();
-  const backPress = typeof back === 'object' ? back.onPress : undefined;
-  const showBack = back === true || typeof back === 'object';
-  const hasBlock = overline !== undefined || title !== undefined || body !== undefined;
+
+  const titleNode =
+    typeof title === 'string' ? (
+      <Text variant={titleVariant ?? 'headingScreen'} color="fg">
+        {title}
+      </Text>
+    ) : (
+      title
+    );
+
+  const titleRowChildren = (
+    <>
+      {titleNode}
+      {titleAccessory ?? null}
+    </>
+  );
+
+  const titleRow = onPressTitle ? (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      onPress={onPressTitle}
+      hitSlop={t.spacing.sm}
+      style={({ pressed }) => ({
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: t.spacing.sm,
+        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+      })}
+    >
+      {titleRowChildren}
+    </Pressable>
+  ) : (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: t.spacing.sm,
+      }}
+    >
+      {titleRowChildren}
+    </View>
+  );
 
   return (
-    <View>
-      {showBack ? (
-        <View style={{ paddingHorizontal: t.spacing.sm, paddingTop: t.spacing.sm }}>
-          <BackButton variant="filled" onPress={backPress} />
-        </View>
+    <View style={{ paddingTop: t.rhythm.header.padTop, gap: t.rhythm.header.gap }}>
+      {eyebrow !== undefined ? (
+        <Text variant="overline" color="fgFaint">
+          {eyebrow}
+        </Text>
       ) : null}
-
-      {hasBlock ? (
-        <View
-          style={{
-            paddingHorizontal: t.layout.screenPaddingX,
-            paddingTop: showBack ? t.spacing.base : t.spacing.sm,
-          }}
-        >
-          {overline !== undefined ? (
-            <Text variant="overline" color="fgFaint">
-              {overline}
-            </Text>
-          ) : null}
-
-          {title !== undefined || body !== undefined ? (
-            <View style={{ marginTop: t.spacing.sm, gap: t.spacing.base }}>
-              {title !== undefined ? <Heading variant="headingSection">{title}</Heading> : null}
-              {body !== undefined ? (
-                <Text variant="bodyLarge" color="fgMuted">
-                  {body}
-                </Text>
-              ) : null}
-            </View>
-          ) : null}
-        </View>
+      {titleRow}
+      {subtitle !== undefined ? (
+        <Text variant="bodySmall" color="fgFaint">
+          {subtitle}
+        </Text>
       ) : null}
     </View>
   );

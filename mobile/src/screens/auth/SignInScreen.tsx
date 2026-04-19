@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   CTAButton,
   CTAStack,
-  ScreenHeader,
+  EditorialHeader,
   ScreenLayout,
   Text,
   useTheme,
@@ -27,7 +27,7 @@ export function SignInScreen({ onApple, onEmail, onNewHere, onHelp }: SignInScre
     <ScreenLayout
       header={
         <View style={{ paddingTop: t.spacing.xxl }}>
-          <ScreenHeader
+          <EditorialHeader
             overline={tr('auth.signIn.overline')}
             title={tr('auth.signIn.title')}
             body={tr('auth.signIn.body')}

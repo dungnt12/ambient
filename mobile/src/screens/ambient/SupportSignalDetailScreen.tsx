@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   CTAButton,
   CTAStack,
-  ScreenHeader,
+  EditorialHeader,
   ScreenLayout,
   Text,
   useTheme,
@@ -28,7 +28,7 @@ export function SupportSignalDetailScreen({
 
   const header = (
     <View>
-      <ScreenHeader back={{ onPress: onBack }} />
+      <EditorialHeader back={{ onPress: onBack }} />
       <View
         style={{
           paddingHorizontal: t.layout.screenPaddingX,

@@ -1,9 +1,10 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ChevronRight, Plus, X } from 'lucide-react-native';
+import { ChevronRight, Plus } from 'lucide-react-native';
 import {
   BottomSheetModal,
   Card,
+  SheetHeader,
   Text,
   useTheme,
   type ColorToken,
@@ -49,29 +50,11 @@ export function GroupSwitcherSheetScreen({
     <BottomSheetModal onDismiss={onDismiss}>
       {({ dismiss }) => (
         <>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Text variant="headingPulse" color="fg">
-              {tr('group.switcher.title')}
-            </Text>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={tr('group.switcher.close')}
-              onPress={() => dismiss()}
-              hitSlop={t.spacing.sm}
-              style={({ pressed }) => ({
-                padding: t.spacing.xs,
-                opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-              })}
-            >
-              <X size={t.iconSize.md} strokeWidth={t.stroke.standard} color={t.colors.fgFaint} />
-            </Pressable>
-          </View>
+          <SheetHeader
+            title={tr('group.switcher.title')}
+            onDismiss={() => dismiss()}
+            accessibilityDismissLabel={tr('group.switcher.close')}
+          />
 
           <View style={{ gap: t.rhythm.list }}>
             {groups.map((g) => (

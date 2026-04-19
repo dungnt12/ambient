@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   CaptchaRow,
   CTAButton,
-  ScreenHeader,
+  EditorialHeader,
   ScreenLayout,
   Text,
   TextButton,
@@ -35,7 +35,7 @@ export function EmailScreen({ onBack, onSendCode, onUseApple }: EmailScreenProps
     <ScreenLayout
       avoidKeyboard
       header={
-        <ScreenHeader
+        <EditorialHeader
           back={{ onPress: onBack }}
           overline={tr('auth.email.overline')}
           title={tr('auth.email.title')}

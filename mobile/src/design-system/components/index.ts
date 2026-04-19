@@ -6,6 +6,8 @@ export { Screen, type ScreenProps } from './Screen';
 export { ScreenLayout, type ScreenLayoutProps } from './ScreenLayout';
 export { ScreenList, type ScreenListProps } from './ScreenList';
 export { ScreenHeader, type ScreenHeaderProps } from './ScreenHeader';
+export { SheetHeader, type SheetHeaderProps } from './SheetHeader';
+export { EditorialHeader, type EditorialHeaderProps } from './EditorialHeader';
 export { CTAStack, type CTAStackProps, type CTASecondary } from './CTAStack';
 export { TextButton, type TextButtonProps } from './TextButton';
 export { FadeMask, type FadeMaskProps } from './FadeMask';

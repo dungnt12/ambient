@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   CTAButton,
   OtpInput,
-  ScreenHeader,
+  EditorialHeader,
   ScreenLayout,
   Text,
   useTheme,
@@ -41,7 +41,7 @@ export function OtpScreen({ email, onBack, onVerify }: OtpScreenProps) {
     <ScreenLayout
       avoidKeyboard
       header={
-        <ScreenHeader
+        <EditorialHeader
           back={{ onPress: onBack }}
           overline={tr('auth.otp.overline')}
           title={tr('auth.otp.title')}
