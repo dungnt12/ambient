@@ -15,7 +15,9 @@ export type PulseMemberCardProps = {
 };
 
 const AVATAR_SIZE = 48;
-const GLYPH_CONTAINER = 24;
+const GLYPH_CONTAINER_WIDTH = 52;
+const GLYPH_CONTAINER_HEIGHT = 24;
+const GLYPH_WIDTH = 40;
 
 const MOOD_TO_LEVEL: Record<Exclude<PulseMood, 'empty'>, MoodLevel> = {
   calm: 3,
@@ -60,15 +62,15 @@ export function PulseMemberCard({ name, signal, mood, initial, style }: PulseMem
       {moodLevel ? (
         <View
           style={{
-            width: GLYPH_CONTAINER,
-            height: GLYPH_CONTAINER,
+            width: GLYPH_CONTAINER_WIDTH,
+            height: GLYPH_CONTAINER_HEIGHT,
             borderRadius: theme.radius.pill,
             backgroundColor: theme.colors.bgMuted,
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <MoodGlyph mood={moodLevel} size={theme.iconSize.lg} />
+          <MoodGlyph mood={moodLevel} size={GLYPH_WIDTH} selected />
         </View>
       ) : null}
     </View>

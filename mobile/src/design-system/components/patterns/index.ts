@@ -15,3 +15,6 @@ export type { InviteLinkRowProps } from './InviteLinkRow';
 
 export { PulseFooterRow } from './PulseFooterRow';
 export type { PulseFooterRowProps } from './PulseFooterRow';
+
+export { FilterChip } from './FilterChip';
+export type { FilterChipProps } from './FilterChip';

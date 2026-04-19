@@ -127,7 +127,16 @@
     "list": {
       "title": "Today's journal",
       "entryCount_one": "{{count}} entry",
-      "entryCount_other": "{{count}} entries"
+      "entryCount_other": "{{count}} entries",
+      "filter": {
+        "thisWeek": "This week",
+        "thisMonth": "This month",
+        "moodLabel": "Mood {{level}} of 5"
+      },
+      "empty": {
+        "title": "Nothing matches yet",
+        "description": "Try clearing a filter or pick a different mood."
+      }
     },
     "day": {
       "entryCount_one": "{{count}} small note",

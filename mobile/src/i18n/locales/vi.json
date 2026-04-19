@@ -127,7 +127,16 @@
     "list": {
       "title": "Nhật ký của bạn",
       "entryCount_one": "{{count}} bài",
-      "entryCount_other": "{{count}} bài"
+      "entryCount_other": "{{count}} bài",
+      "filter": {
+        "thisWeek": "Tuần này",
+        "thisMonth": "Tháng này",
+        "moodLabel": "Cảm xúc {{level}} trên 5"
+      },
+      "empty": {
+        "title": "Chưa có bài nào khớp",
+        "description": "Thử bỏ một bộ lọc hoặc chọn cảm xúc khác."
+      }
     },
     "day": {
       "entryCount_one": "{{count}} ghi chú",

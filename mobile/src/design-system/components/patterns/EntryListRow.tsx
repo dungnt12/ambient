@@ -9,8 +9,6 @@ export type EntryListRowProps = {
   style?: ViewStyle;
 };
 
-const DATE_COL_WIDTH = 48;
-
 export function EntryListRow({ date, preview, onPress, style }: EntryListRowProps) {
   const theme = useTheme();
 
@@ -22,24 +20,17 @@ export function EntryListRow({ date, preview, onPress, style }: EntryListRowProp
         {
           width: '100%',
           maxWidth: theme.layout.maxContentWidth,
-          flexDirection: 'row',
-          alignItems: 'flex-start',
-          gap: theme.spacing.md,
+          gap: theme.spacing.xs,
           paddingVertical: theme.spacing.md,
           opacity: pressed ? theme.opacity.pressedSubtle : theme.opacity.full,
         },
         style,
       ]}
     >
-      <Text variant="overline" color="fgFaint" style={{ width: DATE_COL_WIDTH }}>
+      <Text variant="overline" color="fgFaint" numberOfLines={1}>
         {date}
       </Text>
-      <Text
-        variant="bodyStandard"
-        color="fg"
-        numberOfLines={2}
-        style={{ flexGrow: 1, flexShrink: 1 }}
-      >
+      <Text variant="bodyStandard" color="fg" numberOfLines={2}>
         {preview}
       </Text>
     </Pressable>
