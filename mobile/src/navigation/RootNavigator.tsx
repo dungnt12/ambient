@@ -9,9 +9,10 @@ import {
 } from '../screens/journal';
 import {
   GroupAcceptInviteScreen,
-  GroupCreateJoinScreen,
+  GroupCreateScreen,
   GroupJoinedScreen,
   GroupPulseScreen,
+  GroupSwitcherSheetScreen,
   InviteOfferSheetScreen,
   LeaveGroupSheetScreen,
 } from '../screens/group';
@@ -27,10 +28,15 @@ import {
   DeleteAccountScreen,
   NotificationsPermissionScreen,
   PrivacyByDesignScreen,
-  SettingsScreen,
 } from '../screens/settings';
 import { SAMPLE_DAY_ENTRIES, SAMPLE_ENTRY_BODY } from '../mocks/journal';
-import { SAMPLE_GROUP, SAMPLE_PULSE_MEMBERS, SAMPLE_SAVED_INVITES } from '../mocks/group';
+import {
+  SAMPLE_GROUPS,
+  SAMPLE_GROUP_INSIGHTS,
+  SAMPLE_PULSE_MEMBERS,
+  SAMPLE_TIER,
+} from '../mocks/group';
+import { useActiveGroup } from '../state/activeGroup';
 import {
   SAMPLE_MEETUP_PROPOSAL,
   SAMPLE_QUIET_NOTES,
@@ -157,27 +163,20 @@ function EntryEditRoute({ navigation }: RootScreenProps<'EntryEdit'>) {
 }
 
 function GroupCreateRoute({ navigation }: RootScreenProps<'GroupCreate'>) {
+  const primary = SAMPLE_GROUPS[0];
+  const primaryMembers = SAMPLE_PULSE_MEMBERS[primary.id] ?? [];
   return (
-    <GroupCreateJoinScreen
-      inviteUrl={SAMPLE_GROUP.inviteUrl}
-      savedInvites={SAMPLE_SAVED_INVITES}
+    <GroupCreateScreen
+      inviteUrl={primary.inviteUrl}
       onCreate={(groupName) => navigation.navigate('GroupJoined', { groupName })}
-      onOpenInvite={(invite) =>
-        navigation.navigate('InviteOffer', {
-          inviterName: invite.inviterName,
-          groupName: invite.groupName,
-          memberCount: invite.memberCount,
-          since: invite.since,
-          memberInitials: invite.memberInitials,
-        })
-      }
+      onCopyInvite={() => {}}
       onSimulateIncomingLink={() =>
         navigation.navigate('InviteOffer', {
-          inviterName: SAMPLE_GROUP.inviterName,
-          groupName: SAMPLE_GROUP.name,
-          memberCount: SAMPLE_GROUP.memberCount,
-          since: SAMPLE_GROUP.since,
-          memberInitials: SAMPLE_PULSE_MEMBERS.map((m) => m.initial),
+          inviterName: primary.inviterName,
+          groupName: primary.name,
+          memberCount: primary.memberCount,
+          since: primary.since,
+          memberInitials: primaryMembers.map((m) => m.initial),
         })
       }
     />
@@ -201,13 +200,15 @@ function InviteOfferRoute({ navigation, route }: RootScreenProps<'InviteOffer'>)
 
 function GroupAcceptInviteRoute({ navigation, route }: RootScreenProps<'GroupAcceptInvite'>) {
   const { inviterName, groupName } = route.params;
+  const primary = SAMPLE_GROUPS[0];
+  const primaryMembers = SAMPLE_PULSE_MEMBERS[primary.id] ?? [];
   return (
     <GroupAcceptInviteScreen
       inviterName={inviterName}
       groupName={groupName}
-      memberCount={SAMPLE_GROUP.memberCount}
-      since={SAMPLE_GROUP.since}
-      memberInitials={SAMPLE_PULSE_MEMBERS.map((m) => m.initial)}
+      memberCount={primary.memberCount}
+      since={primary.since}
+      memberInitials={primaryMembers.map((m) => m.initial)}
       onAccept={() => navigation.replace('GroupJoined', { groupName })}
       onLater={() => navigation.goBack()}
     />
@@ -216,10 +217,12 @@ function GroupAcceptInviteRoute({ navigation, route }: RootScreenProps<'GroupAcc
 
 function GroupJoinedRoute({ navigation, route }: RootScreenProps<'GroupJoined'>) {
   const { groupName } = route.params;
+  const primary = SAMPLE_GROUPS[0];
+  const primaryMembers = SAMPLE_PULSE_MEMBERS[primary.id] ?? [];
   return (
     <GroupJoinedScreen
       groupName={groupName}
-      memberNames={SAMPLE_PULSE_MEMBERS.map((m) => m.name)}
+      memberNames={primaryMembers.map((m) => m.name)}
       onWriteFirst={() => navigation.navigate('JournalCompose')}
       onEnterPulse={() => navigation.replace('GroupPulse', { groupName })}
     />
@@ -228,28 +231,43 @@ function GroupJoinedRoute({ navigation, route }: RootScreenProps<'GroupJoined'>)
 
 function GroupPulseRoute({ navigation, route }: RootScreenProps<'GroupPulse'>) {
   const { groupName } = route.params;
+  const active = SAMPLE_GROUPS.find((g) => g.name === groupName) ?? SAMPLE_GROUPS[0];
+  const members = SAMPLE_PULSE_MEMBERS[active.id] ?? [];
+  const insight = SAMPLE_GROUP_INSIGHTS[active.id] ?? null;
   return (
     <GroupPulseScreen
-      groupName={groupName}
-      memberCount={SAMPLE_GROUP.memberCount}
-      since={SAMPLE_GROUP.since}
-      members={SAMPLE_PULSE_MEMBERS}
+      groupName={active.name}
+      memberCount={active.memberCount}
+      since={active.since}
+      members={members}
+      insight={insight}
+      hasMultipleGroups={SAMPLE_GROUPS.length > 1}
+      onOpenSwitcher={() => navigation.navigate('GroupSwitcher')}
       onInviteMore={() => navigation.navigate('GroupCreate')}
       onWriteFirst={() => navigation.navigate('JournalCompose')}
-      onReminderSettings={() => navigation.navigate('LeaveGroup', { groupName })}
+      onDismissInsight={() => {}}
+      onProposeMeetup={() => navigation.navigate('MeetupProposal')}
+      onOpenDigest={() => navigation.navigate('WeeklyDigest')}
+      onCheckInOnMember={() => navigation.navigate('SupportSignalDetail')}
+      onLeaveGroup={() => navigation.navigate('LeaveGroup', { groupName: active.name })}
     />
   );
 }
 
-function GroupPulseEmptyRoute({ navigation }: RootScreenProps<'GroupPulseEmpty'>) {
+function GroupSwitcherRoute({ navigation }: RootScreenProps<'GroupSwitcher'>) {
+  const { activeGroupId, setActiveGroupId } = useActiveGroup();
+  const currentActive = activeGroupId ?? SAMPLE_GROUPS[0]?.id ?? '';
   return (
-    <GroupPulseScreen
-      groupName={SAMPLE_GROUP.name}
-      memberCount={SAMPLE_GROUP.memberCount}
-      members={SAMPLE_PULSE_MEMBERS}
-      empty
-      onWriteFirst={() => navigation.navigate('JournalCompose')}
-      onInviteMore={() => navigation.navigate('GroupCreate')}
+    <GroupSwitcherSheetScreen
+      groups={SAMPLE_GROUPS}
+      activeGroupId={currentActive}
+      tier={SAMPLE_TIER}
+      onSelectGroup={(id) => {
+        setActiveGroupId(id);
+        navigation.goBack();
+      }}
+      onCreateNew={() => navigation.navigate('GroupCreate')}
+      onDismiss={() => navigation.goBack()}
     />
   );
 }
@@ -316,29 +334,6 @@ function MeetupProposalRoute({ navigation }: RootScreenProps<'MeetupProposal'>) 
       proposal={SAMPLE_MEETUP_PROPOSAL}
       onPropose={() => navigation.goBack()}
       onDismiss={() => navigation.goBack()}
-    />
-  );
-}
-
-function SettingsRoute({ navigation }: RootScreenProps<'Settings'>) {
-  return (
-    <SettingsScreen
-      userName="Phong"
-      userEmail="phong@ambient.app"
-      userInitial="P"
-      reminderTime="21:00"
-      timezone="Asia/Ho_Chi_Minh"
-      aiSuggestionsEnabled
-      onToggleAiSuggestions={() => {}}
-      onOpenReminder={() => {}}
-      onOpenTimezone={() => {}}
-      onOpenNotifications={() =>
-        navigation.navigate('NotificationsPermission', { returnTo: 'back' })
-      }
-      onOpenAmbient={() => navigation.navigate('QuietNotes')}
-      onOpenPrivacy={() => navigation.navigate('PrivacyByDesign')}
-      onSignOut={() => navigation.popToTop()}
-      onDeleteAccount={() => navigation.navigate('DeleteAccount')}
     />
   );
 }
@@ -411,7 +406,14 @@ export function RootNavigator() {
       <Stack.Screen name="GroupAcceptInvite" component={GroupAcceptInviteRoute} />
       <Stack.Screen name="GroupJoined" component={GroupJoinedRoute} />
       <Stack.Screen name="GroupPulse" component={GroupPulseRoute} />
-      <Stack.Screen name="GroupPulseEmpty" component={GroupPulseEmptyRoute} />
+      <Stack.Screen
+        name="GroupSwitcher"
+        component={GroupSwitcherRoute}
+        options={{
+          presentation: 'transparentModal',
+          animation: 'none',
+        }}
+      />
       <Stack.Screen
         name="LeaveGroup"
         component={LeaveGroupRoute}
@@ -425,7 +427,6 @@ export function RootNavigator() {
       <Stack.Screen name="WeeklyDigest" component={WeeklyDigestRoute} />
       <Stack.Screen name="WeeklyNeedsWarmth" component={WeeklyNeedsWarmthRoute} />
       <Stack.Screen name="SupportSignalDetail" component={SupportSignalDetailRoute} />
-      <Stack.Screen name="Settings" component={SettingsRoute} />
       <Stack.Screen name="NotificationsPermission" component={NotificationsPermissionRoute} />
       <Stack.Screen name="PrivacyByDesign" component={PrivacyByDesignRoute} />
       <Stack.Screen name="DeleteAccount" component={DeleteAccountRoute} />

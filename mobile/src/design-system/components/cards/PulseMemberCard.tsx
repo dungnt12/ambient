@@ -4,7 +4,10 @@ import { useTheme } from '../../theme';
 import { Avatar, MoodGlyph } from '../identity';
 import type { MoodLevel } from '../identity/types';
 
-export type PulseMood = 'calm' | 'curious' | 'dim' | 'bright' | 'empty';
+// Pulse mood vocabulary aligns with MoodGlyph's MoodLevel (1..5); `empty` means
+// no signal yet. Keeping a single vocabulary means the dot colors in the pulse
+// stream, the MoodGlyph stroke, and the MoodPicker all speak the same language.
+export type PulseMood = MoodLevel | 'empty';
 
 export type PulseMemberCardProps = {
   name: string;
@@ -19,16 +22,9 @@ const GLYPH_CONTAINER_WIDTH = 52;
 const GLYPH_CONTAINER_HEIGHT = 24;
 const GLYPH_WIDTH = 40;
 
-const MOOD_TO_LEVEL: Record<Exclude<PulseMood, 'empty'>, MoodLevel> = {
-  calm: 3,
-  curious: 4,
-  dim: 2,
-  bright: 5,
-};
-
 export function PulseMemberCard({ name, signal, mood, initial, style }: PulseMemberCardProps) {
   const theme = useTheme();
-  const moodLevel = mood === 'empty' ? null : MOOD_TO_LEVEL[mood];
+  const moodLevel: MoodLevel | null = mood === 'empty' ? null : mood;
 
   return (
     <View

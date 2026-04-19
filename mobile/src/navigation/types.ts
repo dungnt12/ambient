@@ -37,15 +37,14 @@ export type RootStackParamList = {
   GroupAcceptInvite: { inviterName: string; groupName: string };
   GroupJoined: { groupName: string };
   GroupPulse: { groupName: string };
-  GroupPulseEmpty: undefined;
   LeaveGroup: { groupName: string };
+  GroupSwitcher: undefined;
   QuietNotes: undefined;
   QuietNotesEmpty: undefined;
   WeeklyDigest: undefined;
   MeetupProposal: undefined;
   SupportSignalDetail: undefined;
   WeeklyNeedsWarmth: undefined;
-  Settings: undefined;
   NotificationsPermission: { returnTo?: 'tabs' | 'back' } | undefined;
   PrivacyByDesign: undefined;
   DeleteAccount: undefined;

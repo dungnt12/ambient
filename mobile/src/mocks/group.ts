@@ -1,4 +1,5 @@
 import type { PulseMood } from '../design-system';
+import type { GroupInsight } from '../screens/group';
 
 export type PulseMember = {
   id: string;
@@ -9,76 +10,136 @@ export type PulseMember = {
   updatedAt: { kind: 'hoursAgo'; hours: number } | { kind: 'yesterday' };
 };
 
-export const SAMPLE_GROUP = {
-  name: 'Sunday Group',
-  memberCount: 4,
-  since: 'March',
-  inviteUrl: 'ambient.app/j/a3f-2kx',
-  inviterName: 'An',
-};
-
-export type SavedInvite = {
+export type GroupSummary = {
   id: string;
-  groupName: string;
-  inviterName: string;
+  name: string;
   memberCount: number;
   since: string;
-  memberInitials: string[];
-  receivedAgo: string;
+  inviteUrl: string;
+  inviterName: string;
+  // Pre-computed hint for the switcher — real impl derives from members.
+  aggregateMood: PulseMood;
 };
 
-export const SAMPLE_SAVED_INVITES: SavedInvite[] = [
+export type Tier = 'free' | 'pro';
+
+// Demo tier flag — flip to 'free' to preview the gated "+ New group" row.
+export const SAMPLE_TIER: Tier = 'pro';
+
+export const SAMPLE_GROUPS: GroupSummary[] = [
   {
     id: 'sunday',
-    groupName: 'Sunday Group',
-    inviterName: 'An',
+    name: 'Sunday Group',
     memberCount: 4,
     since: 'March',
-    memberInitials: ['P', 'L', 'A', 'M'],
-    receivedAgo: '2 days ago',
+    inviteUrl: 'ambient.app/j/a3f-2kx',
+    inviterName: 'An',
+    aggregateMood: 3,
   },
   {
-    id: 'studio',
-    groupName: 'Studio Six',
-    inviterName: 'Minh',
-    memberCount: 6,
+    id: 'family',
+    name: 'Nhà mình',
+    memberCount: 3,
     since: 'January',
-    memberInitials: ['M', 'T', 'K', 'H', 'N', 'V'],
-    receivedAgo: 'Yesterday',
+    inviteUrl: 'ambient.app/j/fam-9pk',
+    inviterName: 'Mẹ',
+    aggregateMood: 4,
+  },
+  {
+    id: 'duo',
+    name: 'Linh & Minh',
+    memberCount: 2,
+    since: 'February',
+    inviteUrl: 'ambient.app/j/duo-7qx',
+    inviterName: 'Linh',
+    aggregateMood: 2,
   },
 ];
 
-export const SAMPLE_PULSE_MEMBERS: PulseMember[] = [
-  {
-    id: 'phong',
-    name: 'Phong',
-    initial: 'P',
-    signal: 'Seems steady, a bit curious this week.',
-    mood: 'curious',
-    updatedAt: { kind: 'hoursAgo', hours: 2 },
-  },
-  {
-    id: 'linh',
-    name: 'Linh',
-    initial: 'L',
-    signal: 'Tired — but routines still keep warmth.',
-    mood: 'dim',
-    updatedAt: { kind: 'yesterday' },
-  },
-  {
-    id: 'an',
-    name: 'An',
-    initial: 'A',
-    signal: 'Full of energy. Small joys every day.',
-    mood: 'bright',
-    updatedAt: { kind: 'hoursAgo', hours: 3 },
-  },
-  {
-    id: 'minh',
-    name: 'Minh',
-    initial: 'M',
-    signal: 'Seems quieter than usual. Reading, walking, listening.',
-    mood: 'calm',
-    updatedAt: { kind: 'yesterday' },
-  },
-];
+export const SAMPLE_PULSE_MEMBERS: Record<string, PulseMember[]> = {
+  sunday: [
+    {
+      id: 'phong',
+      name: 'Phong',
+      initial: 'P',
+      signal: 'Seems steady, a bit curious this week.',
+      mood: 4,
+      updatedAt: { kind: 'hoursAgo', hours: 2 },
+    },
+    {
+      id: 'linh',
+      name: 'Linh',
+      initial: 'L',
+      signal: 'Tired — but routines still keep warmth.',
+      mood: 2,
+      updatedAt: { kind: 'yesterday' },
+    },
+    {
+      id: 'an',
+      name: 'An',
+      initial: 'A',
+      signal: 'Full of energy. Small joys every day.',
+      mood: 5,
+      updatedAt: { kind: 'hoursAgo', hours: 3 },
+    },
+    {
+      id: 'minh',
+      name: 'Minh',
+      initial: 'M',
+      signal: 'Seems quieter than usual. Reading, walking, listening.',
+      mood: 3,
+      updatedAt: { kind: 'yesterday' },
+    },
+  ],
+  family: [
+    {
+      id: 'me',
+      name: 'Mẹ',
+      initial: 'M',
+      signal: 'Warm and settled — cooking something slow today.',
+      mood: 4,
+      updatedAt: { kind: 'hoursAgo', hours: 5 },
+    },
+    {
+      id: 'ba',
+      name: 'Ba',
+      initial: 'B',
+      signal: 'Quiet morning with the garden. Patient.',
+      mood: 4,
+      updatedAt: { kind: 'hoursAgo', hours: 6 },
+    },
+    {
+      id: 'em',
+      name: 'Em',
+      initial: 'E',
+      signal: 'Busy week, still finding small pockets of rest.',
+      mood: 3,
+      updatedAt: { kind: 'yesterday' },
+    },
+  ],
+  duo: [
+    {
+      id: 'linh-duo',
+      name: 'Linh',
+      initial: 'L',
+      signal: 'Feeling heavy — a few long days in a row.',
+      mood: 2,
+      updatedAt: { kind: 'hoursAgo', hours: 4 },
+    },
+    {
+      id: 'minh-duo',
+      name: 'Minh',
+      initial: 'M',
+      signal: 'Tender, listening more than talking lately.',
+      mood: 2,
+      updatedAt: { kind: 'yesterday' },
+    },
+  ],
+};
+
+// Per-group AI insights. Silence (null) is a valid state per the product vision.
+export const SAMPLE_GROUP_INSIGHTS: Record<string, GroupInsight | null> = {
+  sunday: { kind: 'meetup' },
+  family: null,
+  duo: { kind: 'support', targetName: 'Linh' },
+};

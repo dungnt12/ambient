@@ -3,10 +3,10 @@ import { useNavigation } from '@react-navigation/native';
 import type { ReactNode } from 'react';
 import { GardenScreen } from '../screens/garden';
 import { JournalListScreen } from '../screens/journal';
-import { GroupCreateJoinScreen } from '../screens/group';
+import { GroupCreateScreen, GroupPulseScreen } from '../screens/group';
 import { SettingsScreen } from '../screens/settings';
 import { SAMPLE_ENTRIES } from '../mocks/journal';
-import { SAMPLE_GROUP, SAMPLE_PULSE_MEMBERS, SAMPLE_SAVED_INVITES } from '../mocks/group';
+import { SAMPLE_GROUPS, SAMPLE_GROUP_INSIGHTS, SAMPLE_PULSE_MEMBERS } from '../mocks/group';
 import {
   BottomBarInsetProvider,
   TabBarVisibilityProvider,
@@ -15,6 +15,7 @@ import {
 import { AppTabBar } from './AppTabBar';
 import { useTabBarInset } from './useTabBarInset';
 import type { RootNav, TabParamList } from './types';
+import { useActiveGroup } from '../state/activeGroup';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -48,30 +49,60 @@ function JournalTab() {
 }
 
 function GroupTab() {
+  const { activeGroupId } = useActiveGroup();
+  const active =
+    activeGroupId != null ? SAMPLE_GROUPS.find((g) => g.id === activeGroupId) : undefined;
+  if (!active || SAMPLE_GROUPS.length === 0) {
+    return <GroupCreateTabScene />;
+  }
+  return <GroupPulseTabScene activeGroupId={active.id} />;
+}
+
+function GroupPulseTabScene({ activeGroupId }: { activeGroupId: string }) {
   const rootNav = useNavigation<RootNav<'Tabs'>>();
+  const active = SAMPLE_GROUPS.find((g) => g.id === activeGroupId) ?? SAMPLE_GROUPS[0];
+  const members = SAMPLE_PULSE_MEMBERS[active.id] ?? [];
+  const insight = SAMPLE_GROUP_INSIGHTS[active.id] ?? null;
   return (
-    <GroupCreateJoinScreen
-      inviteUrl={SAMPLE_GROUP.inviteUrl}
-      savedInvites={SAMPLE_SAVED_INVITES}
+    <GroupPulseScreen
+      key={active.id}
+      groupName={active.name}
+      memberCount={active.memberCount}
+      since={active.since}
+      members={members}
+      insight={insight}
+      hasMultipleGroups={SAMPLE_GROUPS.length > 1}
+      onOpenSwitcher={() => rootNav.navigate('GroupSwitcher')}
+      onInviteMore={() => rootNav.navigate('GroupCreate')}
+      onWriteFirst={() => rootNav.navigate('JournalCompose')}
+      onDismissInsight={() => {}}
+      onProposeMeetup={() => rootNav.navigate('MeetupProposal')}
+      onOpenDigest={() => rootNav.navigate('WeeklyDigest')}
+      onCheckInOnMember={() => rootNav.navigate('SupportSignalDetail')}
+      onLeaveGroup={() => rootNav.navigate('LeaveGroup', { groupName: active.name })}
+    />
+  );
+}
+
+function GroupCreateTabScene() {
+  const rootNav = useNavigation<RootNav<'Tabs'>>();
+  const primary = SAMPLE_GROUPS[0];
+  const primaryMembers = primary ? (SAMPLE_PULSE_MEMBERS[primary.id] ?? []) : [];
+  return (
+    <GroupCreateScreen
+      inviteUrl={primary?.inviteUrl ?? ''}
       onCreate={(groupName) => rootNav.navigate('GroupJoined', { groupName })}
-      onOpenInvite={(invite) =>
+      onCopyInvite={() => {}}
+      onSimulateIncomingLink={() => {
+        if (!primary) return;
         rootNav.navigate('InviteOffer', {
-          inviterName: invite.inviterName,
-          groupName: invite.groupName,
-          memberCount: invite.memberCount,
-          since: invite.since,
-          memberInitials: invite.memberInitials,
-        })
-      }
-      onSimulateIncomingLink={() =>
-        rootNav.navigate('InviteOffer', {
-          inviterName: SAMPLE_GROUP.inviterName,
-          groupName: SAMPLE_GROUP.name,
-          memberCount: SAMPLE_GROUP.memberCount,
-          since: SAMPLE_GROUP.since,
-          memberInitials: SAMPLE_PULSE_MEMBERS.map((m) => m.initial),
-        })
-      }
+          inviterName: primary.inviterName,
+          groupName: primary.name,
+          memberCount: primary.memberCount,
+          since: primary.since,
+          memberInitials: primaryMembers.map((m) => m.initial),
+        });
+      }}
     />
   );
 }

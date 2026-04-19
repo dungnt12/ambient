@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider } from './src/design-system';
 import { BootGate, RootNavigator } from './src/navigation';
+import { ActiveGroupProvider } from './src/state/activeGroup';
 
 export default function App() {
   return (
@@ -12,10 +13,12 @@ export default function App() {
       <SafeAreaProvider>
         <ThemeProvider>
           <BootGate>
-            <NavigationContainer>
-              <StatusBar style="dark" />
-              <RootNavigator />
-            </NavigationContainer>
+            <ActiveGroupProvider>
+              <NavigationContainer>
+                <StatusBar style="dark" />
+                <RootNavigator />
+              </NavigationContainer>
+            </ActiveGroupProvider>
           </BootGate>
         </ThemeProvider>
       </SafeAreaProvider>

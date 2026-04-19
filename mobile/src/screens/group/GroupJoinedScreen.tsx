@@ -22,7 +22,7 @@ export function GroupJoinedScreen({
   return (
     <Screen edges={['top', 'bottom']} background="bg">
       <View style={{ flex: 1, paddingHorizontal: t.layout.screenPaddingX }}>
-        <Text variant="metaLabel" color="brand" style={{ marginTop: t.spacing.sm }}>
+        <Text variant="metaLabel" color="brand" style={{ marginTop: t.spacing.md }}>
           {tr('group.joined.eyebrow')}
         </Text>
         <Text variant="headingScreen" color="fg" style={{ marginTop: t.spacing.md }}>
@@ -32,7 +32,7 @@ export function GroupJoinedScreen({
           {tr('group.joined.body')}
         </Text>
 
-        <View style={{ gap: t.spacing.base, marginTop: t.spacing.xl }}>
+        <View style={{ gap: t.spacing.lg, marginTop: t.spacing.xxl }}>
           <NextRow
             eyebrow={tr('group.joined.nextWriteEyebrow')}
             label={tr('group.joined.nextWriteLabel')}
@@ -45,7 +45,7 @@ export function GroupJoinedScreen({
           />
         </View>
 
-        <View style={{ gap: t.spacing.sm, marginTop: t.spacing.xxl }}>
+        <View style={{ gap: t.spacing.md, marginTop: t.spacing.xxl }}>
           <Text variant="bodySerifTight" color="fgSubtle">
             {memberNames.join(' · ') + ' · ' + tr('group.joined.andYou')}
           </Text>
@@ -90,7 +90,7 @@ function NextRow({
         borderWidth: t.brand.border.hairline,
         borderColor: t.colors.borderSoft,
         paddingHorizontal: t.spacing.lg,
-        paddingVertical: t.spacing.base,
+        paddingVertical: t.spacing.lg,
         flexDirection: 'row',
         alignItems: 'center',
         gap: t.spacing.md,

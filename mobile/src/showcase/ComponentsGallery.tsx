@@ -285,10 +285,10 @@ function CardsDemo() {
         primaryLabel="View digest"
         onPrimary={() => undefined}
       />
-      <PulseMemberCard name="Hien" signal="Feeling steady and present." mood="calm" initial="H" />
-      <PulseMemberCard name="Linh" signal="A lot on her mind today." mood="dim" initial="L" />
-      <PulseMemberCard name="Phong" signal="Energetic and curious." mood="curious" initial="P" />
-      <PulseMemberCard name="Mai" signal="Bright and warm." mood="bright" initial="M" />
+      <PulseMemberCard name="Hien" signal="Feeling steady and present." mood={3} initial="H" />
+      <PulseMemberCard name="Linh" signal="A lot on her mind today." mood={2} initial="L" />
+      <PulseMemberCard name="Phong" signal="Energetic and curious." mood={4} initial="P" />
+      <PulseMemberCard name="Mai" signal="Bright and warm." mood={5} initial="M" />
       <PulseMemberCard name="Khoa" signal="No entry yet." mood="empty" initial="K" />
       <EmptyState
         title="No notes yet"

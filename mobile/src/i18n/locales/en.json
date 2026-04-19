@@ -8,12 +8,19 @@
     "title": "Settings",
     "sections": {
       "reminders": "REMINDERS & NOTIFICATIONS",
+      "ambient": "AMBIENT INTELLIGENCE",
       "privacy": "PRIVACY"
+    },
+    "ambient": {
+      "quietNotes": "Quiet notes from AI",
+      "open": "Open →"
     },
     "reminders": {
       "dailyWrite": "Daily write reminder",
       "timezone": "Time zone",
-      "aiSuggestions": "Suggestions from AI"
+      "aiSuggestions": "Suggestions from AI",
+      "pushNotifications": "Push notifications",
+      "pushNotificationsAction": "Set up →"
     },
     "actions": {
       "signOut": "Sign out",
@@ -146,10 +153,6 @@
   },
   "group": {
     "aiSignalNote": "AI signal · group only sees summaries, never what you write",
-    "tabs": {
-      "pulse": "Pulse",
-      "suggestions": "Suggestions"
-    },
     "memberSubtitle": "{{count}} members · together since {{since}}",
     "memberSubtitleToday": "{{count}} members · together since today",
     "memberSubtitlePlain": "{{count}} members",
@@ -163,24 +166,13 @@
     "create": {
       "title": "Create a small, close group.",
       "body": "Ambient is for 3–8 trusted people. Invite by link — no public profiles, no search.",
-      "segmentNew": "New",
-      "segmentJoin": "Join",
       "nameLabel": "GROUP NAME",
       "namePlaceholder": "Sunday Group",
       "defaultName": "Sunday Group",
       "inviteLabel": "YOUR INVITE LINK · EXPIRES IN 7 DAYS",
       "inviteHint": "Tap to copy. Share like any link — no public page.",
-      "cta": "Create group"
-    },
-    "join": {
-      "title": "Join a close group.",
-      "body": "Invite links open here. Tap a link to see who's inviting you.",
-      "simulateTitle": "Open an invite link",
-      "simulateHint": "Simulates tapping a link a friend shared",
-      "savedLabel": "SAVED FOR LATER",
-      "emptySaved": "No saved invites yet. They'll appear here when you tap \"Later\".",
-      "savedRowMeta": "From {{name}} · {{count}} {{memberLabel}}",
-      "cta": "Continue"
+      "cta": "Create group",
+      "simulateInvite": "Simulate incoming invite link"
     },
     "inviteOffer": {
       "eyebrow": "{{name}} INVITED YOU",
@@ -217,24 +209,19 @@
         "body": "When at least one person writes, AI starts weaving a signal for the group.",
         "cta": "Write the first line for the group",
         "invite": "Invite more people"
-      }
+      },
+      "leave": "Leave group"
     },
     "insights": {
+      "dismiss": "Not now",
       "meetupEyebrow": "A GENTLE MEETUP · THIS WEEKEND",
       "meetupBody": "Everyone's a bit freer this week. Saturday afternoon could be the right time.",
-      "meetupPropose": "Propose",
-      "meetupLater": "Later",
+      "meetupPropose": "Open proposal",
       "supportEyebrow": "SOMEONE IS LOW · 3 DAYS",
       "supportBody": "{{name}} seems quieter this week. You don't need to say much — a small message is enough warmth.",
+      "supportCheckIn": "Check in on {{name}}",
       "digestEyebrow": "LAST WEEK · SUNDAY",
-      "digestLabel": "Review the group's past week",
-      "empty": {
-        "eyebrow": "NOTHING TO SAY — AND THAT'S OKAY",
-        "headline": "AI is listening. Silence is also an answer.",
-        "body": "We only speak when something matters. Better silence than meaningless noise.",
-        "cta": "Back to group pulse",
-        "reminderSettings": "Reminder settings"
-      }
+      "digestLabel": "Review the group's past week"
     },
     "leave": {
       "eyebrow": "{{group}}",
@@ -242,6 +229,15 @@
       "body": "Your rhythm will no longer appear in the group. Your personal entries stay here. You can return with a new invite link.",
       "cta": "Leave group",
       "stay": "Stay"
+    },
+    "switcher": {
+      "title": "Your groups",
+      "open": "Switch group",
+      "close": "Close",
+      "newGroup": "New group",
+      "proBadge": "Pro",
+      "memberCount_one": "{{count}} member",
+      "memberCount_other": "{{count}} members"
     }
   },
   "ambient": {

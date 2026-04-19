@@ -8,12 +8,19 @@
     "title": "Cài đặt",
     "sections": {
       "reminders": "NHẮC NHỞ & THÔNG BÁO",
+      "ambient": "TRÍ TUỆ AMBIENT",
       "privacy": "QUYỀN RIÊNG TƯ"
+    },
+    "ambient": {
+      "quietNotes": "Quiet notes từ AI",
+      "open": "Mở →"
     },
     "reminders": {
       "dailyWrite": "Nhắc viết nhật ký mỗi ngày",
       "timezone": "Múi giờ",
-      "aiSuggestions": "Gợi ý từ AI"
+      "aiSuggestions": "Gợi ý từ AI",
+      "pushNotifications": "Thông báo đẩy",
+      "pushNotificationsAction": "Thiết lập →"
     },
     "actions": {
       "signOut": "Đăng xuất",
@@ -146,10 +153,6 @@
   },
   "group": {
     "aiSignalNote": "Tín hiệu AI · nhóm chỉ thấy tóm tắt cảm xúc, không bao giờ thấy nội dung bạn viết",
-    "tabs": {
-      "pulse": "Nhịp",
-      "suggestions": "Gợi ý"
-    },
     "memberSubtitle": "{{count}} thành viên · cùng nhau từ {{since}}",
     "memberSubtitleToday": "{{count}} thành viên · cùng nhau từ hôm nay",
     "memberSubtitlePlain": "{{count}} thành viên",
@@ -163,24 +166,13 @@
     "create": {
       "title": "Tạo nhóm nhỏ, thân thiết.",
       "body": "Ambient dành cho 3–8 người bạn tin tưởng. Mời bằng liên kết — không hồ sơ công khai, không thể tìm kiếm.",
-      "segmentNew": "Tạo mới",
-      "segmentJoin": "Tham gia",
       "nameLabel": "TÊN NHÓM",
       "namePlaceholder": "Nhóm Chủ Nhật",
       "defaultName": "Nhóm Chủ Nhật",
       "inviteLabel": "LIÊN KẾT MỜI · HẾT HẠN SAU 7 NGÀY",
       "inviteHint": "Chạm để sao chép. Chia sẻ như liên kết bình thường.",
-      "cta": "Tạo nhóm"
-    },
-    "join": {
-      "title": "Tham gia nhóm thân thiết.",
-      "body": "Liên kết mời sẽ mở tại đây. Chạm vào liên kết bạn bè gửi để xem lời mời.",
-      "simulateTitle": "Mở liên kết mời",
-      "simulateHint": "Mô phỏng thao tác mở liên kết",
-      "savedLabel": "XEM SAU",
-      "emptySaved": "Chưa có lời mời nào được lưu.",
-      "savedRowMeta": "Từ {{name}} · {{count}} {{memberLabel}}",
-      "cta": "Tiếp tục"
+      "cta": "Tạo nhóm",
+      "simulateInvite": "Giả lập nhận link mời"
     },
     "inviteOffer": {
       "eyebrow": "{{name}} ĐÃ MỜI BẠN",
@@ -217,24 +209,19 @@
         "body": "Khi ai đó bắt đầu viết, AI sẽ tạo tín hiệu cho cả nhóm.",
         "cta": "Viết dòng đầu tiên cho nhóm",
         "invite": "Mời thêm người"
-      }
+      },
+      "leave": "Rời nhóm"
     },
     "insights": {
+      "dismiss": "Để sau",
       "meetupEyebrow": "MỘT BUỔI GẶP NHẸ NHÀNG · CUỐI TUẦN NÀY",
       "meetupBody": "Tuần này mọi người dường như đều có năng lượng nhẹ nhàng hơn. Chiều thứ Bảy có thể là thời điểm đẹp.",
-      "meetupPropose": "Đề xuất",
-      "meetupLater": "Để sau",
+      "meetupPropose": "Mở đề xuất",
       "supportEyebrow": "MỘT NGƯỜI ĐANG TRẦM XUỐNG · 3 NGÀY",
       "supportBody": "{{name}} có vẻ trầm lắng hơn tuần này. Một lời nhắn nhỏ từ bạn có thể rất ý nghĩa.",
+      "supportCheckIn": "Nhắn một dòng cho {{name}}",
       "digestEyebrow": "TUẦN TRƯỚC · CHỦ NHẬT",
-      "digestLabel": "Xem lại tuần qua của nhóm",
-      "empty": {
-        "eyebrow": "KHÔNG CÓ GÌ ĐÁNG NÓI — VÀ THẾ LÀ ỔN",
-        "headline": "AI đang lắng nghe. Im lặng cũng là một câu trả lời.",
-        "body": "Chúng tôi chỉ lên tiếng khi thực sự cần. Thà im lặng còn hơn tiếng ồn vô ích.",
-        "cta": "Về lại nhịp nhóm",
-        "reminderSettings": "Cài đặt nhắc nhở"
-      }
+      "digestLabel": "Xem lại tuần qua của nhóm"
     },
     "leave": {
       "eyebrow": "{{group}}",
@@ -242,6 +229,15 @@
       "body": "Nhịp của bạn sẽ không còn xuất hiện trong nhóm. Nhật ký cá nhân vẫn giữ nguyên. Bạn có thể quay lại bất kỳ lúc nào qua liên kết mời mới.",
       "cta": "Rời nhóm",
       "stay": "Ở lại"
+    },
+    "switcher": {
+      "title": "Nhóm của bạn",
+      "open": "Đổi nhóm",
+      "close": "Đóng",
+      "newGroup": "Tạo nhóm mới",
+      "proBadge": "Pro",
+      "memberCount_one": "{{count}} thành viên",
+      "memberCount_other": "{{count}} thành viên"
     }
   },
   "ambient": {

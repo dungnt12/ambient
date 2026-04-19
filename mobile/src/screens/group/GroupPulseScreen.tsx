@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Sparkles } from 'lucide-react-native';
+import { ChevronDown, ChevronRight, MessageCircleHeart, Sparkles, X } from 'lucide-react-native';
 import {
   CTAButton,
   CTAStack,
@@ -12,10 +12,13 @@ import {
   type PulseMood,
 } from '../../design-system';
 import type { PulseMember } from '../../mocks/group';
-import { GroupInsightsBody } from './insights/GroupInsightsBody';
-import { GroupInsightsEmptyBody } from './insights/GroupInsightsEmptyBody';
 
-type PulseTab = 'pulse' | 'suggestions';
+export type GroupInsightKind = 'meetup' | 'support' | 'digest';
+
+export type GroupInsight =
+  | { kind: 'meetup' }
+  | { kind: 'support'; targetName: string }
+  | { kind: 'digest' };
 
 export type GroupPulseScreenProps = {
   groupName: string;
@@ -23,15 +26,19 @@ export type GroupPulseScreenProps = {
   since?: string;
   members: PulseMember[];
   empty?: boolean;
-  supportTargetName?: string;
-  insightsEmpty?: boolean;
+  /** Optional AI-surfaced insight. When meaningful, shows at top of stream. */
+  insight?: GroupInsight | null;
   onWriteFirst?: () => void;
   onInviteMore?: () => void;
-  onProposeMeetup?: () => void;
-  onLaterMeetup?: () => void;
+  onDismissInsight?: () => void;
   onOpenDigest?: () => void;
-  onReminderSettings?: () => void;
-  onBackToPulse?: () => void;
+  onProposeMeetup?: () => void;
+  onCheckInOnMember?: (memberName: string) => void;
+  onLeaveGroup?: () => void;
+  /** Tapping the group name opens the switcher sheet. */
+  onOpenSwitcher?: () => void;
+  /** When false, the name renders without a chevron affordance. */
+  hasMultipleGroups?: boolean;
 };
 
 export function GroupPulseScreen({
@@ -40,19 +47,19 @@ export function GroupPulseScreen({
   since,
   members,
   empty = false,
-  supportTargetName = 'Linh',
-  insightsEmpty = false,
+  insight = null,
   onWriteFirst,
   onInviteMore,
-  onProposeMeetup,
-  onLaterMeetup,
+  onDismissInsight,
   onOpenDigest,
-  onReminderSettings,
-  onBackToPulse,
+  onProposeMeetup,
+  onCheckInOnMember,
+  onLeaveGroup,
+  onOpenSwitcher,
+  hasMultipleGroups = false,
 }: GroupPulseScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
-  const [tab, setTab] = useState<PulseTab>('pulse');
 
   const subtitle = empty
     ? tr('group.memberSubtitleToday', { count: memberCount })
@@ -76,69 +83,99 @@ export function GroupPulseScreen({
     <ScreenLayout
       padHorizontal
       header={
-        <View style={{ paddingTop: t.spacing.base, gap: t.spacing.sm }}>
-          <Text variant="headingPulse" color="fg">
-            {groupName}
-          </Text>
+        <View style={{ paddingTop: t.spacing.base, gap: t.spacing.md }}>
+          <GroupNameRow
+            groupName={groupName}
+            hasMultipleGroups={hasMultipleGroups}
+            onOpenSwitcher={onOpenSwitcher}
+          />
           <Text variant="bodySmall" color="fgFaint">
             {subtitle}
           </Text>
-          <View style={{ paddingTop: t.spacing.xl }}>
-            <TabRow active={tab} onChange={setTab} />
-          </View>
         </View>
       }
       footer={
-        tab === 'pulse' ? (
-          <View style={{ paddingTop: t.spacing.xl }}>
-            <PulseFooter />
-          </View>
-        ) : undefined
+        <View style={{ paddingTop: t.spacing.xl }}>
+          <PulseFooter />
+        </View>
       }
-      bodyContentContainerStyle={{ paddingTop: t.spacing.xl, gap: t.spacing.md }}
+      bodyContentContainerStyle={{ paddingTop: t.spacing.xxl }}
     >
-      {tab === 'pulse' ? (
+      <View style={{ gap: t.spacing.lg }}>
+        {insight ? (
+          <InsightCard
+            insight={insight}
+            onDismiss={onDismissInsight}
+            onOpenDigest={onOpenDigest}
+            onProposeMeetup={onProposeMeetup}
+            onCheckIn={onCheckInOnMember}
+          />
+        ) : null}
         <PulseList members={members} />
-      ) : insightsEmpty ? (
-        <GroupInsightsEmptyBody onBack={onBackToPulse} onReminderSettings={onReminderSettings} />
-      ) : (
-        <GroupInsightsBody
-          supportTargetName={supportTargetName}
-          onProposeMeetup={onProposeMeetup}
-          onLaterMeetup={onLaterMeetup}
-          onOpenDigest={onOpenDigest}
-        />
-      )}
+        {onLeaveGroup ? <LeaveGroupRow onPress={onLeaveGroup} /> : null}
+      </View>
     </ScreenLayout>
   );
 }
 
-function TabRow({ active, onChange }: { active: PulseTab; onChange: (tab: PulseTab) => void }) {
+function GroupNameRow({
+  groupName,
+  hasMultipleGroups,
+  onOpenSwitcher,
+}: {
+  groupName: string;
+  hasMultipleGroups: boolean;
+  onOpenSwitcher?: () => void;
+}) {
   const t = useTheme();
   const { t: tr } = useTranslation();
-  const tabs: { key: PulseTab; label: string }[] = [
-    { key: 'pulse', label: tr('group.tabs.pulse') },
-    { key: 'suggestions', label: tr('group.tabs.suggestions') },
-  ];
+
+  if (!hasMultipleGroups || !onOpenSwitcher) {
+    return (
+      <Text variant="headingPulse" color="fg">
+        {groupName}
+      </Text>
+    );
+  }
+
   return (
-    <View style={{ flexDirection: 'row', gap: t.spacing.xl }}>
-      {tabs.map(({ key, label }) => {
-        const isActive = key === active;
-        return (
-          <Pressable
-            key={key}
-            accessibilityRole="tab"
-            accessibilityState={{ selected: isActive }}
-            onPress={() => onChange(key)}
-            hitSlop={t.spacing.sm}
-          >
-            <Text variant="tabSerif" color={isActive ? 'fg' : 'fgFaint'}>
-              {label}
-            </Text>
-          </Pressable>
-        );
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={tr('group.switcher.open')}
+      onPress={onOpenSwitcher}
+      hitSlop={t.spacing.sm}
+      style={({ pressed }) => ({
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: t.spacing.sm,
+        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
       })}
-    </View>
+    >
+      <Text variant="headingPulse" color="fg">
+        {groupName}
+      </Text>
+      <ChevronDown size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgFaint} />
+    </Pressable>
+  );
+}
+
+function LeaveGroupRow({ onPress }: { onPress: () => void }) {
+  const t = useTheme();
+  const { t: tr } = useTranslation();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      hitSlop={t.spacing.sm}
+      style={({ pressed }) => ({
+        alignItems: 'center',
+        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+      })}
+    >
+      <Text variant="metaLabel" color="fgFaint">
+        {tr('group.pulse.leave')}
+      </Text>
+    </Pressable>
   );
 }
 
@@ -158,11 +195,15 @@ function PulseList({ members }: { members: PulseMember[] }) {
   );
 }
 
+// Dot color follows mood intensity on a single warm axis from muted (low) to
+// brand-strong (high). Same MoodLevel vocabulary as MoodGlyph — 'empty' slot
+// when no signal has formed yet.
 const MOOD_DOT_COLORS: Record<PulseMood, ColorToken> = {
-  calm: 'borderSoft',
-  curious: 'bgMuted',
-  dim: 'ringSoft',
-  bright: 'brandSoft',
+  1: 'ringStrong',
+  2: 'ringSoft',
+  3: 'borderSoft',
+  4: 'brandSoft',
+  5: 'brand',
   empty: 'bgMuted',
 };
 
@@ -175,12 +216,12 @@ function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updat
         borderColor: t.colors.borderSoft,
         borderWidth: t.brand.border.hairline,
         borderRadius: t.radius.card,
-        paddingHorizontal: t.spacing.lg,
-        paddingVertical: t.spacing.base,
-        gap: t.spacing.sm,
+        paddingHorizontal: t.spacing.md,
+        paddingVertical: t.spacing.md,
+        gap: t.spacing.md,
       }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.sm }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.md }}>
         <View
           style={{
             width: t.layout.moodDot,
@@ -197,10 +238,209 @@ function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updat
           {updatedLabel}
         </Text>
       </View>
-      <Text variant="bodySerifTight" color="fg">
+      <Text variant="bodySerif" color="fg">
         {member.signal}
       </Text>
     </View>
+  );
+}
+
+function InsightCard({
+  insight,
+  onDismiss,
+  onOpenDigest,
+  onProposeMeetup,
+  onCheckIn,
+}: {
+  insight: GroupInsight;
+  onDismiss?: () => void;
+  onOpenDigest?: () => void;
+  onProposeMeetup?: () => void;
+  onCheckIn?: (name: string) => void;
+}) {
+  if (insight.kind === 'support') {
+    return (
+      <SupportInsightCard
+        name={insight.targetName}
+        onCheckIn={() => onCheckIn?.(insight.targetName)}
+        onDismiss={onDismiss}
+      />
+    );
+  }
+  if (insight.kind === 'meetup') {
+    return <MeetupInsightCard onPropose={onProposeMeetup} onDismiss={onDismiss} />;
+  }
+  return <DigestInsightCard onOpen={onOpenDigest} onDismiss={onDismiss} />;
+}
+
+function InsightShell({
+  children,
+  onDismiss,
+  tone = 'raised',
+}: {
+  children: ReactNode;
+  onDismiss?: () => void;
+  tone?: 'raised' | 'brand';
+}) {
+  const t = useTheme();
+  const { t: tr } = useTranslation();
+  const isBrand = tone === 'brand';
+  return (
+    <View
+      style={{
+        backgroundColor: isBrand ? t.colors.brand : t.colors.bgRaised,
+        borderColor: isBrand ? 'transparent' : t.colors.borderSoft,
+        borderWidth: isBrand ? 0 : t.brand.border.hairline,
+        borderRadius: t.radius.card,
+        paddingHorizontal: t.spacing.md,
+        paddingVertical: t.spacing.md,
+        gap: t.spacing.md,
+      }}
+    >
+      {children}
+      {onDismiss ? (
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={tr('group.insights.dismiss')}
+            onPress={onDismiss}
+            hitSlop={t.spacing.sm}
+            style={({ pressed }) => ({
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: t.spacing.sm,
+              paddingVertical: t.spacing.xs,
+              opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+            })}
+          >
+            <X
+              size={t.iconSize.sm}
+              strokeWidth={t.stroke.standard}
+              color={isBrand ? t.colors.fgOnBrand : t.colors.fgFaint}
+            />
+            <Text variant="metaLabel" color={isBrand ? 'fgOnBrand' : 'fgFaint'}>
+              {tr('group.insights.dismiss')}
+            </Text>
+          </Pressable>
+        </View>
+      ) : null}
+    </View>
+  );
+}
+
+function MeetupInsightCard({
+  onPropose,
+  onDismiss,
+}: {
+  onPropose?: () => void;
+  onDismiss?: () => void;
+}) {
+  const t = useTheme();
+  const { t: tr } = useTranslation();
+  return (
+    <InsightShell tone="brand" onDismiss={onDismiss}>
+      <Text variant="metaLabel" color="fgOnBrand">
+        {tr('group.insights.meetupEyebrow')}
+      </Text>
+      <Text variant="bodySerifTight" color="fgOnBrand">
+        {tr('group.insights.meetupBody')}
+      </Text>
+      <Pressable
+        accessibilityRole="button"
+        onPress={onPropose}
+        style={({ pressed }) => ({
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: t.spacing.xs,
+          paddingTop: t.spacing.sm,
+          opacity: pressed ? t.opacity.pressed : t.opacity.full,
+        })}
+      >
+        <Text variant="buttonLabelSocial" color="fgOnBrand">
+          {tr('group.insights.meetupPropose')}
+        </Text>
+        <ChevronRight
+          size={t.iconSize.sm}
+          strokeWidth={t.stroke.standard}
+          color={t.colors.fgOnBrand}
+        />
+      </Pressable>
+    </InsightShell>
+  );
+}
+
+function SupportInsightCard({
+  name,
+  onCheckIn,
+  onDismiss,
+}: {
+  name: string;
+  onCheckIn?: () => void;
+  onDismiss?: () => void;
+}) {
+  const t = useTheme();
+  const { t: tr } = useTranslation();
+  return (
+    <InsightShell onDismiss={onDismiss}>
+      <Text variant="metaLabel" color="brandSoft">
+        {tr('group.insights.supportEyebrow')}
+      </Text>
+      <Text variant="bodySerifTight" color="fg">
+        {tr('group.insights.supportBody', { name })}
+      </Text>
+      <Pressable
+        accessibilityRole="button"
+        onPress={onCheckIn}
+        style={({ pressed }) => ({
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: t.spacing.xs,
+          paddingTop: t.spacing.sm,
+          opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+        })}
+      >
+        <MessageCircleHeart
+          size={t.iconSize.sm}
+          strokeWidth={t.stroke.standard}
+          color={t.colors.brand}
+        />
+        <Text variant="buttonLabelSocial" color="brand">
+          {tr('group.insights.supportCheckIn', { name })}
+        </Text>
+      </Pressable>
+    </InsightShell>
+  );
+}
+
+function DigestInsightCard({ onOpen, onDismiss }: { onOpen?: () => void; onDismiss?: () => void }) {
+  const t = useTheme();
+  const { t: tr } = useTranslation();
+  return (
+    <InsightShell onDismiss={onDismiss}>
+      <Text variant="metaLabel" color="fgFaint">
+        {tr('group.insights.digestEyebrow')}
+      </Text>
+      <Pressable
+        accessibilityRole="button"
+        onPress={onOpen}
+        style={({ pressed }) => ({
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: t.spacing.sm,
+          paddingTop: t.spacing.sm,
+          opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+        })}
+      >
+        <Text variant="buttonLabelSocial" color="fg" style={{ flex: 1 }}>
+          {tr('group.insights.digestLabel')}
+        </Text>
+        <ChevronRight
+          size={t.iconSize.base}
+          strokeWidth={t.stroke.standard}
+          color={t.colors.fgFaint}
+        />
+      </Pressable>
+    </InsightShell>
   );
 }
 

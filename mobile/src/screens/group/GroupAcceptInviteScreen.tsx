@@ -32,7 +32,7 @@ export function GroupAcceptInviteScreen({
           paddingHorizontal: t.layout.screenPaddingX,
         }}
       >
-        <Text variant="metaLabel" color="fgFaint" style={{ marginTop: t.spacing.sm }}>
+        <Text variant="metaLabel" color="fgFaint" style={{ marginTop: t.spacing.md }}>
           {tr('group.accept.eyebrow', { name: inviterName.toUpperCase() })}
         </Text>
         <Text variant="headingScreen" color="fg" style={{ marginTop: t.spacing.md }}>
@@ -44,13 +44,13 @@ export function GroupAcceptInviteScreen({
 
         <View
           style={{
-            marginTop: t.spacing.xl,
+            marginTop: t.spacing.xxl,
             backgroundColor: t.colors.bgRaised,
             borderRadius: t.radius.card,
             borderWidth: t.brand.border.hairline,
             borderColor: t.colors.borderSoft,
             padding: t.spacing.lg,
-            gap: t.spacing.sm,
+            gap: t.spacing.md,
           }}
         >
           <Text variant="metaLabel" color="fgFaint">
@@ -64,7 +64,7 @@ export function GroupAcceptInviteScreen({
               ? tr('group.memberSubtitle', { count: memberCount, since })
               : tr('group.memberSubtitlePlain', { count: memberCount })}
           </Text>
-          <View style={{ flexDirection: 'row', marginTop: t.spacing.sm }}>
+          <View style={{ flexDirection: 'row', marginTop: t.spacing.md }}>
             {memberInitials.map((letter, idx) => (
               <View
                 key={`${letter}-${idx}`}
@@ -78,13 +78,13 @@ export function GroupAcceptInviteScreen({
 
         <View
           style={{
-            marginTop: t.spacing.base,
+            marginTop: t.spacing.lg,
             backgroundColor: t.colors.bg,
             borderRadius: t.radius.lg,
             borderWidth: t.brand.border.hairline,
             borderColor: t.colors.border,
             padding: t.spacing.lg,
-            gap: t.spacing.sm,
+            gap: t.spacing.md,
           }}
         >
           <Text variant="metaLabel" color="fgFaint">
@@ -105,7 +105,7 @@ export function GroupAcceptInviteScreen({
         <Pressable
           accessibilityRole="button"
           onPress={onLater}
-          style={{ paddingVertical: t.spacing.sm, marginTop: t.spacing.sm }}
+          style={{ paddingVertical: t.spacing.md, marginTop: t.spacing.md }}
         >
           <Text variant="buttonLabelSocial" color="fgFaint" align="center">
             {tr('group.accept.later')}

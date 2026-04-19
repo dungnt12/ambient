@@ -3,7 +3,6 @@ import { TextInput as RNTextInput, View, Pressable, type ViewStyle } from 'react
 import { Text } from '../Text';
 import { useTheme } from '../../theme';
 
-const CELL_WIDTH = 48;
 const CELL_HEIGHT = 56;
 const DEFAULT_LENGTH = 6;
 
@@ -19,7 +18,7 @@ export function OtpCell({ char, active = false, style }: OtpCellProps) {
     <View
       style={[
         {
-          width: CELL_WIDTH,
+          flex: 1,
           height: CELL_HEIGHT,
           borderRadius: theme.radius.input,
           backgroundColor: theme.colors.bgRaised,

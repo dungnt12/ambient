@@ -42,7 +42,7 @@ export function LeaveGroupSheetScreen({
           <Pressable
             accessibilityRole="button"
             onPress={() => dismiss(onStay ?? onDismiss)}
-            style={{ paddingVertical: t.spacing.sm }}
+            style={{ paddingVertical: t.spacing.md }}
           >
             <Text variant="buttonLabelSocial" color="fgFaint" align="center">
               {tr('group.leave.stay')}

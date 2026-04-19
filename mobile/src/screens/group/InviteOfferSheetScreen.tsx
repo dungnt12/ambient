@@ -42,7 +42,7 @@ export function InviteOfferSheetScreen({
                 : tr('group.memberSubtitlePlain', { count: memberCount })}
             </Text>
 
-            <View style={{ flexDirection: 'row', marginTop: t.spacing.sm }}>
+            <View style={{ flexDirection: 'row', marginTop: t.spacing.md }}>
               {memberInitials.slice(0, 6).map((letter, idx) => (
                 <View
                   key={`${letter}-${idx}`}
@@ -62,7 +62,7 @@ export function InviteOfferSheetScreen({
           <Pressable
             accessibilityRole="button"
             onPress={() => dismiss(onSaveForLater)}
-            style={{ paddingVertical: t.spacing.sm }}
+            style={{ paddingVertical: t.spacing.md }}
           >
             <Text variant="buttonLabelSocial" color="fgFaint" align="center">
               {tr('group.inviteOffer.later')}
