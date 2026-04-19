@@ -510,6 +510,34 @@ Never emoji — Lucide only.
 
 ---
 
+## §10.5 Spacing Rhythm Contract
+
+**Source of truth:** `src/design-system/tokens/spacing.ts` → `rhythm`.
+
+Screens MUST NOT pick raw `spacing.*` for card / row / header / sheet contexts. Use `t.rhythm.*` instead. Raw tokens remain legal for free-form custom layouts only.
+
+| Context | Token | Value |
+|---|---|---|
+| Card padding (H/V) | `rhythm.card.padH/padV` | 12 |
+| Card inner gap | `rhythm.card.gap` | 12 |
+| List row padding H | `rhythm.row.padH` | 20 |
+| List row padding V | `rhythm.row.padV` | 12 |
+| List row inner gap | `rhythm.row.gap` | 12 |
+| Stream gap (card↔card, row↔row) | `rhythm.list` | 20 |
+| Section gap | `rhythm.section` | 32 |
+| Screen padding H | `rhythm.screen` | 24 |
+| Header padTop | `rhythm.header.padTop` | 16 |
+| Header title↔subtitle gap | `rhythm.header.gap` | 12 |
+| Sheet content padding | `rhythm.sheet.pad` | 24 |
+| Sheet block gap | `rhythm.sheet.gap` | 20 |
+
+Primitives owning the contract (to be extracted, Phase 3–5):
+`<Card>`, `<ListRow>`, `<ScreenHeader>`, `<SheetHeader>`, `ScreenLayout.bodyGap`.
+
+Changing any value above = global rhythm shift; treat as breaking.
+
+---
+
 # 11. Using External Design Tools with This System
 
 ## 11.1 Figma MCP

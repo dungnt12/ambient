@@ -1,6 +1,6 @@
 import { colors, palette } from '../tokens/colors';
 import { typography, fontFamily } from '../tokens/typography';
-import { spacing, layout } from '../tokens/spacing';
+import { spacing, layout, rhythm } from '../tokens/spacing';
 import { radius } from '../tokens/radius';
 import { shadow } from '../tokens/shadow';
 import { motion } from '../tokens/motion';
@@ -16,6 +16,7 @@ export const theme = {
   fontFamily,
   spacing,
   layout,
+  rhythm,
   radius,
   shadow,
   motion,

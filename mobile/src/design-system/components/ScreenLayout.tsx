@@ -15,6 +15,7 @@ import {
 import { useSafeAreaInsets, type Edge } from 'react-native-safe-area-context';
 import { useBottomBarInset, useScrollSurfaceBehavior, useTheme } from '../theme';
 import type { ColorToken } from '../tokens/colors';
+import type { SpacingToken } from '../tokens/spacing';
 import { FadeUnderHeader } from './FadeUnderHeader';
 import { getFadeMaskHeight } from './FadeMask';
 
@@ -59,6 +60,13 @@ export type ScreenLayoutProps = {
    * `header` is present. Pass `false` to disable.
    */
   fadeUnderHeader?: boolean;
+  /**
+   * Vertical gap between direct children of the body. When set, children are
+   * wrapped in a single View with this `gap`. Pass a `SpacingToken` (resolved
+   * against `t.spacing`) or a raw number. Leave undefined to preserve the
+   * legacy behavior where callers manage spacing via `bodyContentContainerStyle`.
+   */
+  bodyGap?: SpacingToken | number;
 };
 
 export function ScreenLayout({
@@ -76,6 +84,7 @@ export function ScreenLayout({
   ignoreBottomBarInset = false,
   dismissKeyboardOnBodyTap = false,
   fadeUnderHeader = true,
+  bodyGap,
 }: ScreenLayoutProps) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
@@ -133,9 +142,17 @@ export function ScreenLayout({
   // keyboard with `avoidKeyboard`) — flexGrow:1 with default flexBasis:auto
   // won't go below content's natural size, trapping flex:1 children at full
   // height. flex:1 + minHeight:0 releases that floor.
+  const resolvedBodyGap =
+    bodyGap === undefined ? undefined : typeof bodyGap === 'number' ? bodyGap : t.spacing[bodyGap];
+
+  const childrenWrapperStyle: ViewStyle = {
+    ...(disableScroll ? { flex: 1, minHeight: 0 } : { flexGrow: 1 }),
+    ...(resolvedBodyGap !== undefined ? { gap: resolvedBodyGap } : null),
+  };
+
   const bodyInner = (
     <>
-      <View style={disableScroll ? { flex: 1, minHeight: 0 } : { flexGrow: 1 }}>{children}</View>
+      <View style={childrenWrapperStyle}>{children}</View>
       {footer}
     </>
   );
