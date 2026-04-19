@@ -304,7 +304,7 @@ function SettingsRoute({ navigation }: RootScreenProps<'Settings'>) {
 function NotificationsPermissionRoute({ navigation }: RootScreenProps<'NotificationsPermission'>) {
   const enterApp = () =>
     navigation.reset({ index: 0, routes: [{ name: 'Tabs', params: { screen: 'Journal' } }] });
-  return <NotificationsPermissionScreen onAllow={enterApp} onSkip={enterApp} onClose={enterApp} />;
+  return <NotificationsPermissionScreen onAllow={enterApp} onSkip={enterApp} />;
 }
 
 function PrivacyByDesignRoute({ navigation }: RootScreenProps<'PrivacyByDesign'>) {

@@ -1,18 +1,10 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import {
-  CTAButton,
-  CTAStack,
-  ScreenHeader,
-  ScreenLayout,
-  Text,
-  useTheme,
-} from '../../design-system';
+import { CTAButton, CTAStack, ScreenLayout, Text, useTheme } from '../../design-system';
 
 export type NotificationsPermissionScreenProps = {
   onAllow: () => void;
   onSkip: () => void;
-  onClose?: () => void;
 };
 
 const REASON_KEYS = ['reason1', 'reason2', 'reason3'] as const;
@@ -20,12 +12,9 @@ const REASON_KEYS = ['reason1', 'reason2', 'reason3'] as const;
 export function NotificationsPermissionScreen({
   onAllow,
   onSkip,
-  onClose,
 }: NotificationsPermissionScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
-
-  const header = onClose ? <ScreenHeader back={{ onPress: onClose }} /> : undefined;
 
   const footer = (
     <CTAStack
@@ -42,7 +31,7 @@ export function NotificationsPermissionScreen({
   );
 
   return (
-    <ScreenLayout header={header} footer={footer}>
+    <ScreenLayout footer={footer}>
       <View
         style={{
           paddingHorizontal: t.layout.screenPaddingX,
