@@ -21,6 +21,7 @@ module.exports = defineConfig([
       'ds/max-component-lines': ['error', { max: 200 }],
       'ds/no-sync-state-effect': 'warn',
       'ds/icons-lucide-only': 'error',
+      'ds/no-inline-card-pattern': 'error',
     },
   },
   {

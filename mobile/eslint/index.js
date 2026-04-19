@@ -9,5 +9,6 @@ module.exports = {
     'max-component-lines': require('./rules/max-component-lines'),
     'no-sync-state-effect': require('./rules/no-sync-state-effect'),
     'icons-lucide-only': require('./rules/icons-lucide-only'),
+    'no-inline-card-pattern': require('./rules/no-inline-card-pattern'),
   },
 };
