@@ -22,14 +22,26 @@ export type GroupInsight =
   | { kind: 'support'; targetName: string }
   | { kind: 'digest' };
 
+export type InsightCardEntry = {
+  insight: GroupInsight;
+  // When multiple groups' insights are stacked (All view), the group name is
+  // rendered as an eyebrow so the reader knows which circle it belongs to.
+  groupName?: string;
+};
+
 export type GroupPulseScreenProps = {
   groupName: string;
   memberCount: number;
   since?: string;
   members: PulseMember[];
   empty?: boolean;
-  /** Optional AI-surfaced insight. When meaningful, shows at top of stream. */
-  insight?: GroupInsight | null;
+  /** AI-surfaced insights shown at top of stream. Empty array = silence. */
+  insights?: InsightCardEntry[];
+  /**
+   * When set, the header subtitle becomes "{members} · across {groupCount} groups"
+   * to reflect the aggregated "All groups" feed. `since` is ignored in this mode.
+   */
+  aggregatedGroupCount?: number;
   onWriteFirst?: () => void;
   onInviteMore?: () => void;
   onDismissInsight?: () => void;
@@ -49,7 +61,8 @@ export function GroupPulseScreen({
   since,
   members,
   empty = false,
-  insight = null,
+  insights = [],
+  aggregatedGroupCount,
   onWriteFirst,
   onInviteMore,
   onDismissInsight,
@@ -65,9 +78,11 @@ export function GroupPulseScreen({
 
   const subtitle = empty
     ? tr('group.memberSubtitleToday', { count: memberCount })
-    : since
-      ? tr('group.memberSubtitle', { count: memberCount, since })
-      : tr('group.memberSubtitlePlain', { count: memberCount });
+    : aggregatedGroupCount != null
+      ? tr('group.memberSubtitleAll', { count: memberCount, groups: aggregatedGroupCount })
+      : since
+        ? tr('group.memberSubtitle', { count: memberCount, since })
+        : tr('group.memberSubtitlePlain', { count: memberCount });
 
   if (empty) {
     return (
@@ -104,15 +119,17 @@ export function GroupPulseScreen({
       bodyContentContainerStyle={{ paddingTop: t.spacing.xxl }}
       bodyGap={t.rhythm.list}
     >
-      {insight ? (
+      {insights.map((entry, idx) => (
         <InsightCard
-          insight={insight}
+          key={`${entry.insight.kind}-${entry.groupName ?? 'single'}-${idx}`}
+          insight={entry.insight}
+          groupName={entry.groupName}
           onDismiss={onDismissInsight}
           onOpenDigest={onOpenDigest}
           onProposeMeetup={onProposeMeetup}
           onCheckIn={onCheckInOnMember}
         />
-      ) : null}
+      ))}
       <PulseList members={members} />
       {onLeaveGroup ? <LeaveGroupRow onPress={onLeaveGroup} /> : null}
     </ScreenLayout>
@@ -210,6 +227,7 @@ const MOOD_DOT_COLORS: Record<PulseMood, ColorToken> = {
 
 function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updatedLabel: string }) {
   const t = useTheme();
+  const { t: tr } = useTranslation();
   return (
     <Card>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.rhythm.inner }}>
@@ -221,10 +239,16 @@ function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updat
             backgroundColor: t.colors[MOOD_DOT_COLORS[member.mood]],
           }}
         />
-        <Text variant="buttonLabelSocial" color="fg">
-          {member.name}
-        </Text>
-        <View style={{ flex: 1 }} />
+        <View style={{ flex: 1, gap: t.spacing.xxs }}>
+          <Text variant="buttonLabelSocial" color="fg">
+            {member.name}
+          </Text>
+          {member.fromGroup ? (
+            <Text variant="metaLabel" color="fgFaint">
+              {tr('group.fromGroup', { group: member.fromGroup })}
+            </Text>
+          ) : null}
+        </View>
         <Text variant="metaLabel" color="fgFaint">
           {updatedLabel}
         </Text>
@@ -238,12 +262,14 @@ function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updat
 
 function InsightCard({
   insight,
+  groupName,
   onDismiss,
   onOpenDigest,
   onProposeMeetup,
   onCheckIn,
 }: {
   insight: GroupInsight;
+  groupName?: string;
   onDismiss?: () => void;
   onOpenDigest?: () => void;
   onProposeMeetup?: () => void;
@@ -253,15 +279,34 @@ function InsightCard({
     return (
       <SupportInsightCard
         name={insight.targetName}
+        groupName={groupName}
         onCheckIn={() => onCheckIn?.(insight.targetName)}
         onDismiss={onDismiss}
       />
     );
   }
   if (insight.kind === 'meetup') {
-    return <MeetupInsightCard onPropose={onProposeMeetup} onDismiss={onDismiss} />;
+    return (
+      <MeetupInsightCard groupName={groupName} onPropose={onProposeMeetup} onDismiss={onDismiss} />
+    );
   }
-  return <DigestInsightCard onOpen={onOpenDigest} onDismiss={onDismiss} />;
+  return <DigestInsightCard groupName={groupName} onOpen={onOpenDigest} onDismiss={onDismiss} />;
+}
+
+function InsightGroupEyebrow({
+  groupName,
+  onBrand = false,
+}: {
+  groupName?: string;
+  onBrand?: boolean;
+}) {
+  const { t: tr } = useTranslation();
+  if (!groupName) return null;
+  return (
+    <Text variant="metaLabel" color={onBrand ? 'fgOnBrand' : 'fgFaint'}>
+      {tr('group.fromGroup', { group: groupName })}
+    </Text>
+  );
 }
 
 function InsightShell({
@@ -310,9 +355,11 @@ function InsightShell({
 }
 
 function MeetupInsightCard({
+  groupName,
   onPropose,
   onDismiss,
 }: {
+  groupName?: string;
   onPropose?: () => void;
   onDismiss?: () => void;
 }) {
@@ -320,6 +367,7 @@ function MeetupInsightCard({
   const { t: tr } = useTranslation();
   return (
     <InsightShell tone="brand" onDismiss={onDismiss}>
+      <InsightGroupEyebrow groupName={groupName} onBrand />
       <Text variant="metaLabel" color="fgOnBrand">
         {tr('group.insights.meetupEyebrow')}
       </Text>
@@ -352,10 +400,12 @@ function MeetupInsightCard({
 
 function SupportInsightCard({
   name,
+  groupName,
   onCheckIn,
   onDismiss,
 }: {
   name: string;
+  groupName?: string;
   onCheckIn?: () => void;
   onDismiss?: () => void;
 }) {
@@ -363,6 +413,7 @@ function SupportInsightCard({
   const { t: tr } = useTranslation();
   return (
     <InsightShell onDismiss={onDismiss}>
+      <InsightGroupEyebrow groupName={groupName} />
       <Text variant="metaLabel" color="brandSoft">
         {tr('group.insights.supportEyebrow')}
       </Text>
@@ -393,11 +444,20 @@ function SupportInsightCard({
   );
 }
 
-function DigestInsightCard({ onOpen, onDismiss }: { onOpen?: () => void; onDismiss?: () => void }) {
+function DigestInsightCard({
+  groupName,
+  onOpen,
+  onDismiss,
+}: {
+  groupName?: string;
+  onOpen?: () => void;
+  onDismiss?: () => void;
+}) {
   const t = useTheme();
   const { t: tr } = useTranslation();
   return (
     <InsightShell onDismiss={onDismiss}>
+      <InsightGroupEyebrow groupName={groupName} />
       <Text variant="metaLabel" color="fgFaint">
         {tr('group.insights.digestEyebrow')}
       </Text>

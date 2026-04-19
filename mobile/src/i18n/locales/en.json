@@ -153,9 +153,12 @@
   },
   "group": {
     "aiSignalNote": "AI signal · group only sees summaries, never what you write",
+    "allGroups": "All groups",
+    "fromGroup": "from {{group}}",
     "memberSubtitle": "{{count}} members · together since {{since}}",
     "memberSubtitleToday": "{{count}} members · together since today",
     "memberSubtitlePlain": "{{count}} members",
+    "memberSubtitleAll": "{{count}} people · across {{groups}} groups",
     "memberCountLabel_one": "member",
     "memberCountLabel_other": "members",
     "updatedAt": {
@@ -234,6 +237,7 @@
       "title": "Your groups",
       "open": "Switch group",
       "close": "Close",
+      "all": "All groups",
       "newGroup": "New group",
       "proBadge": "Pro",
       "memberCount_one": "{{count}} member",

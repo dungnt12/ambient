@@ -8,6 +8,15 @@ export type PulseMember = {
   signal: string;
   mood: PulseMood;
   updatedAt: { kind: 'hoursAgo'; hours: number } | { kind: 'yesterday' };
+  // Set when the card is rendered in an aggregated ("All groups") feed so the
+  // reader knows which group the signal came from. Omitted in single-group view.
+  fromGroup?: string;
+};
+
+export type InsightEntry = {
+  insight: GroupInsight;
+  groupId: string;
+  groupName: string;
 };
 
 export type GroupSummary = {
@@ -143,3 +152,34 @@ export const SAMPLE_GROUP_INSIGHTS: Record<string, GroupInsight | null> = {
   family: null,
   duo: { kind: 'support', targetName: 'Linh' },
 };
+
+// Aggregate helpers for the "All groups" pulse view — the default when the
+// user has not actively filtered to a specific group.
+
+function updatedAtSortKey(m: PulseMember): number {
+  return m.updatedAt.kind === 'hoursAgo' ? m.updatedAt.hours : 24;
+}
+
+export function getAllPulseMembers(): PulseMember[] {
+  const flat: PulseMember[] = [];
+  for (const g of SAMPLE_GROUPS) {
+    const rows = SAMPLE_PULSE_MEMBERS[g.id] ?? [];
+    for (const m of rows) {
+      flat.push({ ...m, fromGroup: g.name });
+    }
+  }
+  return flat.sort((a, b) => updatedAtSortKey(a) - updatedAtSortKey(b));
+}
+
+export function getAllInsights(): InsightEntry[] {
+  const out: InsightEntry[] = [];
+  for (const g of SAMPLE_GROUPS) {
+    const ins = SAMPLE_GROUP_INSIGHTS[g.id];
+    if (ins) out.push({ insight: ins, groupId: g.id, groupName: g.name });
+  }
+  return out;
+}
+
+export function getTotalMemberCount(): number {
+  return SAMPLE_GROUPS.reduce((sum, g) => sum + g.memberCount, 0);
+}

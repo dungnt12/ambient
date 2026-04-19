@@ -243,7 +243,7 @@ function GroupPulseRoute({ navigation, route }: RootScreenProps<'GroupPulse'>) {
       memberCount={active.memberCount}
       since={active.since}
       members={members}
-      insight={insight}
+      insights={insight ? [{ insight }] : []}
       hasMultipleGroups={SAMPLE_GROUPS.length > 1}
       onOpenSwitcher={() => navigation.navigate('GroupSwitcher')}
       onInviteMore={() => navigation.navigate('GroupCreate')}
@@ -259,14 +259,17 @@ function GroupPulseRoute({ navigation, route }: RootScreenProps<'GroupPulse'>) {
 
 function GroupSwitcherRoute({ navigation }: RootScreenProps<'GroupSwitcher'>) {
   const { activeGroupId, setActiveGroupId } = useActiveGroup();
-  const currentActive = activeGroupId ?? SAMPLE_GROUPS[0]?.id ?? '';
   return (
     <GroupSwitcherSheetScreen
       groups={SAMPLE_GROUPS}
-      activeGroupId={currentActive}
+      activeGroupId={activeGroupId}
       tier={SAMPLE_TIER}
       onSelectGroup={(id) => {
         setActiveGroupId(id);
+        navigation.goBack();
+      }}
+      onSelectAll={() => {
+        setActiveGroupId(null);
         navigation.goBack();
       }}
       onCreateNew={() => navigation.navigate('GroupCreate')}

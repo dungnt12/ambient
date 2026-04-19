@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ChevronRight, Plus } from 'lucide-react-native';
+import { ChevronRight, Layers, Plus } from 'lucide-react-native';
 import {
   BottomSheetModal,
   Card,
@@ -15,9 +15,11 @@ import type { GroupSummary, Tier } from '../../mocks/group';
 
 export type GroupSwitcherSheetScreenProps = {
   groups: GroupSummary[];
-  activeGroupId: string;
+  // `null` = aggregated "All groups" view is active.
+  activeGroupId: string | null;
   tier: Tier;
   onSelectGroup: (id: string) => void;
+  onSelectAll: () => void;
   onCreateNew: () => void;
   onDismiss: () => void;
 };
@@ -38,6 +40,7 @@ export function GroupSwitcherSheetScreen({
   activeGroupId,
   tier,
   onSelectGroup,
+  onSelectAll,
   onCreateNew,
   onDismiss,
 }: GroupSwitcherSheetScreenProps) {
@@ -45,6 +48,7 @@ export function GroupSwitcherSheetScreen({
   const { t: tr } = useTranslation();
 
   const locked = tier === 'free' && groups.length >= 1;
+  const totalMembers = groups.reduce((sum, g) => sum + g.memberCount, 0);
 
   return (
     <BottomSheetModal onDismiss={onDismiss}>
@@ -57,6 +61,13 @@ export function GroupSwitcherSheetScreen({
           />
 
           <View style={{ gap: t.rhythm.list }}>
+            {groups.length > 1 ? (
+              <AllGroupsRow
+                memberCount={totalMembers}
+                active={activeGroupId === null}
+                onPress={() => dismiss(() => onSelectAll())}
+              />
+            ) : null}
             {groups.map((g) => (
               <GroupRow
                 key={g.id}
@@ -70,6 +81,50 @@ export function GroupSwitcherSheetScreen({
         </>
       )}
     </BottomSheetModal>
+  );
+}
+
+function AllGroupsRow({
+  memberCount,
+  active,
+  onPress,
+}: {
+  memberCount: number;
+  active: boolean;
+  onPress: () => void;
+}) {
+  const t = useTheme();
+  const { t: tr } = useTranslation();
+  return (
+    <Card
+      tone={active ? 'raised' : 'plain'}
+      density="row"
+      onPress={onPress}
+      style={{ flexDirection: 'row', alignItems: 'center' }}
+    >
+      <ActiveIndicator active={active} />
+      <View
+        style={{
+          width: t.layout.moodDot,
+          height: t.layout.moodDot,
+          borderRadius: t.radius.pill,
+          backgroundColor: t.colors.bgMuted,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Layers size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgSubtle} />
+      </View>
+      <View style={{ flex: 1, gap: t.spacing.xs }}>
+        <Text variant="buttonLabelSocial" color="fg">
+          {tr('group.switcher.all')}
+        </Text>
+        <Text variant="metaLabel" color="fgFaint">
+          {tr('group.switcher.memberCount', { count: memberCount })}
+        </Text>
+      </View>
+      <ChevronRight size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgFaint} />
+    </Card>
   );
 }
 

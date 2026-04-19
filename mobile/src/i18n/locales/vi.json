@@ -153,9 +153,12 @@
   },
   "group": {
     "aiSignalNote": "Tín hiệu AI · nhóm chỉ thấy tóm tắt cảm xúc, không bao giờ thấy nội dung bạn viết",
+    "allGroups": "Tất cả nhóm",
+    "fromGroup": "từ {{group}}",
     "memberSubtitle": "{{count}} thành viên · cùng nhau từ {{since}}",
     "memberSubtitleToday": "{{count}} thành viên · cùng nhau từ hôm nay",
     "memberSubtitlePlain": "{{count}} thành viên",
+    "memberSubtitleAll": "{{count}} người · trong {{groups}} nhóm",
     "memberCountLabel_one": "thành viên",
     "memberCountLabel_other": "thành viên",
     "updatedAt": {
@@ -234,6 +237,7 @@
       "title": "Nhóm của bạn",
       "open": "Đổi nhóm",
       "close": "Đóng",
+      "all": "Tất cả nhóm",
       "newGroup": "Tạo nhóm mới",
       "proBadge": "Pro",
       "memberCount_one": "{{count}} thành viên",

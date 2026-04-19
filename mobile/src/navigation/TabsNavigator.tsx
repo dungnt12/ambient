@@ -1,12 +1,20 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GardenScreen } from '../screens/garden';
 import { JournalListScreen } from '../screens/journal';
 import { GroupCreateScreen, GroupPulseScreen } from '../screens/group';
 import { SettingsScreen } from '../screens/settings';
 import { SAMPLE_ENTRIES } from '../mocks/journal';
-import { SAMPLE_GROUPS, SAMPLE_GROUP_INSIGHTS, SAMPLE_PULSE_MEMBERS } from '../mocks/group';
+import {
+  SAMPLE_GROUPS,
+  SAMPLE_GROUP_INSIGHTS,
+  SAMPLE_PULSE_MEMBERS,
+  getAllInsights,
+  getAllPulseMembers,
+  getTotalMemberCount,
+} from '../mocks/group';
 import {
   BottomBarInsetProvider,
   TabBarVisibilityProvider,
@@ -50,12 +58,42 @@ function JournalTab() {
 
 function GroupTab() {
   const { activeGroupId } = useActiveGroup();
-  const active =
-    activeGroupId != null ? SAMPLE_GROUPS.find((g) => g.id === activeGroupId) : undefined;
-  if (!active || SAMPLE_GROUPS.length === 0) {
+  if (SAMPLE_GROUPS.length === 0) {
     return <GroupCreateTabScene />;
   }
+  if (activeGroupId === null) {
+    return <GroupPulseAllScene />;
+  }
+  const active = SAMPLE_GROUPS.find((g) => g.id === activeGroupId);
+  if (!active) {
+    return <GroupPulseAllScene />;
+  }
   return <GroupPulseTabScene activeGroupId={active.id} />;
+}
+
+function GroupPulseAllScene() {
+  const rootNav = useNavigation<RootNav<'Tabs'>>();
+  const { t: tr } = useTranslation();
+  const members = getAllPulseMembers();
+  const insights = getAllInsights().map((e) => ({ insight: e.insight, groupName: e.groupName }));
+  return (
+    <GroupPulseScreen
+      key="all"
+      groupName={tr('group.allGroups')}
+      memberCount={getTotalMemberCount()}
+      members={members}
+      insights={insights}
+      aggregatedGroupCount={SAMPLE_GROUPS.length}
+      hasMultipleGroups={SAMPLE_GROUPS.length > 1}
+      onOpenSwitcher={() => rootNav.navigate('GroupSwitcher')}
+      onInviteMore={() => rootNav.navigate('GroupCreate')}
+      onWriteFirst={() => rootNav.navigate('JournalCompose')}
+      onDismissInsight={() => {}}
+      onProposeMeetup={() => rootNav.navigate('MeetupProposal')}
+      onOpenDigest={() => rootNav.navigate('WeeklyDigest')}
+      onCheckInOnMember={() => rootNav.navigate('SupportSignalDetail')}
+    />
+  );
 }
 
 function GroupPulseTabScene({ activeGroupId }: { activeGroupId: string }) {
@@ -70,7 +108,7 @@ function GroupPulseTabScene({ activeGroupId }: { activeGroupId: string }) {
       memberCount={active.memberCount}
       since={active.since}
       members={members}
-      insight={insight}
+      insights={insight ? [{ insight }] : []}
       hasMultipleGroups={SAMPLE_GROUPS.length > 1}
       onOpenSwitcher={() => rootNav.navigate('GroupSwitcher')}
       onInviteMore={() => rootNav.navigate('GroupCreate')}

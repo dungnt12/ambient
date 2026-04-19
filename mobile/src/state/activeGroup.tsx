@@ -1,7 +1,8 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
-import { SAMPLE_GROUPS } from '../mocks/group';
 
 type ActiveGroupContextValue = {
+  // `null` means "All groups" — the default pulse view aggregates every group
+  // the user belongs to. A concrete id filters to that group.
   activeGroupId: string | null;
   setActiveGroupId: (id: string | null) => void;
 };
@@ -9,7 +10,7 @@ type ActiveGroupContextValue = {
 const ActiveGroupContext = createContext<ActiveGroupContextValue | null>(null);
 
 export function ActiveGroupProvider({ children }: { children: ReactNode }) {
-  const [activeGroupId, setActiveGroupId] = useState<string | null>(SAMPLE_GROUPS[0]?.id ?? null);
+  const [activeGroupId, setActiveGroupId] = useState<string | null>(null);
   const value = useMemo(() => ({ activeGroupId, setActiveGroupId }), [activeGroupId]);
   return <ActiveGroupContext.Provider value={value}>{children}</ActiveGroupContext.Provider>;
 }
