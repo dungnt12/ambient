@@ -1,6 +1,6 @@
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Avatar, CTAButton, Screen, Text, useTheme } from '../../design-system';
+import { Avatar, Card, CTAButton, Screen, Text, useTheme } from '../../design-system';
 
 export type GroupAcceptInviteScreenProps = {
   inviterName: string;
@@ -42,15 +42,11 @@ export function GroupAcceptInviteScreen({
           {tr('group.accept.body', { count: Math.max(memberCount - 1, 0) })}
         </Text>
 
-        <View
+        <Card
           style={{
             marginTop: t.spacing.xxl,
-            backgroundColor: t.colors.bgRaised,
-            borderRadius: t.radius.card,
-            borderWidth: t.brand.border.hairline,
-            borderColor: t.colors.borderSoft,
-            padding: t.spacing.lg,
-            gap: t.spacing.md,
+            paddingHorizontal: t.spacing.lg,
+            paddingVertical: t.spacing.lg,
           }}
         >
           <Text variant="metaLabel" color="fgFaint">
@@ -74,7 +70,7 @@ export function GroupAcceptInviteScreen({
               </View>
             ))}
           </View>
-        </View>
+        </Card>
 
         <View
           style={{

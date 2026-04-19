@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { CTAButton, CTAStack, ScreenLayout, Text, useTheme } from '../../design-system';
+import { Card, CTAButton, CTAStack, ScreenLayout, Text, useTheme } from '../../design-system';
 
 export type NotificationsPermissionScreenProps = {
   onAllow: () => void;
@@ -72,22 +72,20 @@ function ReasonsCard() {
   const t = useTheme();
   const { t: tr } = useTranslation();
 
+  // Prose card: xl padding preserves the original generous rhythm — this is a
+  // "read-and-ack" surface, not a tight list row.
   return (
-    <View
+    <Card
       style={{
-        backgroundColor: t.colors.bgRaised,
-        borderColor: t.colors.borderSoft,
-        borderWidth: t.brand.border.hairline,
-        borderRadius: t.radius.card,
-        paddingVertical: t.spacing.xl,
         paddingHorizontal: t.spacing.xl,
+        paddingVertical: t.spacing.xl,
         gap: t.spacing.base,
       }}
     >
       {REASON_KEYS.map((key) => (
         <ReasonRow key={key} label={tr(`settings.notificationsPermission.reasons.${key}`)} />
       ))}
-    </View>
+    </Card>
   );
 }
 

@@ -1,8 +1,9 @@
-import { Pressable, View } from 'react-native';
+import { View, type ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight } from 'lucide-react-native';
 import {
   Avatar,
+  Card,
   CTAButton,
   ScreenHeader,
   ScreenLayout,
@@ -162,16 +163,12 @@ export function SettingsScreen({
 function ProfileCard({ name, email, initial }: { name: string; email: string; initial: string }) {
   const t = useTheme();
   return (
-    <View
+    <Card
       style={{
         height: t.layout.profileCardHeight,
-        backgroundColor: t.colors.bgRaised,
-        borderColor: t.colors.borderSoft,
-        borderWidth: t.brand.border.hairline,
-        borderRadius: t.radius.card,
+        paddingVertical: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: t.rhythm.card.padH,
         gap: t.spacing.base,
       }}
     >
@@ -184,31 +181,18 @@ function ProfileCard({ name, email, initial }: { name: string; email: string; in
           {email}
         </Text>
       </View>
-    </View>
+    </Card>
   );
 }
 
-function RowCard({ children }: { children: React.ReactNode }) {
-  const t = useTheme();
-  return (
-    <View
-      style={{
-        height: t.layout.rowHeight,
-        backgroundColor: t.colors.bgRaised,
-        borderColor: t.colors.borderSoft,
-        borderWidth: t.brand.border.hairline,
-        borderRadius: t.radius.base,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: t.rhythm.row.padH,
-        gap: t.rhythm.row.gap,
-      }}
-    >
-      {children}
-    </View>
-  );
-}
+const rowCardStyle = (height: number, radius: number): ViewStyle => ({
+  height,
+  paddingVertical: 0,
+  borderRadius: radius,
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+});
 
 function ValueRow({
   label,
@@ -221,29 +205,21 @@ function ValueRow({
 }) {
   const t = useTheme();
   return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) => ({
-        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-      })}
-    >
-      <RowCard>
-        <Text variant="buttonLabelSocial" color="fg" style={{ flexShrink: 1 }}>
-          {label}
+    <Card density="row" onPress={onPress} style={rowCardStyle(t.layout.rowHeight, t.radius.base)}>
+      <Text variant="buttonLabelSocial" color="fg" style={{ flexShrink: 1 }}>
+        {label}
+      </Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.xs }}>
+        <Text variant="bodyStandard" color="fgFaint">
+          {value}
         </Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.xs }}>
-          <Text variant="bodyStandard" color="fgFaint">
-            {value}
-          </Text>
-          <ChevronRight
-            size={t.iconSize.sm}
-            strokeWidth={t.stroke.standard}
-            color={t.colors.fgFaint}
-          />
-        </View>
-      </RowCard>
-    </Pressable>
+        <ChevronRight
+          size={t.iconSize.sm}
+          strokeWidth={t.stroke.standard}
+          color={t.colors.fgFaint}
+        />
+      </View>
+    </Card>
   );
 }
 
@@ -256,13 +232,14 @@ function ToggleRow({
   value: boolean;
   onChange: (next: boolean) => void;
 }) {
+  const t = useTheme();
   return (
-    <RowCard>
+    <Card style={rowCardStyle(t.layout.rowHeight, t.radius.base)}>
       <Text variant="buttonLabelSocial" color="fg" style={{ flexShrink: 1 }}>
         {label}
       </Text>
       <Toggle value={value} onChange={onChange} />
-    </RowCard>
+    </Card>
   );
 }
 
@@ -277,21 +254,13 @@ function LinkRow({
 }) {
   const t = useTheme();
   return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) => ({
-        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-      })}
-    >
-      <RowCard>
-        <Text variant="buttonLabelSocial" color="fg" style={{ flexShrink: 1 }}>
-          {label}
-        </Text>
-        <Text variant="buttonLabelSocial" style={{ color: t.colors.brand }}>
-          {linkLabel}
-        </Text>
-      </RowCard>
-    </Pressable>
+    <Card density="row" onPress={onPress} style={rowCardStyle(t.layout.rowHeight, t.radius.base)}>
+      <Text variant="buttonLabelSocial" color="fg" style={{ flexShrink: 1 }}>
+        {label}
+      </Text>
+      <Text variant="buttonLabelSocial" style={{ color: t.colors.brand }}>
+        {linkLabel}
+      </Text>
+    </Card>
   );
 }

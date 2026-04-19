@@ -1,6 +1,7 @@
 import { Alert, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
+  Card,
   CTAButton,
   CTAStack,
   ScreenHeader,
@@ -68,22 +69,18 @@ export function DeleteAccountScreen({ onConfirmDelete, onKeep }: DeleteAccountSc
           {tr('settings.deleteAccount.body')}
         </Text>
 
-        <View
+        <Card
           style={{
             marginTop: t.spacing.xxl,
-            backgroundColor: t.colors.bgRaised,
-            borderRadius: t.radius.card,
-            borderWidth: t.brand.border.hairline,
-            borderColor: t.colors.borderSoft,
-            paddingVertical: t.spacing.xl,
             paddingHorizontal: t.spacing.xl,
+            paddingVertical: t.spacing.xl,
             gap: t.spacing.xl,
           }}
         >
           {reasons.map((reason, i) => (
             <ReasonRow key={i} text={reason} />
           ))}
-        </View>
+        </Card>
 
         <Text variant="bodySmall" color="fgFaint" style={{ marginTop: t.spacing.lg }}>
           {tr('settings.deleteAccount.caption')}

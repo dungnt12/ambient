@@ -1,6 +1,6 @@
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { CTAButton, Heading, ScreenLayout, Text, useTheme } from '../../design-system';
+import { Card, CTAButton, Heading, ScreenLayout, Text, useTheme } from '../../design-system';
 
 export type PrivacyByDesignScreenProps = {
   onAcknowledge: () => void;
@@ -67,19 +67,19 @@ export function PrivacyByDesignScreen({ onAcknowledge, onReadPolicy }: PrivacyBy
 
 function FlowCard({ children }: { children: React.ReactNode }) {
   const t = useTheme();
+  // Prose flow card: white surface + xl padding — preserves the editorial
+  // feel of the steps list. Overrides Card's default ivory + rhythm.card.
   return (
-    <View
+    <Card
       style={{
         backgroundColor: t.colors.bgCard,
-        borderColor: t.colors.borderSoft,
-        borderWidth: t.brand.border.hairline,
-        borderRadius: t.radius.card,
-        padding: t.spacing.xl,
+        paddingHorizontal: t.spacing.xl,
+        paddingVertical: t.spacing.xl,
         gap: t.spacing.lg,
       }}
     >
       {children}
-    </View>
+    </Card>
   );
 }
 

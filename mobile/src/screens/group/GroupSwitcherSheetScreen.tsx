@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronRight, Plus, X } from 'lucide-react-native';
 import {
   BottomSheetModal,
+  Card,
   Text,
   useTheme,
   type ColorToken,
@@ -101,21 +102,11 @@ function GroupRow({
   const t = useTheme();
   const { t: tr } = useTranslation();
   return (
-    <Pressable
-      accessibilityRole="button"
+    <Card
+      tone={active ? 'raised' : 'plain'}
+      density="row"
       onPress={onPress}
-      style={({ pressed }) => ({
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: t.rhythm.row.gap,
-        paddingVertical: t.rhythm.row.padV,
-        paddingHorizontal: t.rhythm.row.padH,
-        backgroundColor: active ? t.colors.bgRaised : t.colors.bg,
-        borderColor: t.colors.borderSoft,
-        borderWidth: t.brand.border.hairline,
-        borderRadius: t.radius.card,
-        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-      })}
+      style={{ flexDirection: 'row', alignItems: 'center' }}
     >
       <ActiveIndicator active={active} />
       <MoodDot mood={group.aggregateMood} theme={t} />
@@ -128,7 +119,7 @@ function GroupRow({
         </Text>
       </View>
       <ChevronRight size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgFaint} />
-    </Pressable>
+    </Card>
   );
 }
 
@@ -166,22 +157,17 @@ function NewGroupRow({ locked, onPress }: { locked: boolean; onPress: () => void
   const textColor: ColorToken = locked ? 'fgFaint' : 'fg';
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      disabled={locked}
+    <Card
+      tone="plain"
+      density="row"
+      pressable={{ disabled: locked }}
       onPress={onPress}
-      style={({ pressed }) => ({
+      style={{
         flexDirection: 'row',
         alignItems: 'center',
-        gap: t.rhythm.row.gap,
-        paddingVertical: t.rhythm.row.padV,
-        paddingHorizontal: t.rhythm.row.padH,
-        borderColor: t.colors.borderSoft,
-        borderWidth: t.brand.border.hairline,
-        borderRadius: t.radius.card,
+        backgroundColor: 'transparent',
         borderStyle: 'dashed',
-        opacity: pressed && !locked ? t.opacity.pressedSubtle : t.opacity.full,
-      })}
+      }}
     >
       <View style={{ width: t.spacing.sm, height: t.spacing.sm }} />
       <View
@@ -200,7 +186,7 @@ function NewGroupRow({ locked, onPress }: { locked: boolean; onPress: () => void
         {tr('group.switcher.newGroup')}
       </Text>
       {locked ? <ProPill /> : null}
-    </Pressable>
+    </Card>
   );
 }
 

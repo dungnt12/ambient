@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronRight, MessageCircleHeart, Sparkles, X } from 'lucide-react-native';
 import {
+  Card,
   CTAButton,
   CTAStack,
   ScreenLayout,
@@ -209,17 +210,7 @@ const MOOD_DOT_COLORS: Record<PulseMood, ColorToken> = {
 function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updatedLabel: string }) {
   const t = useTheme();
   return (
-    <View
-      style={{
-        backgroundColor: t.colors.bgRaised,
-        borderColor: t.colors.borderSoft,
-        borderWidth: t.brand.border.hairline,
-        borderRadius: t.radius.card,
-        paddingHorizontal: t.rhythm.card.padH,
-        paddingVertical: t.rhythm.card.padV,
-        gap: t.rhythm.card.gap,
-      }}
-    >
+    <Card>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.rhythm.inner }}>
         <View
           style={{
@@ -240,7 +231,7 @@ function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updat
       <Text variant="bodySerif" color="fg">
         {member.signal}
       </Text>
-    </View>
+    </Card>
   );
 }
 
@@ -285,17 +276,7 @@ function InsightShell({
   const { t: tr } = useTranslation();
   const isBrand = tone === 'brand';
   return (
-    <View
-      style={{
-        backgroundColor: isBrand ? t.colors.brand : t.colors.bgRaised,
-        borderColor: isBrand ? 'transparent' : t.colors.borderSoft,
-        borderWidth: isBrand ? 0 : t.brand.border.hairline,
-        borderRadius: t.radius.card,
-        paddingHorizontal: t.rhythm.card.padH,
-        paddingVertical: t.rhythm.card.padV,
-        gap: t.rhythm.card.gap,
-      }}
-    >
+    <Card tone={isBrand ? 'brand' : 'raised'}>
       {children}
       {onDismiss ? (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
@@ -323,7 +304,7 @@ function InsightShell({
           </Pressable>
         </View>
       ) : null}
-    </View>
+    </Card>
   );
 }
 

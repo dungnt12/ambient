@@ -1,7 +1,7 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight } from 'lucide-react-native';
-import { CTAButton, Screen, Text, useTheme } from '../../design-system';
+import { Card, CTAButton, Screen, Text, useTheme } from '../../design-system';
 
 export type GroupJoinedScreenProps = {
   groupName: string;
@@ -81,21 +81,16 @@ function NextRow({
 }) {
   const t = useTheme();
   return (
-    <Pressable
-      accessibilityRole="button"
+    <Card
       onPress={onPress}
-      style={({ pressed }) => ({
-        backgroundColor: t.colors.bgRaised,
+      style={{
         borderRadius: t.radius.lg,
-        borderWidth: t.brand.border.hairline,
-        borderColor: t.colors.borderSoft,
         paddingHorizontal: t.spacing.lg,
         paddingVertical: t.spacing.lg,
         flexDirection: 'row',
         alignItems: 'center',
         gap: t.spacing.md,
-        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-      })}
+      }}
     >
       <View style={{ flex: 1, gap: t.spacing.xs }}>
         <Text variant="metaLabel" color="fgFaint">
@@ -110,6 +105,6 @@ function NextRow({
         strokeWidth={t.stroke.standard}
         color={t.colors.fgFaint}
       />
-    </Pressable>
+    </Card>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { CTAButton, ScreenLayout, Text, TextInput, useTheme } from '../../design-system';
+import { Card, CTAButton, ScreenLayout, Text, TextInput, useTheme } from '../../design-system';
 
 export type GroupCreateScreenProps = {
   inviteUrl: string;
@@ -81,20 +81,16 @@ function InviteBlock({ url, onCopy }: { url: string; onCopy?: () => void }) {
   const t = useTheme();
   const { t: tr } = useTranslation();
 
+  // Invite block keeps lg horizontal padding + lg inner gap to give the
+  // copyable URL room to breathe — overrides Card's tighter rhythm.card.
   return (
-    <Pressable
-      accessibilityRole="button"
+    <Card
       onPress={onCopy}
-      style={({ pressed }) => ({
-        backgroundColor: t.colors.bgRaised,
-        borderColor: t.colors.borderSoft,
-        borderWidth: t.brand.border.hairline,
-        borderRadius: t.radius.card,
+      style={{
         paddingHorizontal: t.spacing.lg,
         paddingVertical: t.spacing.lg,
         gap: t.spacing.lg,
-        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-      })}
+      }}
     >
       <Text variant="metaLabel" color="fgFaint">
         {tr('group.create.inviteLabel')}
@@ -105,6 +101,6 @@ function InviteBlock({ url, onCopy }: { url: string; onCopy?: () => void }) {
       <Text variant="bodySmall" color="fgSubtle">
         {tr('group.create.inviteHint')}
       </Text>
-    </Pressable>
+    </Card>
   );
 }
