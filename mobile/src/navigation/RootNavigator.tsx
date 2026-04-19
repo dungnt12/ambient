@@ -273,7 +273,7 @@ function GroupSwitcherRoute({ navigation }: RootScreenProps<'GroupSwitcher'>) {
         setActiveGroupId(null);
         navigation.goBack();
       }}
-      onCreateNew={() => navigation.navigate('GroupCreate')}
+      onCreateNew={() => navigation.replace('GroupCreate')}
       onDismiss={() => navigation.goBack()}
     />
   );
