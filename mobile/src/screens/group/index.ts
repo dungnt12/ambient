@@ -5,6 +5,7 @@ export {
   type GroupInsightKind,
 } from './GroupPulseScreen';
 export { GroupCreateScreen, type GroupCreateScreenProps } from './GroupCreateScreen';
+export { GroupCreateSheetScreen, type GroupCreateSheetScreenProps } from './GroupCreateSheetScreen';
 export {
   GroupAcceptInviteScreen,
   type GroupAcceptInviteScreenProps,

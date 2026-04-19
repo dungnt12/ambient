@@ -9,7 +9,7 @@ import {
 } from '../screens/journal';
 import {
   GroupAcceptInviteScreen,
-  GroupCreateScreen,
+  GroupCreateSheetScreen,
   GroupJoinedScreen,
   GroupPulseScreen,
   GroupSwitcherSheetScreen,
@@ -169,12 +169,12 @@ function GroupCreateRoute({ navigation }: RootScreenProps<'GroupCreate'>) {
   const primary = SAMPLE_GROUPS[0];
   const primaryMembers = SAMPLE_PULSE_MEMBERS[primary.id] ?? [];
   return (
-    <GroupCreateScreen
+    <GroupCreateSheetScreen
       inviteUrl={primary.inviteUrl}
-      onCreate={(groupName) => navigation.navigate('GroupJoined', { groupName })}
+      onCreate={(groupName) => navigation.replace('GroupJoined', { groupName })}
       onCopyInvite={() => {}}
       onSimulateIncomingLink={() =>
-        navigation.navigate('InviteOffer', {
+        navigation.replace('InviteOffer', {
           inviterName: primary.inviterName,
           groupName: primary.name,
           memberCount: primary.memberCount,
@@ -182,6 +182,7 @@ function GroupCreateRoute({ navigation }: RootScreenProps<'GroupCreate'>) {
           memberInitials: primaryMembers.map((m) => m.initial),
         })
       }
+      onDismiss={() => navigation.goBack()}
     />
   );
 }
@@ -400,7 +401,14 @@ export function RootNavigator() {
       <Stack.Screen name="Day" component={DayRoute} />
       <Stack.Screen name="EntryEdit" component={EntryEditRoute} />
       <Stack.Screen name="EntryDetail" component={EntryDetailRoute} />
-      <Stack.Screen name="GroupCreate" component={GroupCreateRoute} />
+      <Stack.Screen
+        name="GroupCreate"
+        component={GroupCreateRoute}
+        options={{
+          presentation: 'transparentModal',
+          animation: 'none',
+        }}
+      />
       <Stack.Screen
         name="InviteOffer"
         component={InviteOfferRoute}
