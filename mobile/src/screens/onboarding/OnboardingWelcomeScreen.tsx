@@ -19,15 +19,36 @@ const STEPS_WITH_SIGN_IN: readonly Step[] = ['welcome', 'hints'] as const;
 export type OnboardingWelcomeScreenProps = {
   onContinue?: (step: Step) => void;
   onSignIn?: () => void;
+  onDevSkipAuth?: () => void;
 };
 
-export function OnboardingWelcomeScreen({ onContinue, onSignIn }: OnboardingWelcomeScreenProps) {
+export function OnboardingWelcomeScreen({
+  onContinue,
+  onSignIn,
+  onDevSkipAuth,
+}: OnboardingWelcomeScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
   const { width } = useWindowDimensions();
   const scrollRef = useRef<ScrollView>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
   const [active, setActive] = useState(0);
+  const devTapCount = useRef(0);
+  const devTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleDevTap = () => {
+    if (!onDevSkipAuth) return;
+    devTapCount.current += 1;
+    if (devTapTimer.current) clearTimeout(devTapTimer.current);
+    if (devTapCount.current >= 3) {
+      devTapCount.current = 0;
+      onDevSkipAuth();
+      return;
+    }
+    devTapTimer.current = setTimeout(() => {
+      devTapCount.current = 0;
+    }, 600);
+  };
 
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const next = Math.round(e.nativeEvent.contentOffset.x / width);
@@ -49,6 +70,20 @@ export function OnboardingWelcomeScreen({ onContinue, onSignIn }: OnboardingWelc
   return (
     <Screen edges={['top', 'bottom']} background="bg">
       <View style={{ flex: 1 }}>
+        {onDevSkipAuth ? (
+          <Pressable
+            accessibilityLabel="dev-skip-auth"
+            onPress={handleDevTap}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: t.spacing['5xl'],
+              height: t.spacing['5xl'],
+              zIndex: 10,
+            }}
+          />
+        ) : null}
         <Animated.ScrollView
           ref={scrollRef}
           horizontal

@@ -54,6 +54,9 @@ function OnboardingRoute({ navigation }: RootScreenProps<'Onboarding'>) {
     <OnboardingWelcomeScreen
       onContinue={() => navigation.navigate('SignIn')}
       onSignIn={() => navigation.navigate('SignIn')}
+      onDevSkipAuth={() =>
+        navigation.reset({ index: 0, routes: [{ name: 'Tabs', params: { screen: 'Journal' } }] })
+      }
     />
   );
 }
