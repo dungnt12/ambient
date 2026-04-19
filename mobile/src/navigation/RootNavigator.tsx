@@ -312,7 +312,6 @@ function PrivacyByDesignRoute({ navigation }: RootScreenProps<'PrivacyByDesign'>
     <PrivacyByDesignScreen
       onAcknowledge={() => navigation.goBack()}
       onReadPolicy={() => navigation.goBack()}
-      onClose={() => navigation.goBack()}
     />
   );
 }

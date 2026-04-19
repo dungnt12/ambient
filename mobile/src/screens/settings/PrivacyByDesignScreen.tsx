@@ -1,33 +1,22 @@
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import {
-  CTAButton,
-  Heading,
-  ScreenHeader,
-  ScreenLayout,
-  Text,
-  useTheme,
-} from '../../design-system';
+import { CTAButton, Heading, ScreenLayout, Text, useTheme } from '../../design-system';
 
 export type PrivacyByDesignScreenProps = {
   onAcknowledge: () => void;
   onReadPolicy: () => void;
-  onClose?: () => void;
 };
 
 type StepKey = 'write' | 'reads' | 'senses' | 'choose' | 'neverSeen';
 
 const STEPS: StepKey[] = ['write', 'reads', 'senses', 'choose', 'neverSeen'];
 
-export function PrivacyByDesignScreen({
-  onAcknowledge,
-  onReadPolicy,
-  onClose,
-}: PrivacyByDesignScreenProps) {
+// No back button — the primary CTA ("đã hiểu") is the dismiss affordance.
+// A secondary back chevron would be redundant and muddy the read-and-ack
+// flow this screen is for.
+export function PrivacyByDesignScreen({ onAcknowledge, onReadPolicy }: PrivacyByDesignScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
-
-  const header = onClose ? <ScreenHeader back={{ onPress: onClose }} /> : undefined;
 
   const footer = (
     <View style={{ paddingHorizontal: t.layout.screenPaddingX }}>
@@ -49,7 +38,7 @@ export function PrivacyByDesignScreen({
   );
 
   return (
-    <ScreenLayout header={header} footer={footer}>
+    <ScreenLayout footer={footer}>
       <View style={{ paddingHorizontal: t.layout.screenPaddingX, gap: t.spacing.xl }}>
         <View style={{ gap: t.spacing.md }}>
           <Text variant="overline" color="fgFaint">
