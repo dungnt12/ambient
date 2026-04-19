@@ -46,7 +46,7 @@ export type RootStackParamList = {
   SupportSignalDetail: undefined;
   WeeklyNeedsWarmth: undefined;
   Settings: undefined;
-  NotificationsPermission: undefined;
+  NotificationsPermission: { returnTo?: 'tabs' | 'back' } | undefined;
   PrivacyByDesign: undefined;
   DeleteAccount: undefined;
 };

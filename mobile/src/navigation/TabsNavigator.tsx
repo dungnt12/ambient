@@ -89,6 +89,8 @@ function YouTab() {
       onToggleAiSuggestions={() => {}}
       onOpenReminder={() => {}}
       onOpenTimezone={() => {}}
+      onOpenNotifications={() => rootNav.navigate('NotificationsPermission', { returnTo: 'back' })}
+      onOpenAmbient={() => rootNav.navigate('QuietNotes')}
       onOpenPrivacy={() => rootNav.navigate('PrivacyByDesign')}
       onSignOut={() => rootNav.reset({ index: 0, routes: [{ name: 'Onboarding' }] })}
       onDeleteAccount={() => rootNav.navigate('DeleteAccount')}

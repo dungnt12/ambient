@@ -22,6 +22,8 @@ export type SettingsScreenProps = {
   onToggleAiSuggestions: (next: boolean) => void;
   onOpenReminder: () => void;
   onOpenTimezone: () => void;
+  onOpenNotifications: () => void;
+  onOpenAmbient: () => void;
   onOpenPrivacy: () => void;
   onSignOut: () => void;
   onDeleteAccount: () => void;
@@ -37,6 +39,8 @@ export function SettingsScreen({
   onToggleAiSuggestions,
   onOpenReminder,
   onOpenTimezone,
+  onOpenNotifications,
+  onOpenAmbient,
   onOpenPrivacy,
   onSignOut,
   onDeleteAccount,
@@ -95,6 +99,28 @@ export function SettingsScreen({
           label={tr('settings.reminders.aiSuggestions')}
           value={aiSuggestionsEnabled}
           onChange={onToggleAiSuggestions}
+        />
+        <LinkRow
+          label={tr('settings.reminders.pushNotifications')}
+          linkLabel={tr('settings.reminders.pushNotificationsAction')}
+          onPress={onOpenNotifications}
+        />
+      </View>
+
+      <View
+        style={{
+          paddingHorizontal: t.layout.screenPaddingX,
+          paddingTop: t.layout.sectionGap,
+          gap: t.spacing.md,
+        }}
+      >
+        <Text variant="overline" color="fgFaint">
+          {tr('settings.sections.ambient')}
+        </Text>
+        <LinkRow
+          label={tr('settings.ambient.quietNotes')}
+          linkLabel={tr('settings.ambient.open')}
+          onPress={onOpenAmbient}
         />
       </View>
 

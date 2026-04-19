@@ -332,6 +332,10 @@ function SettingsRoute({ navigation }: RootScreenProps<'Settings'>) {
       onToggleAiSuggestions={() => {}}
       onOpenReminder={() => {}}
       onOpenTimezone={() => {}}
+      onOpenNotifications={() =>
+        navigation.navigate('NotificationsPermission', { returnTo: 'back' })
+      }
+      onOpenAmbient={() => navigation.navigate('QuietNotes')}
       onOpenPrivacy={() => navigation.navigate('PrivacyByDesign')}
       onSignOut={() => navigation.popToTop()}
       onDeleteAccount={() => navigation.navigate('DeleteAccount')}
@@ -339,10 +343,16 @@ function SettingsRoute({ navigation }: RootScreenProps<'Settings'>) {
   );
 }
 
-function NotificationsPermissionRoute({ navigation }: RootScreenProps<'NotificationsPermission'>) {
-  const enterApp = () =>
-    navigation.reset({ index: 0, routes: [{ name: 'Tabs', params: { screen: 'Journal' } }] });
-  return <NotificationsPermissionScreen onAllow={enterApp} onSkip={enterApp} />;
+function NotificationsPermissionRoute({
+  navigation,
+  route,
+}: RootScreenProps<'NotificationsPermission'>) {
+  const dismiss =
+    route.params?.returnTo === 'back'
+      ? () => navigation.goBack()
+      : () =>
+          navigation.reset({ index: 0, routes: [{ name: 'Tabs', params: { screen: 'Journal' } }] });
+  return <NotificationsPermissionScreen onAllow={dismiss} onSkip={dismiss} />;
 }
 
 function PrivacyByDesignRoute({ navigation }: RootScreenProps<'PrivacyByDesign'>) {
@@ -424,7 +434,7 @@ export function RootNavigator() {
         component={MeetupProposalRoute}
         options={{
           presentation: 'transparentModal',
-          animation: 'slide_from_bottom',
+          animation: 'none',
         }}
       />
     </Stack.Navigator>
