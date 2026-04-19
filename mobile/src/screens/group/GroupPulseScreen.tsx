@@ -83,7 +83,7 @@ export function GroupPulseScreen({
     <ScreenLayout
       padHorizontal
       header={
-        <View style={{ paddingTop: t.spacing.base, gap: t.spacing.md }}>
+        <View style={{ paddingTop: t.rhythm.header.padTop, gap: t.rhythm.header.gap }}>
           <GroupNameRow
             groupName={groupName}
             hasMultipleGroups={hasMultipleGroups}
@@ -100,20 +100,19 @@ export function GroupPulseScreen({
         </View>
       }
       bodyContentContainerStyle={{ paddingTop: t.spacing.xxl }}
+      bodyGap={t.rhythm.list}
     >
-      <View style={{ gap: t.spacing.lg }}>
-        {insight ? (
-          <InsightCard
-            insight={insight}
-            onDismiss={onDismissInsight}
-            onOpenDigest={onOpenDigest}
-            onProposeMeetup={onProposeMeetup}
-            onCheckIn={onCheckInOnMember}
-          />
-        ) : null}
-        <PulseList members={members} />
-        {onLeaveGroup ? <LeaveGroupRow onPress={onLeaveGroup} /> : null}
-      </View>
+      {insight ? (
+        <InsightCard
+          insight={insight}
+          onDismiss={onDismissInsight}
+          onOpenDigest={onOpenDigest}
+          onProposeMeetup={onProposeMeetup}
+          onCheckIn={onCheckInOnMember}
+        />
+      ) : null}
+      <PulseList members={members} />
+      {onLeaveGroup ? <LeaveGroupRow onPress={onLeaveGroup} /> : null}
     </ScreenLayout>
   );
 }
@@ -216,12 +215,12 @@ function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updat
         borderColor: t.colors.borderSoft,
         borderWidth: t.brand.border.hairline,
         borderRadius: t.radius.card,
-        paddingHorizontal: t.spacing.md,
-        paddingVertical: t.spacing.md,
-        gap: t.spacing.md,
+        paddingHorizontal: t.rhythm.card.padH,
+        paddingVertical: t.rhythm.card.padV,
+        gap: t.rhythm.card.gap,
       }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.md }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.rhythm.inner }}>
         <View
           style={{
             width: t.layout.moodDot,
@@ -292,9 +291,9 @@ function InsightShell({
         borderColor: isBrand ? 'transparent' : t.colors.borderSoft,
         borderWidth: isBrand ? 0 : t.brand.border.hairline,
         borderRadius: t.radius.card,
-        paddingHorizontal: t.spacing.md,
-        paddingVertical: t.spacing.md,
-        gap: t.spacing.md,
+        paddingHorizontal: t.rhythm.card.padH,
+        paddingVertical: t.rhythm.card.padV,
+        gap: t.rhythm.card.gap,
       }}
     >
       {children}

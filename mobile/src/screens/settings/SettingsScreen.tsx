@@ -79,7 +79,7 @@ export function SettingsScreen({
         style={{
           paddingHorizontal: t.layout.screenPaddingX,
           paddingTop: t.layout.sectionGap,
-          gap: t.spacing.md,
+          gap: t.rhythm.list,
         }}
       >
         <Text variant="overline" color="fgFaint">
@@ -111,7 +111,7 @@ export function SettingsScreen({
         style={{
           paddingHorizontal: t.layout.screenPaddingX,
           paddingTop: t.layout.sectionGap,
-          gap: t.spacing.md,
+          gap: t.rhythm.list,
         }}
       >
         <Text variant="overline" color="fgFaint">
@@ -128,7 +128,7 @@ export function SettingsScreen({
         style={{
           paddingHorizontal: t.layout.screenPaddingX,
           paddingTop: t.layout.sectionGap,
-          gap: t.spacing.md,
+          gap: t.rhythm.list,
         }}
       >
         <Text variant="overline" color="fgFaint">
@@ -171,7 +171,7 @@ function ProfileCard({ name, email, initial }: { name: string; email: string; in
         borderRadius: t.radius.card,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: t.spacing.lg,
+        paddingHorizontal: t.rhythm.card.padH,
         gap: t.spacing.base,
       }}
     >
@@ -201,8 +201,8 @@ function RowCard({ children }: { children: React.ReactNode }) {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: t.spacing.lg,
-        gap: t.spacing.md,
+        paddingHorizontal: t.rhythm.row.padH,
+        gap: t.rhythm.row.gap,
       }}
     >
       {children}

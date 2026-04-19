@@ -72,7 +72,7 @@ export function GroupSwitcherSheetScreen({
             </Pressable>
           </View>
 
-          <View style={{ gap: t.spacing.lg }}>
+          <View style={{ gap: t.rhythm.list }}>
             {groups.map((g) => (
               <GroupRow
                 key={g.id}
@@ -107,9 +107,9 @@ function GroupRow({
       style={({ pressed }) => ({
         flexDirection: 'row',
         alignItems: 'center',
-        gap: t.spacing.md,
-        paddingVertical: t.spacing.lg,
-        paddingHorizontal: t.spacing.lg,
+        gap: t.rhythm.row.gap,
+        paddingVertical: t.rhythm.row.padV,
+        paddingHorizontal: t.rhythm.row.padH,
         backgroundColor: active ? t.colors.bgRaised : t.colors.bg,
         borderColor: t.colors.borderSoft,
         borderWidth: t.brand.border.hairline,
@@ -173,9 +173,9 @@ function NewGroupRow({ locked, onPress }: { locked: boolean; onPress: () => void
       style={({ pressed }) => ({
         flexDirection: 'row',
         alignItems: 'center',
-        gap: t.spacing.md,
-        paddingVertical: t.spacing.lg,
-        paddingHorizontal: t.spacing.lg,
+        gap: t.rhythm.row.gap,
+        paddingVertical: t.rhythm.row.padV,
+        paddingHorizontal: t.rhythm.row.padH,
         borderColor: t.colors.borderSoft,
         borderWidth: t.brand.border.hairline,
         borderRadius: t.radius.card,
