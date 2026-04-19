@@ -22,7 +22,7 @@ export type ListRowProps = {
    * toggle, badge...).
    */
   trailing?: ListRowTrailing;
-  /** Card tone. Default `'plain'` — matches existing SettingsScreen rows. */
+  /** Card tone. Default `'raised'` — ivory row on parchment, matches Figma. */
   tone?: Extract<CardTone, 'plain' | 'raised'>;
   onPress?: () => void;
   disabled?: boolean;
@@ -37,7 +37,7 @@ export function ListRow({
   eyebrow,
   leading,
   trailing,
-  tone = 'plain',
+  tone = 'raised',
   onPress,
   disabled = false,
   style,

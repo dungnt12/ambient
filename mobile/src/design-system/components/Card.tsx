@@ -56,9 +56,10 @@ export function Card({
           };
 
   const rhythmSlot = density === 'row' ? t.rhythm.row : t.rhythm.card;
+  const radius = density === 'row' ? t.radius.base : t.radius.card;
 
   const baseStyle: ViewStyle = {
-    borderRadius: t.radius.card,
+    borderRadius: radius,
     paddingHorizontal: rhythmSlot.padH,
     paddingVertical: rhythmSlot.padV,
     gap: rhythmSlot.gap,

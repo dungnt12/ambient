@@ -2,22 +2,33 @@ import { View, type ViewStyle } from 'react-native';
 import { Text } from '../Text';
 import { useTheme } from '../../theme';
 
-export type AvatarSize = 24 | 32 | 48;
+export type AvatarSize = 24 | 32 | 48 | 56;
 export type AvatarVariant = 'initial' | 'empty';
+export type AvatarTone = 'neutral' | 'brand';
 
 export type AvatarProps = {
   size: AvatarSize;
   variant?: AvatarVariant;
+  tone?: AvatarTone;
   initial?: string;
   label?: string;
   style?: ViewStyle;
 };
 
-export function Avatar({ size, variant = 'initial', initial, label, style }: AvatarProps) {
+export function Avatar({
+  size,
+  variant = 'initial',
+  tone = 'neutral',
+  initial,
+  label,
+  style,
+}: AvatarProps) {
   const theme = useTheme();
   const isInitial = variant === 'initial';
-  const background = isInitial ? theme.colors.bgInverse : theme.colors.bgMuted;
-  const foreground = isInitial ? theme.colors.bgRaised : theme.colors.fgGhost;
+  const initialBg = tone === 'brand' ? theme.colors.brand : theme.colors.bgInverse;
+  const initialFg = tone === 'brand' ? theme.colors.fgOnBrand : theme.colors.bgRaised;
+  const background = isInitial ? initialBg : theme.colors.bgMuted;
+  const foreground = isInitial ? initialFg : theme.colors.fgGhost;
   const letter = (initial ?? '').trim().slice(0, 1).toUpperCase();
 
   return (

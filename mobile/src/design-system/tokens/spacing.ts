@@ -18,7 +18,7 @@ export type SpacingToken = keyof typeof spacing;
 
 export const layout = {
   screenPaddingX: spacing.xl,
-  sectionGap: spacing.xxl,
+  sectionGap: spacing['3xl'],
   ctaHeight: 60,
   inputHeight: 56,
   tabBarHeight: 68,
@@ -29,6 +29,7 @@ export const layout = {
   profileCardHeight: 96,
   avatarSm: 32,
   avatarMd: 48,
+  avatarLg: 56,
   avatarOverlap: 20,
   avatarOverlapTight: 14,
   moodDot: 26,
@@ -56,8 +57,9 @@ export const rhythm = {
     padV: spacing.md, // list row vertical padding
     gap: spacing.md, // gap between icon/text/chevron inside a row
   },
-  list: spacing.lg, // gap between cards/rows in a stream
-  section: spacing.xxl, // gap between sections within a screen
+  list: spacing.lg, // gap between cards in a card-stream
+  rowStack: spacing.md, // gap between stacked rows in a list section
+  section: spacing.md, // gap between sections / from overline → body
   screen: spacing.xl, // horizontal screen padding (alias of layout.screenPaddingX)
   header: {
     padTop: spacing.base, // header paddingTop under status bar
