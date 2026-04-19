@@ -39,7 +39,7 @@ export const palette = {
     slate: '#9bb0c4',
     slateSoft: '#c0cfde',
     nutCap: '#6f5842',
-    cloud: '#d9d5c6',
+    cloud: '#faf9f5',
   },
   // Per-illustration tint seeds. Garden cell background = seed @ 22% over parchment.
   illoTint: {

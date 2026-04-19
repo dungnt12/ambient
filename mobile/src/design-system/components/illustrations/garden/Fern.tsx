@@ -3,7 +3,14 @@ import { useTheme } from '../../../theme';
 
 type Props = { size?: number };
 
-const LEAFLET_ROWS = [20, 28, 36, 44];
+// Upward-pointing leaflets, pine-tree shape. Each pair at a y-position,
+// with half-width that grows toward the base.
+const LEAFLETS: { y: number; w: number }[] = [
+  { y: 18, w: 5 },
+  { y: 24, w: 8 },
+  { y: 32, w: 11 },
+  { y: 40, w: 13 },
+];
 
 export function Fern({ size = 60 }: Props) {
   const t = useTheme();
@@ -11,18 +18,19 @@ export function Fern({ size = 60 }: Props) {
   return (
     <Svg width={size} height={size} viewBox="0 0 60 60" fill="none">
       <Line x1={30} y1={12} x2={30} y2={50} stroke={sage} strokeWidth={1.5} strokeLinecap="round" />
-      <Path d="M30 16 C28 14 28 12 30 10 C32 12 32 14 30 16 Z" fill={sage} />
-      {LEAFLET_ROWS.map((y) => (
+      {/* top bud */}
+      <Path d="M30 14 C28.5 12 28.5 11 30 10 C31.5 11 31.5 12 30 14 Z" fill={sage} />
+      {LEAFLETS.map(({ y, w }) => (
         <Path
           key={`l-${y}`}
-          d={`M30 ${y} C24 ${y - 4} 19 ${y - 2} 16 ${y + 2} C22 ${y + 3} 27 ${y + 2} 30 ${y} Z`}
+          d={`M30 ${y + 2} L${30 - w} ${y - 1} C${30 - w - 1} ${y + 1} ${30 - w / 2} ${y + 3} 30 ${y + 2} Z`}
           fill={sage}
         />
       ))}
-      {LEAFLET_ROWS.map((y) => (
+      {LEAFLETS.map(({ y, w }) => (
         <Path
           key={`r-${y}`}
-          d={`M30 ${y} C36 ${y - 4} 41 ${y - 2} 44 ${y + 2} C38 ${y + 3} 33 ${y + 2} 30 ${y} Z`}
+          d={`M30 ${y + 2} L${30 + w} ${y - 1} C${30 + w + 1} ${y + 1} ${30 + w / 2} ${y + 3} 30 ${y + 2} Z`}
           fill={sage}
         />
       ))}

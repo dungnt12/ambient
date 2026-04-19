@@ -11,17 +11,17 @@ export function Acorn({ size = 60 }: Props) {
         x1={30}
         y1={10}
         x2={30}
-        y2={18}
+        y2={16}
         stroke={t.colors.illoNutCap}
         strokeWidth={1.5}
         strokeLinecap="round"
       />
       <Path
-        d="M19 22 C19 19 24 17 30 17 C36 17 41 19 41 22 C41 26 36 28 30 28 C24 28 19 26 19 22 Z"
+        d="M22 18 C22 16 26 15 30 15 C34 15 38 16 38 18 C38 22 34 24 30 24 C26 24 22 22 22 18 Z"
         fill={t.colors.illoNutCap}
       />
       <Path
-        d="M20 26 C20 38 24 50 30 50 C36 50 40 38 40 26 C35 27 25 27 20 26 Z"
+        d="M22 24 C22 36 25 50 30 50 C35 50 38 36 38 24 C34 25 26 25 22 24 Z"
         fill={t.colors.brandSoft}
       />
     </Svg>

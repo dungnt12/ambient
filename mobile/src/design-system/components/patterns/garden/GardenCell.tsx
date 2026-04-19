@@ -19,8 +19,8 @@ export type GardenCellProps = {
   onPress?: () => void;
 };
 
-const CELL_SIZE = 40;
-const ILLUSTRATION_SIZE = 32;
+const CELL_SIZE = 44;
+const ILLUSTRATION_SIZE = 30;
 const TODAY_BORDER_WIDTH = 2;
 
 function GardenCellImpl({ state, illustration, label, day, style, onPress }: GardenCellProps) {
@@ -29,7 +29,7 @@ function GardenCellImpl({ state, illustration, label, day, style, onPress }: Gar
   const base: ViewStyle = {
     width: CELL_SIZE,
     height: CELL_SIZE,
-    borderRadius: theme.radius.xs,
+    borderRadius: theme.radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
   };
