@@ -187,12 +187,13 @@ function GroupNameRow({
           accessibilityRole="button"
           accessibilityLabel={tr('group.switcher.open')}
           onPress={onOpenSwitcher}
-          hitSlop={t.spacing.sm}
+          hitSlop={t.spacing.md}
           style={({ pressed }) => ({
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
             gap: t.spacing.sm,
+            paddingVertical: t.spacing.xs,
             opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
           })}
         >
@@ -200,9 +201,9 @@ function GroupNameRow({
             {groupName}
           </Text>
           <ChevronDown
-            size={t.iconSize.sm}
+            size={t.iconSize.md}
             strokeWidth={t.stroke.standard}
-            color={t.colors.fgFaint}
+            color={t.colors.fgSubtle}
           />
         </Pressable>
       ) : (
@@ -215,14 +216,14 @@ function GroupNameRow({
           accessibilityRole="button"
           accessibilityLabel={tr('group.settings.open')}
           onPress={onOpenSettings}
-          hitSlop={t.spacing.sm}
+          hitSlop={t.spacing.md}
           style={({ pressed }) => ({
-            padding: t.spacing.xs,
+            padding: t.spacing.sm,
             opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
           })}
         >
           <Settings
-            size={t.iconSize.base}
+            size={t.iconSize.lg}
             strokeWidth={t.stroke.standard}
             color={t.colors.fgSubtle}
           />
@@ -263,35 +264,38 @@ const MOOD_DOT_COLORS: Record<PulseMood, ColorToken> = {
 function MemberSignalCard({ member, updatedLabel }: { member: PulseMember; updatedLabel: string }) {
   const t = useTheme();
   const { t: tr } = useTranslation();
+  const dotSize = t.spacing.md;
+
   return (
-    <Card>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.rhythm.inner }}>
-        <View
-          style={{
-            width: t.layout.moodDot,
-            height: t.layout.moodDot,
-            borderRadius: t.radius.pill,
-            backgroundColor: t.colors[MOOD_DOT_COLORS[member.mood]],
-          }}
-        />
-        <View style={{ flex: 1, gap: t.spacing.xxs }}>
-          <Text variant="buttonLabelSocial" color="fg">
+    <View style={{ flexDirection: 'row', gap: t.spacing.md, paddingVertical: t.spacing.xs }}>
+      <View
+        style={{
+          width: dotSize,
+          height: dotSize,
+          borderRadius: t.radius.pill,
+          backgroundColor: t.colors[MOOD_DOT_COLORS[member.mood]],
+          marginTop: t.spacing.xs,
+        }}
+      />
+      <View style={{ flex: 1, gap: t.spacing.xxs }}>
+        <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: t.spacing.sm }}>
+          <Text variant="buttonLabelSocial" color="fg" style={{ flex: 1 }} numberOfLines={1}>
             {member.name}
           </Text>
-          {member.fromGroup ? (
-            <Text variant="metaLabel" color="fgFaint">
-              {tr('group.fromGroup', { group: member.fromGroup })}
-            </Text>
-          ) : null}
+          <Text variant="metaLabel" color="fgFaint">
+            {updatedLabel}
+          </Text>
         </View>
-        <Text variant="metaLabel" color="fgFaint">
-          {updatedLabel}
+        <Text variant="bodySerifTight" color="fgMuted">
+          {member.signal}
         </Text>
+        {member.fromGroup ? (
+          <Text variant="metaLabel" color="fgFaint">
+            {tr('group.fromGroup', { group: member.fromGroup })}
+          </Text>
+        ) : null}
       </View>
-      <Text variant="bodySerif" color="fg">
-        {member.signal}
-      </Text>
-    </Card>
+    </View>
   );
 }
 
