@@ -1,14 +1,7 @@
 import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import {
-  ChevronDown,
-  ChevronRight,
-  MessageCircleHeart,
-  Settings,
-  Sparkles,
-  X,
-} from 'lucide-react-native';
+import { ChevronDown, ChevronRight, Settings, Sparkles, X } from 'lucide-react-native';
 import {
   Avatar,
   Card,
@@ -558,34 +551,33 @@ function SupportInsightCard({
   const t = useTheme();
   const { t: tr } = useTranslation();
   return (
-    <InsightShell onDismiss={onDismiss}>
-      <InsightGroupEyebrow groupName={groupName} />
-      <Text variant="metaLabel" color="brandSoft">
+    <InsightShell tone="brand">
+      <InsightGroupEyebrow groupName={groupName} onBrand />
+      <Text variant="metaLabel" color="fgOnBrand">
         {tr('group.insights.supportEyebrow')}
       </Text>
-      <Text variant="bodySerifTight" color="fg">
+      <Text variant="bodySerifTight" color="fgOnBrand">
         {tr('group.insights.supportBody', { name })}
       </Text>
-      <Pressable
-        accessibilityRole="button"
-        onPress={onCheckIn}
-        style={({ pressed }) => ({
+      <View
+        style={{
           flexDirection: 'row',
-          alignItems: 'center',
-          gap: t.spacing.xs,
-          paddingTop: t.spacing.sm,
-          opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-        })}
+          justifyContent: 'flex-end',
+          gap: t.spacing.sm,
+          paddingTop: t.spacing.xs,
+        }}
       >
-        <MessageCircleHeart
-          size={t.iconSize.sm}
-          strokeWidth={t.stroke.standard}
-          color={t.colors.brand}
+        <InlineBrandButton
+          variant="primary"
+          label={tr('group.insights.supportCheckIn', { name })}
+          onPress={onCheckIn}
         />
-        <Text variant="buttonLabelSocial" color="brand">
-          {tr('group.insights.supportCheckIn', { name })}
-        </Text>
-      </Pressable>
+        <InlineBrandButton
+          variant="secondary"
+          label={tr('group.insights.dismiss')}
+          onPress={onDismiss}
+        />
+      </View>
     </InsightShell>
   );
 }
