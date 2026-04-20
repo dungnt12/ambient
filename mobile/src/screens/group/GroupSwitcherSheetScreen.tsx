@@ -1,6 +1,6 @@
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ChevronRight, Layers, Plus } from 'lucide-react-native';
+import { ChevronRight, Inbox, Layers, Plus, X } from 'lucide-react-native';
 import {
   BottomSheetModal,
   Card,
@@ -12,6 +12,7 @@ import {
   type Theme,
 } from '../../design-system';
 import { groupLimitForTier, type GroupSummary, type Tier } from '../../mocks/group';
+import type { PendingInvite } from '../../data/pendingInvitesRepo';
 
 export type GroupSwitcherSheetScreenProps = {
   groups: GroupSummary[];
@@ -22,6 +23,9 @@ export type GroupSwitcherSheetScreenProps = {
   onSelectAll: () => void;
   onCreateNew: () => void;
   onDismiss: () => void;
+  pendingInvites?: PendingInvite[];
+  onOpenPendingInvite?: (invite: PendingInvite) => void;
+  onDismissPendingInvite?: (id: string) => void;
 };
 
 // Mirrors the mood vocabulary used on PulseMemberCard so the switcher dot and
@@ -43,6 +47,9 @@ export function GroupSwitcherSheetScreen({
   onSelectAll,
   onCreateNew,
   onDismiss,
+  pendingInvites = [],
+  onOpenPendingInvite,
+  onDismissPendingInvite,
 }: GroupSwitcherSheetScreenProps) {
   const t = useTheme();
   const { t: tr } = useTranslation();
@@ -86,6 +93,23 @@ export function GroupSwitcherSheetScreen({
               lockedReason={lockedReason}
               onPress={() => dismiss(() => onCreateNew())}
             />
+            {pendingInvites.length > 0 ? (
+              <View style={{ gap: t.spacing.sm, paddingTop: t.spacing.md }}>
+                <Text variant="metaLabel" color="fgFaint">
+                  {tr('group.switcher.pendingEyebrow')}
+                </Text>
+                {pendingInvites.map((invite) => (
+                  <PendingInviteRow
+                    key={invite.id}
+                    invite={invite}
+                    onPress={() => dismiss(() => onOpenPendingInvite?.(invite))}
+                    onDismiss={
+                      onDismissPendingInvite ? () => onDismissPendingInvite(invite.id) : undefined
+                    }
+                  />
+                ))}
+              </View>
+            ) : null}
           </View>
         </>
       )}
@@ -248,6 +272,77 @@ function NewGroupRow({
         ) : null}
       </View>
       {locked && lockedReason === 'upsell' ? <ProPill /> : null}
+    </Card>
+  );
+}
+
+function PendingInviteRow({
+  invite,
+  onPress,
+  onDismiss,
+}: {
+  invite: PendingInvite;
+  onPress: () => void;
+  onDismiss?: () => void;
+}) {
+  const t = useTheme();
+  const { t: tr, i18n } = useTranslation();
+  const daysLeft = Math.max(
+    0,
+    Math.ceil((new Date(invite.expiresAt).getTime() - Date.now()) / (24 * 60 * 60 * 1000)),
+  );
+  const expiresLabel = i18n.language.startsWith('vi')
+    ? `Hết hạn sau ${daysLeft}d`
+    : `Expires in ${daysLeft}d`;
+
+  return (
+    <Card
+      tone="plain"
+      density="row"
+      onPress={onPress}
+      style={{ flexDirection: 'row', alignItems: 'center' }}
+    >
+      <View style={{ width: t.spacing.sm, height: t.spacing.sm }} />
+      <View
+        style={{
+          width: t.layout.moodDot,
+          height: t.layout.moodDot,
+          borderRadius: t.radius.pill,
+          backgroundColor: t.colors.bgMuted,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Inbox size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgSubtle} />
+      </View>
+      <View style={{ flex: 1, gap: t.spacing.xxs }}>
+        <Text variant="buttonLabelSocial" color="fg">
+          {invite.groupName}
+        </Text>
+        <Text variant="metaLabel" color="fgFaint">
+          {tr('group.switcher.pendingFrom', { name: invite.inviterName })} · {expiresLabel}
+        </Text>
+      </View>
+      {onDismiss ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={tr('group.switcher.pendingDismiss')}
+          onPress={onDismiss}
+          hitSlop={t.spacing.sm}
+          style={({ pressed }) => ({
+            padding: t.spacing.xs,
+            opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+          })}
+        >
+          <X size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgFaint} />
+        </Pressable>
+      ) : (
+        <ChevronRight
+          size={t.iconSize.sm}
+          strokeWidth={t.stroke.standard}
+          color={t.colors.fgFaint}
+        />
+      )}
     </Card>
   );
 }

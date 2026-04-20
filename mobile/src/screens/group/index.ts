@@ -17,3 +17,7 @@ export {
   GroupSwitcherSheetScreen,
   type GroupSwitcherSheetScreenProps,
 } from './GroupSwitcherSheetScreen';
+export {
+  GroupSettingsSheetScreen,
+  type GroupSettingsSheetScreenProps,
+} from './GroupSettingsSheetScreen';

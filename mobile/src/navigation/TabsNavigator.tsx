@@ -26,6 +26,7 @@ import { useTabBarInset } from './useTabBarInset';
 import type { RootNav, TabParamList } from './types';
 import { useActiveGroup } from '../state/activeGroup';
 import { useGroupInsights } from '../state/groupInsights';
+import { useGroupOverrides } from '../state/groupOverrides';
 import { addMeetupToCalendar } from '../lib/calendar';
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -110,14 +111,18 @@ function GroupPulseAllScene() {
 function GroupPulseTabScene({ activeGroupId }: { activeGroupId: string }) {
   const rootNav = useNavigation<RootNav<'Tabs'>>();
   const { proposals } = useGroupInsights();
+  const { getDisplayName, isMemberRemoved } = useGroupOverrides();
   const active = SAMPLE_GROUPS.find((g) => g.id === activeGroupId) ?? SAMPLE_GROUPS[0];
-  const members = SAMPLE_PULSE_MEMBERS[active.id] ?? [];
+  const displayName = getDisplayName(active.id, active.name);
+  const members = (SAMPLE_PULSE_MEMBERS[active.id] ?? []).filter(
+    (m) => !isMemberRemoved(active.id, m.id),
+  );
   const insight = SAMPLE_GROUP_INSIGHTS[active.id] ?? null;
   return (
     <GroupPulseScreen
       key={active.id}
-      groupName={active.name}
-      memberCount={active.memberCount}
+      groupName={displayName}
+      memberCount={members.length}
       since={active.since}
       members={members}
       insights={insight ? [{ insight }] : []}
@@ -133,7 +138,7 @@ function GroupPulseTabScene({ activeGroupId }: { activeGroupId: string }) {
       }}
       onOpenDigest={() => rootNav.navigate('WeeklyDigest')}
       onCheckInOnMember={() => rootNav.navigate('SupportSignalDetail')}
-      onLeaveGroup={() => rootNav.navigate('LeaveGroup', { groupName: active.name })}
+      onOpenSettings={() => rootNav.navigate('GroupSettings', { groupId: active.id })}
       receivedNotesCount={SAMPLE_RECEIVED_NOTES.length}
       receivedNotesSenderInitials={SAMPLE_RECEIVED_NOTES.map((n) => n.senderInitial)}
       onOpenReceivedNotes={() => rootNav.navigate('ReceivedNotes')}

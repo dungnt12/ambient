@@ -52,6 +52,13 @@ export const rhythm = {
     padV: spacing.md, // card vertical padding
     gap: spacing.md, // gap between items inside the card
   },
+  comfort: {
+    // Breathable variant — use when a card carries narrative text (insight,
+    // digest, support signal) where dense packing reads as anxious.
+    padH: spacing.lg,
+    padV: spacing.lg,
+    gap: spacing.base,
+  },
   row: {
     padH: spacing.lg, // list row horizontal padding
     padV: spacing.md, // list row vertical padding

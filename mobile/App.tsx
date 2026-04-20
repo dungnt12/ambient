@@ -7,6 +7,8 @@ import { ThemeProvider } from './src/design-system';
 import { BootGate, RootNavigator } from './src/navigation';
 import { ActiveGroupProvider } from './src/state/activeGroup';
 import { GroupInsightsProvider } from './src/state/groupInsights';
+import { PendingInvitesProvider } from './src/state/pendingInvites';
+import { GroupOverridesProvider } from './src/state/groupOverrides';
 
 export default function App() {
   return (
@@ -15,12 +17,16 @@ export default function App() {
         <ThemeProvider>
           <BootGate>
             <ActiveGroupProvider>
-              <GroupInsightsProvider>
-                <NavigationContainer>
-                  <StatusBar style="dark" />
-                  <RootNavigator />
-                </NavigationContainer>
-              </GroupInsightsProvider>
+              <GroupOverridesProvider>
+                <GroupInsightsProvider>
+                  <PendingInvitesProvider>
+                    <NavigationContainer>
+                      <StatusBar style="dark" />
+                      <RootNavigator />
+                    </NavigationContainer>
+                  </PendingInvitesProvider>
+                </GroupInsightsProvider>
+              </GroupOverridesProvider>
             </ActiveGroupProvider>
           </BootGate>
         </ThemeProvider>

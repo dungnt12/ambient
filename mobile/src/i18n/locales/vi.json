@@ -179,6 +179,7 @@
       "defaultName": "Nhóm Chủ Nhật",
       "inviteLabel": "LIÊN KẾT MỜI · HẾT HẠN SAU 7 NGÀY",
       "inviteHint": "Chạm để sao chép. Chia sẻ như liên kết bình thường.",
+      "inviteCopied": "Đã sao chép. Dán ở đâu cũng được.",
       "cta": "Tạo nhóm",
       "simulateInvite": "Giả lập nhận link mời"
     },
@@ -215,7 +216,16 @@
         "body": "Khi ai đó bắt đầu viết, AI sẽ tạo tín hiệu cho cả nhóm.",
         "cta": "Viết dòng đầu tiên cho nhóm",
         "invite": "Mời thêm người"
-      },
+      }
+    },
+    "settings": {
+      "open": "Cài đặt nhóm",
+      "title": "Cài đặt nhóm",
+      "renameLabel": "TÊN NHÓM",
+      "saveName": "Lưu tên",
+      "inviteEyebrow": "LIÊN KẾT MỜI",
+      "membersEyebrow": "THÀNH VIÊN · {{count}}",
+      "removeMember": "Xoá {{name}}",
       "leave": "Rời nhóm"
     },
     "thinkingOfYou": {
@@ -227,7 +237,8 @@
       "dismiss": "Để sau",
       "meetupEyebrow": "MỘT BUỔI GẶP NHẸ NHÀNG · CUỐI TUẦN NÀY",
       "meetupBody": "Tuần này mọi người dường như đều có năng lượng nhẹ nhàng hơn. Chiều thứ Bảy có thể là thời điểm đẹp.",
-      "meetupPropose": "Mở đề xuất",
+      "meetupPropose": "Đề xuất",
+      "meetupLater": "Để sau",
       "meetupProposedEyebrow": "ĐÃ ĐỀ XUẤT · {{when}}",
       "meetupProposedBy": "{{name}} đã đề xuất cho cả nhóm.",
       "meetupAddToCalendar": "Thêm vào lịch của tôi",
@@ -253,7 +264,10 @@
       "capReached": "Đã đạt giới hạn — 5 vòng tròn là đủ cho nhịp ambient",
       "proBadge": "Pro",
       "memberCount_one": "{{count}} thành viên",
-      "memberCount_other": "{{count}} thành viên"
+      "memberCount_other": "{{count}} thành viên",
+      "pendingEyebrow": "LỜI MỜI ĐANG CHỜ",
+      "pendingFrom": "Từ {{name}}",
+      "pendingDismiss": "Bỏ lời mời"
     }
   },
   "ambient": {
@@ -279,7 +293,7 @@
       "sentEyebrow": "ĐÃ GỬI NHÓM · VỪA XONG",
       "freeEnergy": "AI THẤY NHỮNG NGƯỜI NÀY ĐANG CÓ NĂNG LƯỢNG TUẦN NÀY",
       "proposeCta": "Đề xuất cho nhóm",
-      "sentCta": "Đã đề xuất ✓",
+      "sentCta": "Đã đề xuất",
       "footer": "Khi bạn đề xuất, cả nhóm sẽ thấy trong Pulse. Mỗi người tự thêm vào lịch của mình."
     },
     "supportDetail": {

@@ -33,12 +33,15 @@ export type RootStackParamList = {
     memberCount: number;
     since?: string;
     memberInitials: string[];
+    /** When set, accepting or dismissing this offer clears the stored pending invite. */
+    pendingInviteId?: string;
   };
   GroupAcceptInvite: { inviterName: string; groupName: string };
   GroupJoined: { groupName: string };
   GroupPulse: { groupName: string };
   LeaveGroup: { groupName: string };
   GroupSwitcher: undefined;
+  GroupSettings: { groupId: string };
   QuietNotes: undefined;
   QuietNotesEmpty: undefined;
   WeeklyDigest: undefined;

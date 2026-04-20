@@ -12,6 +12,7 @@ import {
   GroupCreateSheetScreen,
   GroupJoinedScreen,
   GroupPulseScreen,
+  GroupSettingsSheetScreen,
   GroupSwitcherSheetScreen,
   InviteOfferSheetScreen,
   LeaveGroupSheetScreen,
@@ -41,6 +42,8 @@ import {
 } from '../mocks/group';
 import { useActiveGroup } from '../state/activeGroup';
 import { useGroupInsights } from '../state/groupInsights';
+import { usePendingInvites } from '../state/pendingInvites';
+import { useGroupOverrides } from '../state/groupOverrides';
 import { addMeetupToCalendar } from '../lib/calendar';
 import {
   SAMPLE_QUIET_NOTES,
@@ -195,7 +198,9 @@ function GroupCreateRoute({ navigation }: RootScreenProps<'GroupCreate'>) {
 }
 
 function InviteOfferRoute({ navigation, route }: RootScreenProps<'InviteOffer'>) {
-  const { inviterName, groupName, memberCount, since, memberInitials } = route.params;
+  const { inviterName, groupName, memberCount, since, memberInitials, pendingInviteId } =
+    route.params;
+  const { save, remove } = usePendingInvites();
   return (
     <InviteOfferSheetScreen
       inviterName={inviterName}
@@ -203,8 +208,16 @@ function InviteOfferRoute({ navigation, route }: RootScreenProps<'InviteOffer'>)
       memberCount={memberCount}
       since={since}
       memberInitials={memberInitials}
-      onJoin={() => navigation.replace('GroupAcceptInvite', { inviterName, groupName })}
-      onSaveForLater={() => navigation.goBack()}
+      onJoin={() => {
+        if (pendingInviteId) void remove(pendingInviteId);
+        navigation.replace('GroupAcceptInvite', { inviterName, groupName });
+      }}
+      onSaveForLater={() => {
+        if (!pendingInviteId) {
+          void save({ inviterName, groupName, memberCount, since, memberInitials });
+        }
+        navigation.goBack();
+      }}
     />
   );
 }
@@ -247,13 +260,17 @@ function GroupJoinedRoute({ navigation, route }: RootScreenProps<'GroupJoined'>)
 function GroupPulseRoute({ navigation, route }: RootScreenProps<'GroupPulse'>) {
   const { groupName } = route.params;
   const { proposals } = useGroupInsights();
+  const { getDisplayName, isMemberRemoved } = useGroupOverrides();
   const active = SAMPLE_GROUPS.find((g) => g.name === groupName) ?? SAMPLE_GROUPS[0];
-  const members = SAMPLE_PULSE_MEMBERS[active.id] ?? [];
+  const displayName = getDisplayName(active.id, active.name);
+  const members = (SAMPLE_PULSE_MEMBERS[active.id] ?? []).filter(
+    (m) => !isMemberRemoved(active.id, m.id),
+  );
   const insight = SAMPLE_GROUP_INSIGHTS[active.id] ?? null;
   return (
     <GroupPulseScreen
-      groupName={active.name}
-      memberCount={active.memberCount}
+      groupName={displayName}
+      memberCount={members.length}
       since={active.since}
       members={members}
       insights={insight ? [{ insight }] : []}
@@ -269,13 +286,14 @@ function GroupPulseRoute({ navigation, route }: RootScreenProps<'GroupPulse'>) {
       }}
       onOpenDigest={() => navigation.navigate('WeeklyDigest')}
       onCheckInOnMember={() => navigation.navigate('SupportSignalDetail')}
-      onLeaveGroup={() => navigation.navigate('LeaveGroup', { groupName: active.name })}
+      onOpenSettings={() => navigation.navigate('GroupSettings', { groupId: active.id })}
     />
   );
 }
 
 function GroupSwitcherRoute({ navigation }: RootScreenProps<'GroupSwitcher'>) {
   const { activeGroupId, setActiveGroupId } = useActiveGroup();
+  const { invites, remove } = usePendingInvites();
   return (
     <GroupSwitcherSheetScreen
       groups={SAMPLE_GROUPS}
@@ -291,6 +309,18 @@ function GroupSwitcherRoute({ navigation }: RootScreenProps<'GroupSwitcher'>) {
       }}
       onCreateNew={() => navigation.replace('GroupCreate')}
       onDismiss={() => navigation.goBack()}
+      pendingInvites={invites}
+      onOpenPendingInvite={(invite) =>
+        navigation.replace('InviteOffer', {
+          inviterName: invite.inviterName,
+          groupName: invite.groupName,
+          memberCount: invite.memberCount,
+          since: invite.since,
+          memberInitials: invite.memberInitials,
+          pendingInviteId: invite.id,
+        })
+      }
+      onDismissPendingInvite={(id) => void remove(id)}
     />
   );
 }
@@ -353,6 +383,36 @@ function WeeklyNeedsWarmthRoute({ navigation }: RootScreenProps<'WeeklyNeedsWarm
       onMessage={() => navigation.navigate('SupportSignalDetail')}
       onOpenSummary={() => navigation.goBack()}
       onClose={() => navigation.goBack()}
+    />
+  );
+}
+
+function GroupSettingsRoute({ navigation, route }: RootScreenProps<'GroupSettings'>) {
+  const { groupId } = route.params;
+  const { getDisplayName, isMemberRemoved, renameGroup, removeMember } = useGroupOverrides();
+  const group = SAMPLE_GROUPS.find((g) => g.id === groupId);
+  if (!group) {
+    navigation.goBack();
+    return null;
+  }
+  const displayName = getDisplayName(groupId, group.name);
+  const members = (SAMPLE_PULSE_MEMBERS[groupId] ?? []).filter(
+    (m) => !isMemberRemoved(groupId, m.id),
+  );
+  return (
+    <GroupSettingsSheetScreen
+      groupId={groupId}
+      groupName={displayName}
+      inviteUrl={group.inviteUrl}
+      members={members}
+      selfId={CURRENT_USER.id}
+      onRename={(nextName) => {
+        renameGroup(groupId, nextName);
+        navigation.goBack();
+      }}
+      onRemoveMember={(memberId) => removeMember(groupId, memberId)}
+      onLeave={() => navigation.replace('LeaveGroup', { groupName: displayName })}
+      onDismiss={() => navigation.goBack()}
     />
   );
 }
@@ -508,6 +568,14 @@ export function RootNavigator() {
       <Stack.Screen name="PrivacyByDesign" component={PrivacyByDesignRoute} />
       <Stack.Screen name="DeleteAccount" component={DeleteAccountRoute} />
       <Stack.Screen name="Subscription" component={SubscriptionRoute} />
+      <Stack.Screen
+        name="GroupSettings"
+        component={GroupSettingsRoute}
+        options={{
+          presentation: 'transparentModal',
+          animation: 'none',
+        }}
+      />
       <Stack.Screen
         name="MeetupProposal"
         component={MeetupProposalRoute}

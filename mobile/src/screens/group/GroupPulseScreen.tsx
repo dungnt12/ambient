@@ -1,7 +1,14 @@
 import type { ReactNode } from 'react';
 import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronRight, MessageCircleHeart, Sparkles, X } from 'lucide-react-native';
+import {
+  ChevronDown,
+  ChevronRight,
+  MessageCircleHeart,
+  Settings,
+  Sparkles,
+  X,
+} from 'lucide-react-native';
 import {
   Avatar,
   Card,
@@ -51,7 +58,8 @@ export type GroupPulseScreenProps = {
   onProposeMeetup?: (proposalId: string) => void;
   onAddMeetupToCalendar?: (proposalId: string) => void;
   onCheckInOnMember?: (memberName: string) => void;
-  onLeaveGroup?: () => void;
+  /** Opens the group-scoped settings sheet (rename, members, invite, leave). */
+  onOpenSettings?: () => void;
   /** Number of one-line notes sent by others that the viewer hasn't acknowledged. */
   receivedNotesCount?: number;
   /** Initials of senders — shown as a small avatar stack (max 3). */
@@ -79,7 +87,7 @@ export function GroupPulseScreen({
   onProposeMeetup,
   onAddMeetupToCalendar,
   onCheckInOnMember,
-  onLeaveGroup,
+  onOpenSettings,
   onOpenSwitcher,
   hasMultipleGroups = false,
   receivedNotesCount = 0,
@@ -119,6 +127,7 @@ export function GroupPulseScreen({
               groupName={groupName}
               hasMultipleGroups={hasMultipleGroups}
               onOpenSwitcher={onOpenSwitcher}
+              onOpenSettings={onOpenSettings}
             />
           }
           subtitle={subtitle}
@@ -152,7 +161,6 @@ export function GroupPulseScreen({
         />
       ))}
       <PulseList members={members} />
-      {onLeaveGroup ? <LeaveGroupRow onPress={onLeaveGroup} /> : null}
     </ScreenLayout>
   );
 }
@@ -161,60 +169,66 @@ function GroupNameRow({
   groupName,
   hasMultipleGroups,
   onOpenSwitcher,
+  onOpenSettings,
 }: {
   groupName: string;
   hasMultipleGroups: boolean;
   onOpenSwitcher?: () => void;
+  onOpenSettings?: () => void;
 }) {
   const t = useTheme();
   const { t: tr } = useTranslation();
-
-  if (!hasMultipleGroups || !onOpenSwitcher) {
-    return (
-      <Text variant="headingPulse" color="fg">
-        {groupName}
-      </Text>
-    );
-  }
+  const canSwitch = hasMultipleGroups && !!onOpenSwitcher;
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={tr('group.switcher.open')}
-      onPress={onOpenSwitcher}
-      hitSlop={t.spacing.sm}
-      style={({ pressed }) => ({
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: t.spacing.sm,
-        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-      })}
-    >
-      <Text variant="headingPulse" color="fg">
-        {groupName}
-      </Text>
-      <ChevronDown size={t.iconSize.sm} strokeWidth={t.stroke.standard} color={t.colors.fgFaint} />
-    </Pressable>
-  );
-}
-
-function LeaveGroupRow({ onPress }: { onPress: () => void }) {
-  const t = useTheme();
-  const { t: tr } = useTranslation();
-  return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      hitSlop={t.spacing.sm}
-      style={({ pressed }) => ({
-        alignItems: 'center',
-        opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
-      })}
-    >
-      <Text variant="metaLabel" color="fgFaint">
-        {tr('group.pulse.leave')}
-      </Text>
-    </Pressable>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.spacing.sm }}>
+      {canSwitch ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={tr('group.switcher.open')}
+          onPress={onOpenSwitcher}
+          hitSlop={t.spacing.sm}
+          style={({ pressed }) => ({
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: t.spacing.sm,
+            opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+          })}
+        >
+          <Text variant="headingPulse" color="fg" numberOfLines={1} style={{ flex: 1 }}>
+            {groupName}
+          </Text>
+          <ChevronDown
+            size={t.iconSize.sm}
+            strokeWidth={t.stroke.standard}
+            color={t.colors.fgFaint}
+          />
+        </Pressable>
+      ) : (
+        <Text variant="headingPulse" color="fg" numberOfLines={1} style={{ flex: 1 }}>
+          {groupName}
+        </Text>
+      )}
+      {onOpenSettings ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={tr('group.settings.open')}
+          onPress={onOpenSettings}
+          hitSlop={t.spacing.sm}
+          style={({ pressed }) => ({
+            padding: t.spacing.xs,
+            opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
+          })}
+        >
+          <Settings
+            size={t.iconSize.base}
+            strokeWidth={t.stroke.standard}
+            color={t.colors.fgSubtle}
+          />
+        </Pressable>
+      ) : null}
+    </View>
   );
 }
 
@@ -351,10 +365,19 @@ function InsightShell({
   const { t: tr } = useTranslation();
   const isBrand = tone === 'brand';
   return (
-    <Card tone={isBrand ? 'brand' : 'raised'}>
+    <Card tone={isBrand ? 'brand' : 'raised'} density="comfort">
       {children}
       {onDismiss ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            paddingTop: t.spacing.xs,
+            marginTop: t.spacing.xs,
+            borderTopWidth: t.brand.border.hairline,
+            borderTopColor: isBrand ? t.colors.brandSoft : t.colors.borderSoft,
+          }}
+        >
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={tr('group.insights.dismiss')}
@@ -364,7 +387,7 @@ function InsightShell({
               flexDirection: 'row',
               alignItems: 'center',
               gap: t.spacing.sm,
-              paddingVertical: t.spacing.xs,
+              paddingVertical: t.spacing.sm,
               opacity: pressed ? t.opacity.pressedSubtle : t.opacity.full,
             })}
           >
@@ -416,32 +439,25 @@ function MeetupInsightCard({
         <Text variant="bodySmall" color="fgOnBrand">
           {tr('group.insights.meetupProposedBy', { name: proposal.proposedBy?.name ?? '—' })}
         </Text>
-        <Pressable
-          accessibilityRole="button"
-          onPress={onAddToCalendar}
-          style={({ pressed }) => ({
+        <View
+          style={{
             flexDirection: 'row',
-            alignItems: 'center',
-            gap: t.spacing.xs,
-            paddingTop: t.spacing.sm,
-            opacity: pressed ? t.opacity.pressed : t.opacity.full,
-          })}
+            justifyContent: 'flex-end',
+            paddingTop: t.spacing.xs,
+          }}
         >
-          <Text variant="buttonLabelSocial" color="fgOnBrand">
-            {tr('group.insights.meetupAddToCalendar')}
-          </Text>
-          <ChevronRight
-            size={t.iconSize.sm}
-            strokeWidth={t.stroke.standard}
-            color={t.colors.fgOnBrand}
+          <InlineBrandButton
+            variant="primary"
+            label={tr('group.insights.meetupAddToCalendar')}
+            onPress={onAddToCalendar}
           />
-        </Pressable>
+        </View>
       </InsightShell>
     );
   }
 
   return (
-    <InsightShell tone="brand" onDismiss={onDismiss}>
+    <InsightShell tone="brand">
       <InsightGroupEyebrow groupName={groupName} onBrand />
       <Text variant="metaLabel" color="fgOnBrand">
         {tr('group.insights.meetupEyebrow')}
@@ -449,27 +465,62 @@ function MeetupInsightCard({
       <Text variant="bodySerifTight" color="fgOnBrand">
         {tr('group.insights.meetupBody')}
       </Text>
-      <Pressable
-        accessibilityRole="button"
-        onPress={onPropose}
-        style={({ pressed }) => ({
+      <View
+        style={{
           flexDirection: 'row',
-          alignItems: 'center',
-          gap: t.spacing.xs,
-          paddingTop: t.spacing.sm,
-          opacity: pressed ? t.opacity.pressed : t.opacity.full,
-        })}
+          justifyContent: 'flex-end',
+          gap: t.spacing.sm,
+          paddingTop: t.spacing.xs,
+        }}
       >
-        <Text variant="buttonLabelSocial" color="fgOnBrand">
-          {tr('group.insights.meetupPropose')}
-        </Text>
-        <ChevronRight
-          size={t.iconSize.sm}
-          strokeWidth={t.stroke.standard}
-          color={t.colors.fgOnBrand}
+        <InlineBrandButton
+          variant="primary"
+          label={tr('group.insights.meetupPropose')}
+          onPress={onPropose}
         />
-      </Pressable>
+        <InlineBrandButton
+          variant="secondary"
+          label={tr('group.insights.meetupLater')}
+          onPress={onDismiss}
+        />
+      </View>
     </InsightShell>
+  );
+}
+
+function InlineBrandButton({
+  label,
+  variant,
+  onPress,
+}: {
+  label: string;
+  variant: 'primary' | 'secondary';
+  onPress?: () => void;
+}) {
+  const t = useTheme();
+  const isPrimary = variant === 'primary';
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      onPress={onPress}
+      style={({ pressed }) => ({
+        height: t.layout.inlineButtonHeight,
+        minWidth: 110,
+        paddingHorizontal: t.spacing.base,
+        borderRadius: t.radius.md,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: isPrimary ? t.colors.bg : 'transparent',
+        borderWidth: isPrimary ? 0 : t.brand.border.hairline,
+        borderColor: isPrimary ? 'transparent' : t.colors.brandSoft,
+        opacity: pressed ? t.opacity.pressed : t.opacity.full,
+      })}
+    >
+      <Text variant="buttonLabelSocial" color={isPrimary ? 'brand' : 'fgOnBrand'}>
+        {label}
+      </Text>
+    </Pressable>
   );
 }
 

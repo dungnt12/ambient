@@ -179,6 +179,7 @@
       "defaultName": "Sunday Group",
       "inviteLabel": "YOUR INVITE LINK · EXPIRES IN 7 DAYS",
       "inviteHint": "Tap to copy. Share like any link — no public page.",
+      "inviteCopied": "Link copied. Paste it anywhere to share.",
       "cta": "Create group",
       "simulateInvite": "Simulate incoming invite link"
     },
@@ -215,7 +216,16 @@
         "body": "When at least one person writes, AI starts weaving a signal for the group.",
         "cta": "Write the first line for the group",
         "invite": "Invite more people"
-      },
+      }
+    },
+    "settings": {
+      "open": "Group settings",
+      "title": "Group settings",
+      "renameLabel": "GROUP NAME",
+      "saveName": "Save name",
+      "inviteEyebrow": "INVITE LINK",
+      "membersEyebrow": "MEMBERS · {{count}}",
+      "removeMember": "Remove {{name}}",
       "leave": "Leave group"
     },
     "thinkingOfYou": {
@@ -227,7 +237,8 @@
       "dismiss": "Not now",
       "meetupEyebrow": "A GENTLE MEETUP · THIS WEEKEND",
       "meetupBody": "Everyone's a bit freer this week. Saturday afternoon could be the right time.",
-      "meetupPropose": "Open proposal",
+      "meetupPropose": "Propose",
+      "meetupLater": "Later",
       "meetupProposedEyebrow": "PROPOSED · {{when}}",
       "meetupProposedBy": "{{name}} proposed this for the group.",
       "meetupAddToCalendar": "Add to my calendar",
@@ -253,7 +264,10 @@
       "capReached": "You've reached the limit — 5 circles is enough for ambient awareness",
       "proBadge": "Pro",
       "memberCount_one": "{{count}} member",
-      "memberCount_other": "{{count}} members"
+      "memberCount_other": "{{count}} members",
+      "pendingEyebrow": "PENDING INVITES",
+      "pendingFrom": "From {{name}}",
+      "pendingDismiss": "Remove invite"
     }
   },
   "ambient": {
@@ -279,7 +293,7 @@
       "sentEyebrow": "SENT TO GROUP · JUST NOW",
       "freeEnergy": "AI THINKS THESE PEOPLE HAVE FREE ENERGY THIS WEEK",
       "proposeCta": "Propose to group",
-      "sentCta": "Proposed ✓",
+      "sentCta": "Proposed",
       "footer": "If you propose, the group sees it in Pulse. Everyone adds it to their own calendar."
     },
     "supportDetail": {

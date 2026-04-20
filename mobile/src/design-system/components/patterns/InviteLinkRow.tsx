@@ -1,18 +1,33 @@
 import { Pressable, View, type ViewStyle } from 'react-native';
-import { Hash, Copy } from 'lucide-react-native';
+import { Hash, Copy, Check } from 'lucide-react-native';
 import { Text } from '../Text';
 import { useTheme } from '../../theme';
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
 
 export type InviteLinkRowProps = {
   url: string;
+  copyLabel?: string;
+  copiedLabel?: string;
   onCopy?: () => void;
   style?: ViewStyle;
 };
 
 const COPY_HIT_SLOP = 8;
 
-export function InviteLinkRow({ url, onCopy, style }: InviteLinkRowProps) {
+export function InviteLinkRow({
+  url,
+  copyLabel = 'Copy invite link',
+  copiedLabel = 'Copied',
+  onCopy,
+  style,
+}: InviteLinkRowProps) {
   const theme = useTheme();
+  const { copied, copy } = useCopyToClipboard(url);
+
+  const handlePress = () => {
+    void copy();
+    onCopy?.();
+  };
 
   return (
     <View
@@ -42,18 +57,27 @@ export function InviteLinkRow({ url, onCopy, style }: InviteLinkRowProps) {
       </Text>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Copy invite link"
-        onPress={onCopy}
+        accessibilityLabel={copied ? copiedLabel : copyLabel}
+        accessibilityState={{ selected: copied }}
+        onPress={handlePress}
         hitSlop={COPY_HIT_SLOP}
         style={({ pressed }) => ({
           opacity: pressed ? theme.opacity.pressedSubtle : theme.opacity.full,
         })}
       >
-        <Copy
-          size={theme.iconSize.base}
-          strokeWidth={theme.stroke.standard}
-          color={theme.colors.fgMuted}
-        />
+        {copied ? (
+          <Check
+            size={theme.iconSize.base}
+            strokeWidth={theme.stroke.standard}
+            color={theme.colors.brand}
+          />
+        ) : (
+          <Copy
+            size={theme.iconSize.base}
+            strokeWidth={theme.stroke.standard}
+            color={theme.colors.fgMuted}
+          />
+        )}
       </Pressable>
     </View>
   );

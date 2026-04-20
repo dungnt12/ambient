@@ -9,7 +9,7 @@ import {
 import { useTheme } from '../theme';
 
 export type CardTone = 'raised' | 'brand' | 'plain';
-export type CardDensity = 'card' | 'row';
+export type CardDensity = 'card' | 'row' | 'comfort';
 
 export type CardProps = {
   children: ReactNode;
@@ -55,7 +55,8 @@ export function Card({
             borderWidth: t.brand.border.hairline,
           };
 
-  const rhythmSlot = density === 'row' ? t.rhythm.row : t.rhythm.card;
+  const rhythmSlot =
+    density === 'row' ? t.rhythm.row : density === 'comfort' ? t.rhythm.comfort : t.rhythm.card;
   const radius = density === 'row' ? t.radius.base : t.radius.card;
 
   const baseStyle: ViewStyle = {
